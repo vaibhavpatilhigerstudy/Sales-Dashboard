@@ -1644,6 +1644,12 @@ body.role-director #dlWrap {
 }
 .inc-row:hover{ background:rgba(255,255,255,.04); }
 
+/* Threshold qualify styling for incentive leaderboard */
+.inc-row.threshold-qualify {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.08), transparent);
+  border-left: 2px solid rgba(16, 185, 129, 0.5);
+}
+
 /* ── Donut hover tooltip: richer ── */
 .donut-tip{
   background:rgba(8,9,22,.97);
@@ -1836,6 +1842,71 @@ body.role-director #dlWrap {
 .bar-tooltip-row{ display:flex;align-items:center;gap:8px;margin-top:2px; }
 .bar-tooltip-lbl{ color:rgba(255,255,255,.4);font-size:10px; }
 .bar-tooltip-val{ color:#a5b4fc;font-weight:900; }
+
+/* ═══════════════════════════════════════════════════════
+   15 ADMISSION THRESHOLD - INCENTIVE QUALIFICATION
+═══════════════════════════════════════════════════════ */
+.threshold-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-radius: 16px;
+  padding: 4px 9px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #10b981;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.threshold-badge.ineligible {
+  background: rgba(248, 113, 113, 0.1);
+  border-color: rgba(248, 113, 113, 0.3);
+  color: #f87171;
+}
+
+.br-wrap.threshold-qualify .br {
+  box-shadow: inset 0 0 0 2px rgba(16, 185, 129, 0.5), 0 4px 12px rgba(16, 185, 129, 0.15) !important;
+}
+
+.threshold-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(6, 214, 160, 0.04));
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.threshold-banner-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  color: #10b981;
+}
+
+.threshold-banner-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.threshold-banner-title {
+  font-weight: 700;
+  color: #10b981;
+  font-size: 13px;
+}
+
+.threshold-banner-desc {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+}
 
 /* ── Refresh animation on live update ── */
 @keyframes liveFlash{
@@ -2816,10 +2887,28 @@ function norm(raw, p){
   raw.allTrendRows = raw.trendRows.slice();
 
   // ── Separate cancel rows BEFORE any processing ──
-  // A row is cancelled if admissionStatus field == "Cancel" (case-insensitive)
+  // A row is cancelled if any status-like field contains "cancel" or similar
   const _isCancel = r => {
-    const s = (r.admissionStatus || r.AdmissionStatus || r.admission_status || r.status || r.Status || '').toString().trim().toLowerCase();
-    return s === 'cancel' || s === 'cancelled' || s === 'canceled';
+    // Check all possible field variations
+    const fields = [
+      r.admissionStatus, r.AdmissionStatus, r.admission_status, 
+      r.admissionState, r.AdmissionState, r.admission_state,
+      r.status, r.Status, r.STATUS,
+      r.state, r.State, r.STATE,
+      r.adm_status, r.admStatus, r.admState,
+      r.cancelStatus, r.CancelStatus, r.cancel_status
+    ];
+    
+    for(let field of fields) {
+      if(field) {
+        const s = field.toString().trim().toLowerCase();
+        // Check for cancel variations
+        if(s.includes('cancel') || s === 'cancelled' || s === 'canceled' || s === 'cancelled') {
+          return true;
+        }
+      }
+    }
+    return false;
   };
 
   // Store raw unfiltered rows (with cancels) for filter-scope cancel counting
@@ -2836,7 +2925,6 @@ function norm(raw, p){
 
   // Store cancel count from rows (overrides server value if rows present)
   if(raw.trendRows.length > 0){
-    raw.cancelAdm  = cancelRows.length + (raw.cancelAdm || 0) - Math.min(cancelRows.length, raw.cancelAdm || 0);
     // Actually: trust row-level cancel status as ground truth
     raw.cancelAdm  = cancelAllRows.length;
     raw.totalAdm   = raw.allTrendRows.length;
@@ -3654,8 +3742,26 @@ function _recomputeBarsFromRows(rows){
     const cached2 = mem[activeCk];
     if(cached2){
       const _isCancel2 = r => {
-        const s = (r.admissionStatus || r.AdmissionStatus || r.admission_status || r.status || r.Status || '').toString().trim().toLowerCase();
-        return s === 'cancel' || s === 'cancelled' || s === 'canceled';
+        // Check all possible field variations
+        const fields = [
+          r.admissionStatus, r.AdmissionStatus, r.admission_status, 
+          r.admissionState, r.AdmissionState, r.admission_state,
+          r.status, r.Status, r.STATUS,
+          r.state, r.State, r.STATE,
+          r.adm_status, r.admStatus, r.admState,
+          r.cancelStatus, r.CancelStatus, r.cancel_status
+        ];
+        
+        for(let field of fields) {
+          if(field) {
+            const s = field.toString().trim().toLowerCase();
+            // Check for cancel variations
+            if(s.includes('cancel') || s === 'cancelled' || s === 'canceled') {
+              return true;
+            }
+          }
+        }
+        return false;
       };
       // Get the raw (non-cancel-filtered) source rows
       const rawAllRows = cached2.data._rawAllRows || [];
@@ -4536,6 +4642,24 @@ function renderIncLeaderboard(data, prefix, title){
     subEl.textContent = `Sorted by ${sortName} · ${dirName}${ctx}`;
   }
 
+  // Create threshold banner for TL and Manager
+  let thresholdBanner = section?.querySelector('.threshold-banner');
+  if(!thresholdBanner && (prefix === 'tlInc' || prefix === 'mgrInc')) {
+    thresholdBanner = document.createElement('div');
+    thresholdBanner.className = 'threshold-banner';
+    const bannerTitle = prefix === 'tlInc' ? 'Team Leader' : 'Manager';
+    thresholdBanner.innerHTML = `
+      <div class="threshold-banner-icon">⚡</div>
+      <div class="threshold-banner-text">
+        <div class="threshold-banner-title">Incentive Qualification Threshold</div>
+        <div class="threshold-banner-desc">Minimum 15 admissions required to qualify for incentives</div>
+      </div>
+    `;
+    if(chartEl && chartEl.parentNode) {
+      chartEl.parentNode.insertBefore(thresholdBanner, chartEl);
+    }
+  }
+
   const isAsc = (_incSort[prefix]||{}).dir === 'asc';
   const rCls=['r1','r2','r3'], rIco=['🥇','🥈','🥉'];
   // For ascending, medal emojis are reversed (lowest = best)
@@ -4546,9 +4670,16 @@ function renderIncLeaderboard(data, prefix, title){
     const rc=i<3?rCls[i]:'rn';
     const ri=i<3?(isAsc?rIcoAsc[i]:rIco[i]):(i+1);
     const grad=INC_GRD[i%INC_GRD.length];
-    html+=`<div class="inc-row" style="animation:fadeUp .22s ease both ${i*28}ms">`;
+    
+    // 15 Admission Threshold Check
+    const qualifiesForIncentive = d.count >= 15;
+    const thresholdBadge = qualifiesForIncentive 
+      ? '<span class="threshold-badge">✓ Qualified</span>'
+      : '<span class="threshold-badge ineligible">⚠ Min 15</span>';
+    
+    html+=`<div class="inc-row${qualifiesForIncentive ? ' threshold-qualify' : ''}" style="animation:fadeUp .22s ease both ${i*28}ms">`;
     html+=`<div class="inc-rank ${rc}${isAsc&&i<3?' sorted-asc':''}">${ri}</div>`;
-    html+=`<div class="inc-name"><span class="inc-name-main" title="${d.name}">${d.name}</span><span class="inc-name-adm">${d.count} admissions</span></div>`;
+    html+=`<div class="inc-name"><span class="inc-name-main" title="${d.name}">${d.name}</span><span class="inc-name-adm">${d.count} admissions${thresholdBadge}</span></div>`;
     html+=`<div class="inc-track-wrap"><div class="inc-track"><div class="inc-bar" id="${prefix}b${i}" style="background:${grad};"></div></div><div class="inc-overlay"><span class="inc-ol-adm">${d.count} adm</span><span class="inc-ol-amt">${fmtIncFull(d.incentive)}</span></div></div>`;
     html+=`<div class="inc-stats"><span class="inc-stat-amt">₹${fmtInc(d.incentive)}</span><span class="inc-stat-adm">${d.count} adm</span></div>`;
     html+=`</div>`;
@@ -4592,6 +4723,25 @@ function _renderCounselIncChart(sorted){
     subEl.textContent=`Sorted by ${st.sort==='inc'?'incentive':'admissions'} · ${st.dir==='desc'?'highest first':'lowest first'}${ctx}`;
   }
 
+  // Create threshold banner
+  const incSection = $('incSection');
+  let thresholdBanner = incSection?.querySelector('.threshold-banner');
+  if(!thresholdBanner) {
+    thresholdBanner = document.createElement('div');
+    thresholdBanner.className = 'threshold-banner';
+    thresholdBanner.innerHTML = `
+      <div class="threshold-banner-icon">⚡</div>
+      <div class="threshold-banner-text">
+        <div class="threshold-banner-title">Incentive Qualification Threshold</div>
+        <div class="threshold-banner-desc">Minimum 15 admissions required to qualify for incentives</div>
+      </div>
+    `;
+    const chartEl = $('incChart');
+    if(chartEl && chartEl.parentNode) {
+      chartEl.parentNode.insertBefore(thresholdBanner, chartEl);
+    }
+  }
+
   const isAsc=(_incSort['inc']||{}).dir==='asc';
   const rCls=['r1','r2','r3'],rIco=['🥇','🥈','🥉'],rIcoAsc=['🔺','▲','△'];
   let html='';
@@ -4600,9 +4750,16 @@ function _renderCounselIncChart(sorted){
     const rc=i<3?rCls[i]:'rn';
     const ri=i<3?(isAsc?rIcoAsc[i]:rIco[i]):(i+1);
     const grad=INC_GRD[i%INC_GRD.length];
-    html+=`<div class="inc-row" style="animation:fadeUp .22s ease both ${i*28}ms">`;
+    
+    // 15 Admission Threshold Check
+    const qualifiesForIncentive = c.count >= 15;
+    const thresholdBadge = qualifiesForIncentive 
+      ? '<span class="threshold-badge">✓ Qualified</span>'
+      : '<span class="threshold-badge ineligible">⚠ Min 15</span>';
+    
+    html+=`<div class="inc-row${qualifiesForIncentive ? ' threshold-qualify' : ''}" style="animation:fadeUp .22s ease both ${i*28}ms">`;
     html+=`<div class="inc-rank ${rc}${isAsc&&i<3?' sorted-asc':''}">${ri}</div>`;
-    html+=`<div class="inc-name"><span class="inc-name-main" title="${c.name}">${c.name}</span><span class="inc-name-adm">${c.count} admissions</span></div>`;
+    html+=`<div class="inc-name"><span class="inc-name-main" title="${c.name}">${c.name}</span><span class="inc-name-adm">${c.count} admissions${thresholdBadge}</span></div>`;
     html+=`<div class="inc-track-wrap"><div class="inc-track"><div class="inc-bar" id="incb${i}" style="background:${grad};"></div></div><div class="inc-overlay"><span class="inc-ol-adm">${c.count} adm</span><span class="inc-ol-amt">${fmtIncFull(c.incentive)}</span></div></div>`;
     html+=`<div class="inc-stats"><span class="inc-stat-amt">₹${fmtInc(c.incentive)}</span><span class="inc-stat-adm">${c.count} adm</span></div>`;
     html+=`</div>`;
