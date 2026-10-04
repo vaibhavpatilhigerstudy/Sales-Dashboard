@@ -309,17 +309,24 @@ body::before{
 .bf-tgt-ach.low{background:linear-gradient(90deg,#dc2626,#ef4444,#fca5a5);box-shadow:0 0 10px rgba(239,68,68,.25);}
 
 /* ═══════════════════════════════════════════════════════
-   DONUT CHART — interactive segments
+   DONUT CHART — fills full card height, no dead space
 ═══════════════════════════════════════════════════════ */
+
+/* Card itself stretches to match its grid sibling */
 .card.univ-card{
   display:flex;flex-direction:column;
+  /* Remove paint containment — it clips flex children growing to full height */
   contain:layout style;
 }
+
+/* donut-wrap fills remaining card height after the header */
 .donut-wrap{
   display:flex;align-items:stretch;
   gap:0;width:100%;flex:1;
   min-height:148px;
 }
+
+/* Donut box — fixed width, SVG centered vertically */
 .donut-box{
   position:relative;flex-shrink:0;
   width:148px;min-height:148px;
@@ -329,124 +336,45 @@ body::before{
 .donut-ctr{
   position:absolute;top:50%;left:50%;
   transform:translate(-50%,-50%);text-align:center;pointer-events:none;
-  transition:opacity .25s ease;
 }
 .donut-num{
   font-size:28px;font-weight:900;line-height:1;letter-spacing:-.03em;
   background:linear-gradient(135deg,#fff 55%,rgba(255,255,255,.55));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  transition:font-size .2s ease;
 }
 .donut-sub{
   font-size:8px;font-weight:700;color:rgba(255,255,255,.28);
   letter-spacing:.15em;margin-top:5px;display:block;text-transform:uppercase;
-  transition:color .2s ease;
 }
-/* SVG segment base transitions */
-svg.udonut circle.useg{
+#u1,#u2,#u3,#u4,#u5,#u6{
+  filter:drop-shadow(0 0 6px rgba(255,255,255,.08));
   transition:stroke-dasharray .4s cubic-bezier(.16,1,.3,1),
-             stroke-dashoffset .55s cubic-bezier(.16,1,.3,1),
-             stroke-width .25s cubic-bezier(.34,1.56,.64,1),
-             opacity .22s ease,
-             filter .22s ease;
-  will-change:stroke-dasharray,stroke-dashoffset,stroke-width,opacity;
-  cursor:pointer;
-}
-/* Hover — subtle grow */
-svg.udonut circle.useg:hover{
-  stroke-width:14px;
-  filter:drop-shadow(0 0 8px currentColor);
-}
-/* Selected segment — pop out + glow */
-svg.udonut circle.useg.seg-active{
-  stroke-width:16px;
-  filter:drop-shadow(0 0 12px currentColor) drop-shadow(0 0 4px currentColor);
-  opacity:1 !important;
-}
-/* Dimmed segments */
-svg.udonut circle.useg.seg-dim{
-  opacity:0.18;
-  stroke-width:11px;
-  filter:none;
-}
-/* Center label when a university is selected */
-.donut-ctr.has-sel .donut-num{
-  font-size:22px;
-}
-.donut-ctr.has-sel .donut-sub{
-  color:rgba(255,255,255,.55);
-  font-size:7px;
+             stroke-dashoffset .55s cubic-bezier(.16,1,.3,1);
+  will-change:stroke-dasharray,stroke-dashoffset;
 }
 
-/* ── Donut tooltip ───────────────────────────────────── */
-.donut-tip{
-  position:absolute;
-  background:rgba(10,11,24,.97);
-  border:1px solid rgba(255,255,255,.14);
-  border-radius:10px;padding:9px 13px;
-  pointer-events:none;
-  opacity:0;
-  transform:translate(-50%,-110%) scale(.92);
-  transition:opacity .15s ease,transform .15s ease;
-  z-index:50;white-space:nowrap;
-  box-shadow:0 8px 28px rgba(0,0,0,.6);
-  min-width:120px;
-}
-.donut-tip.show{
-  opacity:1;
-  transform:translate(-50%,-110%) scale(1);
-}
-.donut-tip-name{font-size:12px;font-weight:800;color:#fff;margin-bottom:4px;}
-.donut-tip-row{display:flex;align-items:center;justify-content:space-between;gap:14px;}
-.donut-tip-val{font-size:18px;font-weight:900;line-height:1;}
-.donut-tip-pct{font-size:11px;font-weight:700;color:rgba(255,255,255,.4);margin-top:2px;}
-
-/* Legend — stretches full height, rows space-evenly */
+/* Legend — stretches full height, rows space-evenly to fill it */
 .leg{
   flex:1;min-width:0;padding-left:18px;
   display:flex;flex-direction:column;
-  justify-content:space-evenly;
+  justify-content:space-evenly;  /* rows spread to fill whatever height exists */
 }
 .leg-row{
   display:flex;align-items:center;justify-content:space-between;gap:8px;
-  padding:5px 10px;border-radius:8px;
-  transition:background .12s,opacity .22s ease,transform .2s ease;
-  cursor:pointer;
-  flex:1;max-height:42px;
+  padding:5px 10px;border-radius:8px;transition:background .12s;cursor:default;
+  flex:1;max-height:42px;        /* cap so rows don't balloon on very tall cards */
 }
-.leg-row:hover{ background:rgba(255,255,255,.07); }
-/* Selected legend row */
-.leg-row.leg-active{
-  background:rgba(255,255,255,.09);
-  border:1px solid rgba(255,255,255,.12);
-  transform:translateX(3px);
-}
-/* Dimmed legend row */
-.leg-row.leg-dim{
-  opacity:0.28;
-  pointer-events:none;
-}
+.leg-row:hover{background:rgba(255,255,255,.055);}
 .leg-l{display:flex;align-items:center;gap:9px;min-width:0;flex:1;}
-.leg-dot{
-  width:10px;height:10px;border-radius:50%;flex-shrink:0;
-  transition:transform .2s ease,box-shadow .2s ease;
-}
-.leg-row.leg-active .leg-dot{
-  transform:scale(1.4);
-  box-shadow:0 0 8px currentColor;
-}
+.leg-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
 .leg-name{
   font-size:12.5px;font-weight:600;color:rgba(255,255,255,.72);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;
-  transition:color .2s ease;
 }
-.leg-row.leg-active .leg-name{ color:#fff;font-weight:800; }
 .leg-pct{
   font-size:10px;font-weight:700;color:rgba(255,255,255,.2);
   min-width:32px;text-align:right;flex-shrink:0;
-  transition:color .2s ease;
 }
-.leg-row.leg-active .leg-pct{ color:rgba(255,255,255,.55); }
 .leg-val{
   font-size:14px;font-weight:900;
   min-width:28px;text-align:right;flex-shrink:0;letter-spacing:-.02em;
@@ -459,103 +387,6 @@ svg.udonut circle.useg.seg-dim{
 .univ-filter-name{color:#fff;}
 .univ-filter-x{cursor:pointer;opacity:.5;font-size:13px;line-height:1;transition:opacity .15s;margin-left:2px;}
 .univ-filter-x:hover{opacity:1;}
-
-/* ═══════════════════════════════════════════════════════
-   MULTI-LEVEL FILTER BREADCRUMB TRAIL
-═══════════════════════════════════════════════════════ */
-.filter-trail{
-  display:none;align-items:center;gap:0;
-  flex-wrap:wrap;
-  margin-bottom:10px;
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:12px;
-  padding:7px 12px;
-  position:relative;z-index:10;
-}
-.filter-trail.show{ display:flex; }
-
-/* "Filters:" label */
-.ft-label{
-  font-size:9px;font-weight:800;letter-spacing:.12em;
-  color:rgba(255,255,255,.25);text-transform:uppercase;
-  margin-right:8px;flex-shrink:0;
-}
-
-/* Each crumb */
-.ft-crumb{
-  display:flex;align-items:center;gap:5px;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:20px;
-  padding:3px 10px 3px 8px;
-  cursor:pointer;
-  transition:background .15s,border-color .15s,transform .12s;
-  user-select:none;
-  white-space:nowrap;
-}
-.ft-crumb:hover{
-  background:rgba(255,255,255,.12);
-  border-color:rgba(255,255,255,.22);
-  transform:translateY(-1px);
-}
-.ft-crumb-dot{
-  width:7px;height:7px;border-radius:50%;flex-shrink:0;
-}
-.ft-crumb-level{
-  font-size:8px;font-weight:800;letter-spacing:.1em;
-  color:rgba(255,255,255,.3);text-transform:uppercase;
-}
-.ft-crumb-name{
-  font-size:11px;font-weight:800;color:#fff;
-  max-width:90px;overflow:hidden;text-overflow:ellipsis;
-}
-.ft-crumb-x{
-  font-size:11px;color:rgba(255,255,255,.35);
-  margin-left:2px;transition:color .12s;
-  line-height:1;
-}
-.ft-crumb:hover .ft-crumb-x{ color:#fff; }
-
-/* Separator chevron between crumbs */
-.ft-sep{
-  font-size:10px;color:rgba(255,255,255,.2);
-  margin:0 4px;flex-shrink:0;line-height:1;
-  user-select:none;pointer-events:none;
-}
-
-/* Clear-all button */
-.ft-clear{
-  margin-left:auto;
-  font-size:9px;font-weight:800;letter-spacing:.08em;
-  color:rgba(255,255,255,.28);cursor:pointer;
-  padding:3px 8px;border-radius:20px;
-  border:1px solid rgba(255,255,255,.08);
-  background:transparent;
-  transition:color .13s,background .13s,border-color .13s;
-  white-space:nowrap;flex-shrink:0;
-  font-family:var(--font);
-}
-.ft-clear:hover{
-  color:#f87171;
-  background:rgba(248,113,113,.1);
-  border-color:rgba(248,113,113,.3);
-}
-
-/* ── Bars dim/highlight when filtered ── */
-.br.ml-dim{ opacity:.22; pointer-events:none; }
-.br.ml-active .bf{ box-shadow:0 0 0 2px rgba(255,255,255,.35) inset; }
-.br.ml-active{ opacity:1; }
-
-/* ── Active filter glow on card header ── */
-.card.filter-active .card-title::after{
-  content:'';display:inline-block;
-  width:6px;height:6px;border-radius:50%;
-  background:#10b981;margin-left:8px;
-  vertical-align:middle;
-  box-shadow:0 0 6px rgba(16,185,129,.7);
-  animation:pulse 2s infinite;
-}
 
 /* ═══════════════════════════════════════════════════════
    TOP PERFORMERS
@@ -717,7 +548,40 @@ svg.udonut circle.useg.seg-dim{
 .inc-rank.r2{background:rgba(226,232,240,.12);color:#e2e8f0;border:1px solid rgba(226,232,240,.18);}
 .inc-rank.r3{background:rgba(245,158,11,.2);color:#fbbf24;border:1px solid rgba(245,158,11,.28);}
 .inc-rank.rn{background:rgba(255,255,255,.06);color:rgba(255,255,255,.38);border:1px solid rgba(255,255,255,.08);}
-.inc-name{width:98px;flex-shrink:0;}
+.inc-name{width:104px;flex-shrink:0;}
+/* counsellor status chips + tags (Sheet2) */
+.c-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+.cchip{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55);font-family:var(--font);font-size:10px;font-weight:700;padding:4px 9px;border-radius:999px;cursor:pointer;display:inline-flex;gap:5px;align-items:center;transition:background .15s,border-color .15s,color .15s;}
+.cchip b{font-weight:800;color:#fff;opacity:.85;}
+.cchip:hover{border-color:rgba(255,255,255,.28);color:#fff;}
+.cchip.on{background:rgba(129,140,248,.22);border-color:rgba(129,140,248,.6);color:#fff;}
+.cg-tags{display:flex;gap:4px;margin-top:3px;flex-wrap:wrap;}
+.ctag{font-size:9px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:6px;line-height:1.5;white-space:nowrap;}
+.ctag.a{color:#34d399;background:rgba(52,211,153,.13);}
+.ctag.i{color:#fff;background:#dc2626;border:1px solid #f87171;box-shadow:0 0 8px rgba(239,68,68,.45);}
+/* QUALIFY — deep blue, solid, white text */
+.ctag.q{color:#fff;background:#1d4ed8;border:1px solid #60a5fa;box-shadow:0 0 8px rgba(59,130,246,.55);}
+/* NOT QUALIFY — deep orange, solid, white text */
+.ctag.n{color:#fff;background:#c2410c;border:1px solid #fb923c;box-shadow:0 0 8px rgba(249,115,22,.55);}
+.cg-card.cg-off{opacity:1;background:rgba(239,68,68,.09);border-color:rgba(248,113,113,.65) !important;box-shadow:inset 3px 0 0 #ef4444;}
+/* inactive counsellor name — bright red, clearly readable on the dark cards */
+.c-off{color:#ff6b6b !important;text-shadow:0 0 10px rgba(239,68,68,.35);}
+.cg-card.cg-off .cg-fill{background:rgba(239,68,68,.22) !important;}
+.cg-card.cg-zero .cg-count{opacity:.5;}
+/* leaderboard controls: sort + status filter */
+.inc-ctl{display:flex;flex-wrap:wrap;gap:8px;margin:-4px 0 14px;position:relative;z-index:1;}
+.inc-ctl-row{display:inline-flex;align-items:center;gap:3px;flex-wrap:wrap;padding:5px 6px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);}
+.inc-ctl-lbl{font-size:9px;font-weight:800;letter-spacing:.12em;color:rgba(255,255,255,.35);padding:0 6px 0 8px;}
+.inc-ctl-div{width:1px;height:16px;background:rgba(255,255,255,.12);margin-right:4px;}
+.inc-ctl button{font-family:inherit;font-size:11px;font-weight:700;color:rgba(255,255,255,.5);background:transparent;border:1px solid transparent;border-radius:9px;padding:6px 11px;cursor:pointer;display:inline-flex;gap:5px;align-items:center;white-space:nowrap;transition:background .15s,color .15s,border-color .15s;}
+.inc-ctl button:hover{color:#fff;background:rgba(255,255,255,.06);}
+.inc-ctl button.on{color:#34d399;background:rgba(16,185,129,.16);border-color:rgba(16,185,129,.4);}
+.inc-ctl button b{font-weight:800;opacity:.85;}
+.inc-ctl .ar{font-weight:900;}
+.rbtn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);font-family:var(--font);font-size:10px;font-weight:700;padding:4px 10px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s,border-color .15s;}
+.rbtn:hover{background:rgba(129,140,248,.2);border-color:rgba(129,140,248,.5);color:#fff;}
+.rbtn:disabled{opacity:.5;cursor:wait;}
+.c-diag{flex-basis:100%;font-size:11px;font-weight:600;color:#fbbf24;background:rgba(251,191,36,.09);border:1px solid rgba(251,191,36,.28);border-radius:8px;padding:7px 10px;line-height:1.45;}
 .inc-name-main{font-size:12px;font-weight:800;color:#fff;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .inc-name-adm{font-size:10px;font-weight:700;color:rgba(255,255,255,.35);display:block;margin-top:1px;}
 .inc-track-wrap{flex:1;position:relative;height:40px;}
@@ -744,50 +608,6 @@ svg.udonut circle.useg.seg-dim{
 .inc-row:nth-child(1) .inc-bar{box-shadow:0 0 22px rgba(251,191,36,.28);}
 .inc-row:nth-child(2) .inc-bar{box-shadow:0 0 16px rgba(148,163,184,.16);}
 .inc-row:nth-child(3) .inc-bar{box-shadow:0 0 16px rgba(180,107,60,.2);}
-
-/* ═══════════════════════════════════════════════════════
-   INCENTIVE SORT CONTROLS
-═══════════════════════════════════════════════════════ */
-.inc-controls{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:14px;gap:10px;flex-wrap:wrap;position:relative;z-index:1;
-}
-.inc-sort-group{
-  display:flex;align-items:center;gap:6px;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:10px;padding:4px;gap:3px;
-}
-.inc-sort-lbl{
-  font-size:9px;font-weight:800;color:rgba(255,255,255,.3);
-  letter-spacing:.1em;text-transform:uppercase;
-  padding:0 6px 0 4px;white-space:nowrap;
-  border-right:1px solid rgba(255,255,255,.08);
-  margin-right:2px;
-}
-.inc-sort-btn{
-  display:flex;align-items:center;gap:4px;
-  padding:5px 10px;border-radius:7px;
-  font-size:10px;font-weight:800;letter-spacing:.02em;
-  cursor:pointer;border:none;background:transparent;
-  color:rgba(255,255,255,.35);font-family:var(--font);
-  transition:color .13s,background .13s;user-select:none;
-  white-space:nowrap;
-}
-.inc-sort-btn:hover{ color:rgba(255,255,255,.75); background:rgba(255,255,255,.07); }
-.inc-sort-btn.active{
-  background:rgba(99,102,241,.22);
-  border:1px solid rgba(99,102,241,.45);
-  color:#a5b4fc;
-}
-.inc-sort-btn.active.asc{ background:rgba(16,185,129,.18); border-color:rgba(16,185,129,.4); color:#34d399; }
-.inc-sort-btn svg{ flex-shrink:0; transition:transform .2s ease; }
-.inc-sort-btn.active svg{ transform:translateY(-1px); }
-/* Subtle row reorder animation */
-.inc-chart{ transition:opacity .18s ease; }
-.inc-chart.sorting{ opacity:0.45; }
-/* Rank badge changes with sort */
-.inc-rank.sorted-asc.r1{ background:rgba(16,185,129,.2);color:#34d399;border-color:rgba(16,185,129,.35); }
 
 /* ═══════════════════════════════════════════════════════
    CALENDAR PANEL
@@ -1011,157 +831,8 @@ svg.udonut circle.useg.seg-dim{
 .dash-wrap { transform: translateZ(0); }
 
 /* ═══════════════════════════════════════════════════════
-   DOWNLOAD BUTTON & PANEL
+   LOGIN OVERLAY
 ═══════════════════════════════════════════════════════ */
-.dl-btn{
-  display:flex;align-items:center;gap:6px;
-  padding:7px 13px;border-radius:10px;
-  border:1px solid rgba(16,185,129,.3);
-  background:rgba(16,185,129,.1);
-  cursor:pointer;font-size:12px;font-weight:700;
-  color:#34d399;font-family:var(--font);
-  transition:all .15s ease;white-space:nowrap;user-select:none;
-  position:relative;
-}
-.dl-btn:hover{
-  background:rgba(16,185,129,.18);
-  border-color:rgba(16,185,129,.5);
-  color:#6ee7b7;
-  box-shadow:0 0 16px rgba(16,185,129,.2);
-  transform:translateY(-1px);
-}
-.dl-btn:active{ transform:translateY(0); }
-.dl-btn svg{ flex-shrink:0; }
-.dl-btn .dl-chevron{
-  font-size:9px;opacity:.6;transition:transform .2s;
-}
-.dl-btn.open .dl-chevron{ transform:rotate(180deg); }
-
-/* Download dropdown panel */
-.dl-panel{
-  position:absolute;top:calc(100% + 10px);right:0;
-  background:linear-gradient(160deg,rgba(18,19,38,.98),rgba(13,14,28,.99));
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:18px;padding:0;
-  min-width:260px;z-index:9999;
-  box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.04) inset;
-  display:none;overflow:hidden;
-  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-  animation:menuPop .18s cubic-bezier(.34,1.56,.64,1) both;
-  transform-origin:top right;
-}
-.dl-panel.open{ display:block; }
-
-/* Panel header */
-.dl-panel-hdr{
-  padding:14px 16px 12px;
-  background:linear-gradient(135deg,rgba(16,185,129,.16),rgba(6,182,212,.07));
-  border-bottom:1px solid rgba(255,255,255,.07);
-  position:relative;overflow:hidden;
-}
-.dl-panel-hdr::before{
-  content:'';position:absolute;top:-28px;right:-28px;
-  width:90px;height:90px;border-radius:50%;
-  background:radial-gradient(circle,rgba(16,185,129,.2),transparent 65%);
-  pointer-events:none;
-}
-.dl-panel-title{
-  font-size:12px;font-weight:800;color:#fff;
-  display:flex;align-items:center;gap:7px;margin-bottom:4px;
-}
-.dl-panel-sub{
-  font-size:10px;font-weight:600;color:rgba(255,255,255,.35);
-  line-height:1.4;
-}
-.dl-filter-badge{
-  display:inline-flex;align-items:center;gap:4px;
-  background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);
-  border-radius:20px;padding:2px 8px;
-  font-size:9px;font-weight:700;color:#34d399;
-  margin-top:6px;
-}
-
-/* Format options */
-.dl-formats{
-  padding:10px;display:flex;flex-direction:column;gap:6px;
-}
-.dl-fmt-btn{
-  display:flex;align-items:center;gap:10px;
-  padding:11px 14px;border-radius:12px;
-  border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.04);
-  cursor:pointer;transition:all .15s ease;
-  position:relative;overflow:hidden;
-}
-.dl-fmt-btn::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);
-  transform:translateX(-100%);transition:transform .4s ease;
-  pointer-events:none;
-}
-.dl-fmt-btn:hover::before{ transform:translateX(100%); }
-.dl-fmt-btn:hover{
-  background:rgba(255,255,255,.08);
-  border-color:rgba(255,255,255,.15);
-  transform:translateX(3px);
-}
-.dl-fmt-btn:active{ transform:translateX(1px); }
-.dl-fmt-btn.dl-xlsx:hover{
-  background:rgba(34,197,94,.1);
-  border-color:rgba(34,197,94,.3);
-}
-.dl-fmt-btn.dl-csv:hover{
-  background:rgba(99,102,241,.1);
-  border-color:rgba(99,102,241,.3);
-}
-.dl-fmt-ico{
-  width:32px;height:32px;border-radius:9px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;border:1px solid transparent;
-}
-.dl-xlsx .dl-fmt-ico{
-  background:rgba(34,197,94,.15);
-  border-color:rgba(34,197,94,.25);
-}
-.dl-csv .dl-fmt-ico{
-  background:rgba(99,102,241,.15);
-  border-color:rgba(99,102,241,.25);
-}
-.dl-fmt-body{ flex:1;min-width:0; }
-.dl-fmt-name{
-  font-size:12px;font-weight:800;color:#fff;
-  display:block;line-height:1.2;
-}
-.dl-fmt-desc{
-  font-size:10px;font-weight:600;color:rgba(255,255,255,.35);
-  display:block;margin-top:2px;
-}
-.dl-fmt-tag{
-  font-size:9px;font-weight:800;letter-spacing:.06em;
-  padding:2px 7px;border-radius:5px;flex-shrink:0;
-}
-.dl-xlsx .dl-fmt-tag{ background:rgba(34,197,94,.18);color:#4ade80; }
-.dl-csv  .dl-fmt-tag{ background:rgba(99,102,241,.18);color:#a5b4fc; }
-
-/* Progress / loading state inside panel */
-.dl-progress{
-  display:none;align-items:center;gap:10px;
-  padding:10px 14px 12px;
-  font-size:11px;font-weight:700;color:rgba(255,255,255,.5);
-}
-.dl-progress.show{ display:flex; }
-.dl-spinner{
-  width:16px;height:16px;border-radius:50%;
-  border:2px solid rgba(16,185,129,.2);
-  border-top-color:#34d399;
-  animation:spin .6s linear infinite;flex-shrink:0;
-}
-.dl-success{
-  display:none;align-items:center;gap:8px;
-  padding:8px 14px 12px;
-  font-size:11px;font-weight:700;color:#34d399;
-}
-.dl-success.show{ display:flex; }
 #loginModal{
   position:fixed;inset:0;z-index:99999;
   display:none;align-items:center;justify-content:center;
@@ -1231,874 +902,53 @@ body.role-tl #tlIncSection {
   display: block !important;
 }
 body.role-manager #tlIncSection,
-body.role-manager #mgrIncSection {
-  display: block !important;
-}
+body.role-manager #mgrIncSection,
 body.role-director #tlIncSection,
 body.role-director #mgrIncSection {
   display: block !important;
 }
-
-/* Download button — hidden by default, only Director sees it */
-#dlWrap {
-  display: none !important;
-}
-body.role-director #dlWrap {
-  display: flex !important;
-  align-items: center;
-}
-
-/* Director avatar glow */
-.ava.ava-director{
-  background:linear-gradient(135deg,#b45309,#f59e0b) !important;
-  box-shadow:0 0 0 2px rgba(245,158,11,.5),0 0 14px rgba(245,158,11,.4) !important;
-  animation:dirGlow 2.5s ease-in-out infinite;
-}
-@keyframes dirGlow{
-  0%,100%{ box-shadow:0 0 0 2px rgba(245,158,11,.5),0 0 14px rgba(245,158,11,.4); }
-  50%    { box-shadow:0 0 0 2px rgba(245,158,11,.8),0 0 22px rgba(245,158,11,.6); }
-}
-
-/* Director role badge color */
-.user-menu-role.role-dir{ color:#fbbf24; }
-
-/* Director crown badge on menu header */
-.user-menu-header.dir-header{
-  background:linear-gradient(135deg,rgba(180,83,9,.22),rgba(245,158,11,.1));
-}
-.user-menu-header.dir-header::before{
-  background:radial-gradient(circle,rgba(245,158,11,.25),transparent 65%);
-}
+/* Director-only export buttons */
+.exp-btn{display:none !important;}
+body.role-director .exp-btn{display:inline-flex !important;align-items:center;gap:4px;border-color:rgba(251,191,36,.45);color:#fbbf24;}
+body.role-director .exp-btn:hover{background:rgba(251,191,36,.14);border-color:rgba(251,191,36,.75);color:#fde68a;}
 /* User menu */
 .ava{ cursor:pointer; }
 .user-menu{
-  position:absolute;top:calc(100% + 10px);right:0;
-  background:linear-gradient(160deg,rgba(18,19,38,.98),rgba(13,14,28,.99));
+  position:absolute;top:calc(100% + 8px);right:0;
+  background:rgba(20,21,35,.96);
   border:1px solid rgba(255,255,255,.1);
-  border-radius:20px;padding:0;
-  min-width:220px;z-index:9999;
-  box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.04) inset;
+  border-radius:14px;padding:8px;
+  min-width:200px;z-index:9999;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);
   display:none;
-  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  backdrop-filter:blur(12px);
   overflow:hidden;
-  animation:menuPop .18s cubic-bezier(.34,1.56,.64,1) both;
-  transform-origin:top right;
-}
-@keyframes menuPop{
-  from{opacity:0;transform:scale(.88) translateY(-6px);}
-  to{opacity:1;transform:scale(1) translateY(0);}
 }
 .user-menu.open{display:block;}
-
-/* Top gradient header band */
-.user-menu-header{
-  padding:14px 14px 12px;
-  background:linear-gradient(135deg,rgba(99,102,241,.18),rgba(6,182,212,.08));
-  border-bottom:1px solid rgba(255,255,255,.07);
-  display:flex;align-items:center;gap:10px;
-  position:relative;overflow:hidden;
-}
-.user-menu-header::before{
-  content:'';position:absolute;top:-30px;right:-30px;
-  width:100px;height:100px;border-radius:50%;
-  background:radial-gradient(circle,rgba(99,102,241,.22),transparent 65%);
-  pointer-events:none;
-}
-.user-menu-avatar{
-  width:34px;height:34px;border-radius:10px;flex-shrink:0;
-  background:linear-gradient(135deg,#6366f1,#06b6d4);
-  display:flex;align-items:center;justify-content:center;
-  font-weight:900;font-size:12px;color:#fff;
-  box-shadow:0 0 0 2px rgba(99,102,241,.45),0 4px 12px rgba(99,102,241,.3);
-}
-.user-menu-info{flex:1;min-width:0;}
 .user-menu-name{
-  font-size:12px;font-weight:800;color:#fff;
-  padding:0;margin-bottom:2px;
+  font-size:12px;font-weight:700;color:rgba(255,255,255,.9);
+  padding:8px 10px 4px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  line-height:1.2;
 }
 .user-menu-role{
-  font-size:9px;font-weight:700;letter-spacing:.06em;
-  padding:0;border:none;margin:0;
+  font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(255,255,255,.35);padding:0 10px 8px;
+  border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:4px;
   white-space:nowrap;
-  background:none;
 }
-/* Role-specific colors */
-.user-menu-role.role-mgr{ color:#a5b4fc; }
-.user-menu-role.role-tl { color:#34d399; }
-.user-menu-role.role-pub{ color:rgba(255,255,255,.35); }
-
-.user-menu-body{padding:6px 6px 0;}
-
 .user-menu-item{
-  padding:8px 10px;border-radius:10px;font-size:12px;font-weight:600;
-  color:rgba(255,255,255,.65);cursor:pointer;
-  transition:background .15s,color .15s,transform .1s;
+  padding:9px 10px;border-radius:8px;font-size:13px;font-weight:600;
+  color:rgba(255,255,255,.7);cursor:pointer;
+  transition:background .15s,color .15s;
   display:flex;align-items:center;gap:8px;
-  position:relative;
 }
-.user-menu-item:hover{background:rgba(255,255,255,.07);color:#fff;transform:translateX(2px);}
-.user-menu-item .menu-icon{
-  width:24px;height:24px;border-radius:7px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:12px;
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
-  transition:background .15s;
-}
-.user-menu-item:hover .menu-icon{background:rgba(255,255,255,.1);}
-.user-menu-item.login-item{ color:rgba(100,200,255,.85); }
-.user-menu-item.login-item .menu-icon{ background:rgba(100,200,255,.1); border-color:rgba(100,200,255,.2); }
-.user-menu-item.login-item:hover{ background:rgba(100,200,255,.08); color:#7dd3fc; }
-
-/* ── Sign Out button — compact pill style ── */
-.user-menu-item.logout{
-  margin:0;
-  padding:0;
-  border-radius:0;
-  overflow:hidden;
-  border:none;
-  background:none;
-  display:block;
-}
-.signout-btn{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  width:100%;padding:9px 14px;
-  background:linear-gradient(180deg,#f03a2e 0%,#c0170d 55%,#a01008 100%);
-  border:none;
-  border-radius:0 0 20px 20px;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.25),
-    inset 0 -1px 0 rgba(0,0,0,.2),
-    0 6px 18px rgba(180,20,10,.5);
-  color:#fff;
-  font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
-  font-family:var(--font);
-  cursor:pointer;position:relative;overflow:hidden;
-  transition:all .12s cubic-bezier(.16,1,.3,1);
-  text-shadow:0 1px 3px rgba(0,0,0,.5);
-}
-  color:#fff;
-  font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;
-  font-family:var(--font);
-  cursor:pointer;position:relative;overflow:hidden;
-  transition:all .12s cubic-bezier(.16,1,.3,1);
-  text-shadow:0 1px 3px rgba(0,0,0,.5);
-}
-.signout-btn::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:45%;
-  background:linear-gradient(180deg,rgba(255,255,255,.18),transparent);
-  border-radius:10px 10px 50% 50%;
-  pointer-events:none;
-}
-.signout-btn:hover{
-  background:linear-gradient(180deg,#f84a3e 0%,#d41e13 55%,#b01210 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.28),
-    0 8px 22px rgba(180,20,10,.65);
-}
-.signout-btn:active{
-  background:linear-gradient(180deg,#c0170d 0%,#a01008 100%);
-  box-shadow:inset 0 2px 6px rgba(0,0,0,.3);
-}
-.signout-arrow{
-  display:flex;align-items:center;justify-content:center;
-  width:14px;height:14px;flex-shrink:0;
-  background:rgba(0,0,0,.2);border-radius:3px;
-  font-size:8px;line-height:1;
-}
-.user-menu-divider{ height:1px; background:rgba(255,255,255,.06); margin:4px 0; }
+.user-menu-item:hover{background:rgba(255,255,255,.07);color:#fff;}
+.user-menu-item.logout{color:#f87171;}
+.user-menu-item.logout:hover{background:rgba(248,113,113,.1);}
 .hd-right{position:relative;z-index:2000;}
 /* Ensure user menu is never clipped by parent overflow/contain */
 .wrap{contain:layout;}
 .topbar{overflow:visible;position:relative;z-index:100;}
-
-/* ═══════════════════════════════════════════════════════
-   ENHANCEMENT LAYER — Smooth · Fast · Addictive UX
-═══════════════════════════════════════════════════════ */
-
-/* ── Global micro-interaction timing ── */
-:root{
-  --ease-spring:cubic-bezier(.34,1.56,.64,1);
-  --ease-out:cubic-bezier(.16,1,.3,1);
-  --ease-in-out:cubic-bezier(.45,0,.55,1);
-  --t-fast:120ms;
-  --t-med:220ms;
-  --t-slow:380ms;
-}
-
-/* ── Topbar: sticky with blur glass ── */
-.topbar{
-  position:sticky;top:0;z-index:200;
-  background:rgba(7,8,15,.82);
-  backdrop-filter:blur(20px) saturate(180%);
-  -webkit-backdrop-filter:blur(20px) saturate(180%);
-  border-bottom:1px solid rgba(255,255,255,.06);
-  margin-bottom:0;
-  padding:10px 0 10px;
-  margin-left:-20px;margin-right:-20px;
-  padding-left:20px;padding-right:20px;
-  transition:box-shadow var(--t-med) ease;
-}
-.topbar.scrolled{
-  box-shadow:0 4px 32px rgba(0,0,0,.5);
-  border-bottom-color:rgba(255,255,255,.1);
-}
-
-/* ── Tab: smooth sliding pill indicator ── */
-.tabs{
-  position:relative;
-  border-radius:26px;
-  overflow:hidden;
-}
-.tab-indicator{
-  position:absolute;
-  height:calc(100% - 6px);
-  top:3px;
-  background:#fff;
-  border-radius:22px;
-  transition:left var(--t-med) var(--ease-out), width var(--t-med) var(--ease-out);
-  pointer-events:none;
-  z-index:0;
-}
-.tab{
-  position:relative;z-index:1;
-  transition:color var(--t-fast) ease;
-}
-.tab.on{background:transparent;color:#08091a;}
-.tab.on::after{display:none;} /* remove old underline indicator */
-
-/* ── KPI cards: bigger, more visual ── */
-.statusbar{ margin-bottom:16px; }
-.kpis{ gap:10px; }
-.kpi{
-  border-radius:16px;padding:10px 18px;
-  flex-direction:column;align-items:flex-start;gap:3px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.08);
-  min-width:90px;
-  transition:transform var(--t-fast) ease, box-shadow var(--t-med) ease, background var(--t-med) ease;
-  cursor:default;
-}
-.kpi:hover{
-  transform:translateY(-2px);
-  background:rgba(255,255,255,.08);
-  box-shadow:0 8px 24px rgba(0,0,0,.3);
-}
-.kpi-lbl{font-size:9px;letter-spacing:.1em;margin-bottom:1px;}
-.kpi-val{font-size:22px;font-weight:900;letter-spacing:-.02em;line-height:1.1;}
-.kpi.net{ border-color:rgba(103,232,249,.2); background:rgba(103,232,249,.06); }
-.kpi.net:hover{ background:rgba(103,232,249,.1); box-shadow:0 8px 24px rgba(103,232,249,.08); }
-.kpi.can{ border-color:rgba(252,165,165,.2); background:rgba(252,165,165,.06); }
-.kpi.can:hover{ background:rgba(252,165,165,.1); box-shadow:0 8px 24px rgba(252,165,165,.08); }
-
-/* ── Cards: elevated glass with shimmer on hover ── */
-.card,.full-card{
-  border-radius:20px;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.07);
-  position:relative;overflow:hidden;
-  transition:transform var(--t-med) var(--ease-out),
-             box-shadow var(--t-med) ease,
-             border-color var(--t-med) ease;
-}
-.card::before,.full-card::before{
-  content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.025),transparent);
-  transform:skewX(-15deg);
-  transition:left .6s var(--ease-out);
-  pointer-events:none;z-index:0;opacity:0;
-}
-.card:hover::before,.full-card:hover::before{
-  left:120%;opacity:1;
-}
-.card:hover,.full-card:hover{
-  transform:translateY(-2px);
-  box-shadow:0 16px 48px rgba(0,0,0,.35);
-  border-color:rgba(255,255,255,.13);
-}
-/* Card content above shimmer */
-.card > *,.full-card > *{ position:relative;z-index:1; }
-
-/* ── Bar rows: richer hover + click ripple ── */
-.br{
-  border-radius:10px;
-  padding:4px 6px 4px 4px;
-  transition:background var(--t-fast) ease, transform var(--t-fast) ease;
-}
-.br:hover{
-  background:rgba(255,255,255,.05);
-  transform:translateX(3px);
-  opacity:1 !important;
-}
-.br:active{ transform:translateX(1px) scale(.99); }
-.bn{ font-size:12px; }
-.bt{ height:34px; }
-.bv{ color:rgba(255,255,255,.7); }
-
-/* Bar fill: glow tip */
-.bf::after{
-  content:'';position:absolute;right:0;top:0;bottom:0;width:3px;
-  background:rgba(255,255,255,.6);border-radius:0 8px 8px 0;
-  filter:blur(2px);
-}
-
-/* ── Trend chart: taller, better labels ── */
-.chart-wrap{ height:220px; }
-.trend-stats{ gap:28px; margin-bottom:20px; }
-.tstat{ 
-  cursor:default;
-  transition:transform var(--t-fast) ease;
-}
-.tstat:hover{ transform:translateY(-2px); }
-.tstat-val{ font-size:24px; }
-
-/* ── Counsellor grid: smoother cards ── */
-.cg-card{
-  border-radius:12px;
-  transition:transform var(--t-fast) var(--ease-spring),
-             box-shadow var(--t-med) ease,
-             border-color var(--t-fast) ease;
-  cursor:pointer;
-}
-.cg-card:hover{
-  transform:translateY(-3px) scale(1.02);
-  box-shadow:0 8px 28px rgba(0,0,0,.35);
-}
-.cg-card:active{ transform:translateY(-1px) scale(1.01); }
-
-/* ── Podium cards: spring animation ── */
-.c-pod{
-  transition:transform var(--t-fast) var(--ease-spring),
-             box-shadow var(--t-med) ease;
-}
-.c-pod:hover{
-  transform:translateY(-4px);
-  box-shadow:0 12px 32px rgba(0,0,0,.3);
-}
-
-/* ── Filter trail: pill animations ── */
-.filter-trail{
-  animation:slideDown .2s var(--ease-out) both;
-  border-radius:16px;
-  background:rgba(255,255,255,.04);
-  border-color:rgba(255,255,255,.09);
-  padding:8px 14px;
-  margin-bottom:14px;
-}
-@keyframes slideDown{
-  from{opacity:0;transform:translateY(-8px);}
-  to{opacity:1;transform:translateY(0);}
-}
-.ft-crumb{
-  transition:background var(--t-fast) ease,
-             transform var(--t-fast) var(--ease-spring),
-             box-shadow var(--t-med) ease;
-}
-.ft-crumb:hover{
-  transform:translateY(-2px);
-  box-shadow:0 4px 14px rgba(0,0,0,.25);
-}
-.ft-crumb:active{ transform:translateY(0); }
-
-/* ── Legend rows: interactive hover ── */
-.leg-row{
-  display:flex;align-items:center;gap:8px;
-  padding:5px 8px;border-radius:8px;
-  cursor:pointer;
-  transition:background var(--t-fast) ease, transform var(--t-fast) ease;
-}
-.leg-row:hover{
-  background:rgba(255,255,255,.07);
-  transform:translateX(3px);
-}
-.leg-name{
-  font-size:11px;font-weight:700;color:rgba(255,255,255,.75);flex:1;
-  transition:color var(--t-fast) ease;
-}
-.leg-row:hover .leg-name{ color:#fff; }
-.leg-pct{font-size:10px;font-weight:700;color:rgba(255,255,255,.35);margin-right:4px;}
-.leg-val{font-size:12px;font-weight:800;min-width:22px;text-align:right;}
-
-/* ── Top performers: entry animation ── */
-.ti{
-  transition:transform var(--t-fast) var(--ease-spring),
-             box-shadow var(--t-med) ease;
-  animation:fadeUp .3s var(--ease-out) both;
-}
-.ti:nth-child(1){animation-delay:.04s;}
-.ti:nth-child(2){animation-delay:.08s;}
-.ti:nth-child(3){animation-delay:.12s;}
-.ti:hover{
-  transform:translateX(6px);
-  box-shadow:0 8px 28px rgba(0,0,0,.3);
-}
-
-/* ── Incentive section: entry ── */
-.inc-section{
-  animation:fadeUp .35s var(--ease-out) both;
-}
-.inc-row{
-  border-radius:10px;padding:2px 4px;
-  transition:background var(--t-fast) ease;
-}
-.inc-row:hover{ background:rgba(255,255,255,.04); }
-
-/* Threshold qualify styling for incentive leaderboard */
-.inc-row.threshold-qualify {
-  background: linear-gradient(90deg, rgba(16, 185, 129, 0.08), transparent);
-  border-left: 2px solid rgba(16, 185, 129, 0.5);
-}
-
-/* ── Donut hover tooltip: richer ── */
-.donut-tip{
-  background:rgba(8,9,22,.97);
-  border:1px solid rgba(255,255,255,.15);
-  border-radius:12px;padding:11px 16px;
-  box-shadow:0 16px 48px rgba(0,0,0,.6);
-  transition:opacity .1s ease;
-}
-.donut-tip-name{ font-size:12px;font-weight:800;color:#fff;margin-bottom:5px; }
-.donut-tip-row{ display:flex;align-items:center;gap:10px; }
-.donut-tip-val{ font-size:18px;font-weight:900;color:#fff; }
-.donut-tip-pct{
-  font-size:11px;font-weight:700;
-  background:rgba(255,255,255,.1);border-radius:6px;
-  padding:2px 7px;color:rgba(255,255,255,.6);
-}
-
-/* ── Donut center text: smooth transitions ── */
-.donut-num{
-  transition:all .25s var(--ease-out);
-}
-.donut-ctr.has-sel .donut-num{
-  font-size:20px;
-}
-
-/* ── Mobile: bottom tab bar ── */
-@media(max-width:660px){
-  .topbar{
-    padding:8px 14px;
-    gap:8px;
-  }
-  .brand-ico{ width:36px;height:36px;font-size:18px; }
-  .brand-title{ font-size:13px; }
-  .brand-sub{ display:none; }
-  .top-r{
-    width:100%;
-    overflow-x:auto;
-    scrollbar-width:none;
-    -ms-overflow-style:none;
-    padding-bottom:2px;
-    gap:6px;
-  }
-  .top-r::-webkit-scrollbar{ display:none; }
-  .tabs{ flex-shrink:0; }
-  .tab{ padding:5px 10px;font-size:11px; }
-  .kpi{ min-width:75px;padding:8px 12px; }
-  .kpi-val{ font-size:18px; }
-  .g2{ gap:10px; }
-  .card,.full-card{ padding:14px; border-radius:16px; }
-  .card:hover,.full-card:hover{ transform:none; } /* no hover lift on touch */
-  .cg-card:hover{ transform:none; }
-  .c-grid{ grid-template-columns:repeat(2,1fr); }
-  .wrap{ padding:10px 14px 60px; }
-  .statusbar{ flex-direction:column;align-items:flex-start;gap:6px; }
-  .kpis{ width:100%; justify-content:space-between; }
-}
-@media(max-width:480px){
-  .kpis{ gap:6px; }
-  .kpi{ min-width:60px;padding:7px 10px; }
-  .kpi-val{ font-size:16px; }
-  .tabs{ border-radius:20px; }
-}
-
-/* ── Scroll-into-view animation for sections ── */
-.section-animate{
-  opacity:0;transform:translateY(16px);
-  transition:opacity .4s var(--ease-out), transform .4s var(--ease-out);
-}
-.section-animate.visible{
-  opacity:1;transform:translateY(0);
-}
-
-/* ── Trend filter tabs: pill toggle ── */
-.tf{
-  transition:all var(--t-fast) ease;
-  border-radius:20px;
-}
-.tf:hover:not(.on){
-  background:rgba(255,255,255,.09);
-  color:rgba(255,255,255,.75);
-  transform:translateY(-1px);
-}
-.tf.on{
-  background:rgba(99,102,241,.25);
-  border-color:rgba(99,102,241,.55);
-  box-shadow:0 0 14px rgba(99,102,241,.2);
-}
-.tf:active{ transform:scale(.96); }
-
-/* ── Search input: focus expansion ── */
-.counsel-search{
-  transition:border-color var(--t-fast) ease, box-shadow var(--t-med) ease, width var(--t-med) var(--ease-out);
-}
-.counsel-search:focus-within{
-  border-color:rgba(99,102,241,.5);
-  box-shadow:0 0 0 3px rgba(99,102,241,.12);
-}
-.counsel-search input{ transition:width var(--t-med) var(--ease-out); }
-.counsel-search:focus-within input{ width:160px; }
-
-/* ── Skeleton shimmer: faster wave ── */
-.skel-bar::after{
-  animation:skelMove .9s ease-in-out infinite;
-  background:linear-gradient(90deg,
-    transparent 0%,
-    rgba(255,255,255,.12) 50%,
-    transparent 100%
-  );
-}
-
-/* ── Page transition on tab switch ── */
-#dash.tab-switching{
-  opacity:0.6;
-  transform:translateY(4px);
-  transition:opacity .12s ease,transform .12s ease;
-}
-#dash.tab-stable{
-  opacity:1;
-  transform:translateY(0);
-  transition:opacity .2s ease,transform .2s var(--ease-out);
-}
-
-/* ── Pull-to-refresh indicator (mobile) ── */
-.ptr-indicator{
-  position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(-60px);
-  background:rgba(99,102,241,.9);
-  border-radius:0 0 20px 20px;
-  padding:8px 20px 10px;
-  font-size:11px;font-weight:700;color:#fff;
-  display:flex;align-items:center;gap:6px;
-  z-index:9998;
-  transition:transform .25s var(--ease-out);
-  pointer-events:none;
-}
-.ptr-indicator.show{ transform:translateX(-50%) translateY(0); }
-
-/* ── Ripple on bar click ── */
-@keyframes ripple{
-  from{opacity:.5;transform:scale(0);}
-  to{opacity:0;transform:scale(4);}
-}
-.ripple-el{
-  position:absolute;border-radius:50%;
-  width:40px;height:40px;
-  background:rgba(255,255,255,.2);
-  pointer-events:none;
-  animation:ripple .5s var(--ease-out) forwards;
-  transform-origin:center;
-}
-
-/* ── Live data pulse on KPI change ── */
-@keyframes kpiFlash{
-  0%{ background:rgba(103,232,249,.25); }
-  100%{ background:inherit; }
-}
-.kpi.flashing{ animation:kpiFlash .6s ease; }
-.kpi.can.flashing{ animation:kpiFlash .6s ease; }
-
-/* ── Scroll-aware status bar ── */
-.statusbar{
-  position:sticky;top:58px;z-index:190;
-  background:rgba(7,8,15,.75);
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
-  margin-left:-20px;margin-right:-20px;
-  padding:8px 20px;
-  border-bottom:1px solid rgba(255,255,255,.05);
-  margin-bottom:0;
-}
-
-/* ── Content area padding offset for sticky bars ── */
-.g2:first-of-type,.full-card:first-of-type{
-  margin-top:14px;
-}
-
-/* ── Tooltip for bar hover ── */
-.bar-tooltip{
-  position:fixed;
-  background:rgba(8,9,22,.97);
-  border:1px solid rgba(255,255,255,.15);
-  border-radius:10px;padding:8px 14px;
-  font-size:11px;font-weight:700;color:#fff;
-  pointer-events:none;z-index:9997;
-  opacity:0;transition:opacity .1s ease;
-  white-space:nowrap;
-  box-shadow:0 8px 28px rgba(0,0,0,.55);
-}
-.bar-tooltip.show{ opacity:1; }
-.bar-tooltip-name{ font-size:12px;font-weight:800;margin-bottom:4px; }
-.bar-tooltip-row{ display:flex;align-items:center;gap:8px;margin-top:2px; }
-.bar-tooltip-lbl{ color:rgba(255,255,255,.4);font-size:10px; }
-.bar-tooltip-val{ color:#a5b4fc;font-weight:900; }
-
-/* ═══════════════════════════════════════════════════════
-   15 ADMISSION THRESHOLD - INCENTIVE QUALIFICATION
-═══════════════════════════════════════════════════════ */
-.threshold-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(16, 185, 129, 0.15);
-  border: 1px solid rgba(16, 185, 129, 0.4);
-  border-radius: 16px;
-  padding: 4px 9px;
-  font-size: 10px;
-  font-weight: 700;
-  color: #10b981;
-  letter-spacing: 0.03em;
-  white-space: nowrap;
-}
-
-.threshold-badge.ineligible {
-  background: rgba(248, 113, 113, 0.1);
-  border-color: rgba(248, 113, 113, 0.3);
-  color: #f87171;
-}
-
-.br-wrap.threshold-qualify .br {
-  box-shadow: inset 0 0 0 2px rgba(16, 185, 129, 0.5), 0 4px 12px rgba(16, 185, 129, 0.15) !important;
-}
-
-.threshold-banner {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(6, 214, 160, 0.04));
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 16px;
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.85);
-}
-
-.threshold-banner-icon {
-  font-size: 20px;
-  flex-shrink: 0;
-  color: #10b981;
-}
-
-.threshold-banner-text {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.threshold-banner-title {
-  font-weight: 700;
-  color: #10b981;
-  font-size: 13px;
-}
-
-.threshold-banner-desc {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-/* ── Refresh animation on live update ── */
-@keyframes liveFlash{
-  0%{border-color:rgba(16,185,129,.5);}
-  100%{border-color:rgba(255,255,255,.07);}
-}
-.card.just-updated{ animation:liveFlash 1s ease; }
-
-/* ── Quick-stat mini chips on bar cards ── */
-.card-head .card-badge{
-  transition:background var(--t-fast) ease, color var(--t-fast) ease;
-}
-.card:hover .card-badge{
-  background:rgba(255,255,255,.11);
-  color:rgba(255,255,255,.6);
-}
-
-/* ═══════════════════════════════════════
-   UPDATE OVERLAY
-═══════════════════════════════════════ */
-#updateOverlay{
-  position:fixed;inset:0;z-index:8888;
-  display:none;align-items:center;justify-content:center;
-  pointer-events:none;
-}
-#updateOverlay.show{
-  display:flex;pointer-events:all;
-}
-#updateOverlay::before{
-  content:'';position:absolute;inset:0;
-  background:rgba(7,8,15,.6);
-  backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
-  animation:updBgIn .22s ease both;
-}
-@keyframes updBgIn{from{opacity:0}to{opacity:1}}
-
-.upd-box{
-  position:relative;z-index:1;
-  display:flex;flex-direction:column;align-items:center;gap:16px;
-  background:rgba(13,14,28,.95);
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:22px;padding:36px 44px 28px;
-  box-shadow:0 28px 70px rgba(0,0,0,.65);
-  animation:updBoxIn .28s cubic-bezier(.34,1.56,.64,1) both;
-  min-width:240px;overflow:hidden;
-}
-@keyframes updBoxIn{
-  from{opacity:0;transform:scale(.88) translateY(10px)}
-  to{opacity:1;transform:none}
-}
-
-/* Dual counter-rotating rings */
-.upd-spinner-wrap{
-  position:relative;width:60px;height:60px;
-  display:flex;align-items:center;justify-content:center;
-}
-.upd-ring{
-  position:absolute;inset:0;border-radius:50%;
-  border:3px solid rgba(232,81,42,.18);
-  border-top-color:#e8512a;
-  animation:updSpin .75s linear infinite;
-}
-.upd-ring2{
-  position:absolute;inset:8px;border-radius:50%;
-  border:2px solid rgba(129,140,248,.15);
-  border-bottom-color:#818cf8;
-  animation:updSpin .55s linear infinite reverse;
-}
-@keyframes updSpin{to{transform:rotate(360deg)}}
-.upd-ico{
-  position:relative;font-size:22px;
-  animation:updIcoPulse 1.6s ease-in-out infinite;
-}
-@keyframes updIcoPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.88)}}
-
-.upd-msg{
-  font-size:15px;font-weight:800;color:#fff;
-  letter-spacing:-.01em;text-align:center;
-}
-.upd-sub{
-  font-size:11px;font-weight:600;
-  color:rgba(255,255,255,.32);letter-spacing:.04em;
-  text-align:center;animation:updSubPulse 1.6s ease-in-out infinite;
-}
-@keyframes updSubPulse{0%,100%{opacity:.32}50%{opacity:.65}}
-
-/* Sweeping progress bar */
-.upd-progress{
-  position:absolute;bottom:0;left:0;right:0;height:2px;
-  border-radius:0 0 22px 22px;
-  background:linear-gradient(90deg,transparent 0%,#e8512a 40%,#818cf8 60%,transparent 100%);
-  background-size:250% 100%;
-  animation:updBar 1.4s linear infinite;
-}
-@keyframes updBar{
-  0%{background-position:200% 0}
-  100%{background-position:-200% 0}
-}
-
-/* Dash blur when overlay active */
-#dash.upd-active{
-  filter:blur(2px);
-  pointer-events:none;
-  transition:filter .22s ease;
-}
-#dash{transition:filter .25s ease;}
-
-
-/* ═══════════════════════════════════════
-   INCENTIVE TOTALS SUMMARY — manager/director
-═══════════════════════════════════════ */
-.inc-totals-summary{
-  margin-top:14px;margin-bottom:14px;padding:20px 22px;
-  background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(16,185,129,.05));
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:18px;position:relative;overflow:hidden;
-}
-.inc-totals-summary::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(99,102,241,.5),rgba(16,185,129,.5),transparent);
-}
-.its-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:6px;}
-.its-head-title{font-size:14px;font-weight:900;color:#fff;letter-spacing:-.02em;}
-.its-head-sub{font-size:10px;font-weight:700;color:rgba(255,255,255,.32);letter-spacing:.08em;text-transform:uppercase;}
-
-.its-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-}
-@media(max-width:760px){.its-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:420px){.its-grid{grid-template-columns:1fr;}}
-
-.its-card{
-  display:flex;align-items:center;gap:12px;
-  padding:14px 16px;border-radius:14px;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
-  transition:transform .2s cubic-bezier(.34,1.56,.64,1),border-color .2s ease,background .2s ease;
-  position:relative;overflow:hidden;
-}
-.its-card:hover{transform:translateY(-2px);background:rgba(255,255,255,.06);}
-.its-card::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;opacity:.6;
-}
-.its-counsel{border-color:rgba(168,85,247,.25);}
-.its-counsel::after{background:linear-gradient(90deg,#a855f7,#c084fc);}
-.its-counsel:hover{border-color:rgba(168,85,247,.45);}
-
-.its-tl{border-color:rgba(34,211,238,.25);}
-.its-tl::after{background:linear-gradient(90deg,#0891b2,#22d3ee);}
-.its-tl:hover{border-color:rgba(34,211,238,.45);}
-
-.its-mgr{border-color:rgba(99,102,241,.25);}
-.its-mgr::after{background:linear-gradient(90deg,#6366f1,#818cf8);}
-.its-mgr:hover{border-color:rgba(99,102,241,.45);}
-
-.its-grand{
-  border-color:rgba(16,185,129,.3);
-  background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(16,185,129,.04));
-}
-.its-grand::after{background:linear-gradient(90deg,#059669,#10b981,#34d399);height:3px;opacity:.8;}
-.its-grand:hover{border-color:rgba(16,185,129,.5);background:linear-gradient(135deg,rgba(16,185,129,.14),rgba(16,185,129,.06));}
-
-.its-ico{font-size:28px;flex-shrink:0;line-height:1;}
-.its-body{flex:1;min-width:0;}
-.its-lbl{
-  font-size:9px;font-weight:800;letter-spacing:.1em;
-  color:rgba(255,255,255,.4);text-transform:uppercase;margin-bottom:3px;
-}
-.its-val{
-  font-size:20px;font-weight:900;line-height:1.1;
-  letter-spacing:-.02em;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  transition:color .25s ease;
-}
-.its-counsel .its-val{color:#c084fc;}
-.its-tl .its-val{color:#22d3ee;}
-.its-mgr .its-val{color:#818cf8;}
-.its-grand .its-val{
-  background:linear-gradient(135deg,#34d399,#10b981);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  font-size:22px;
-}
-.its-meta{font-size:10px;font-weight:600;color:rgba(255,255,255,.3);margin-top:3px;}
-
-/* Role visibility */
-body.role-public  #incTotalsSummary,
-body.role-tl      #incTotalsSummary { display:none !important; }
-body.role-manager #incTotalsSummary,
-body.role-director #incTotalsSummary { display:block; }
-
 </style>
 </head>
 <body>
@@ -2110,21 +960,6 @@ body.role-director #incTotalsSummary { display:block; }
     <div class="ldr-ico">🎓</div>
   </div>
   <div class="ldr-txt">LOADING LIVE DATA</div>
-</div>
-
-
-<!-- UPDATE OVERLAY -->
-<div id="updateOverlay">
-  <div class="upd-box">
-    <div class="upd-spinner-wrap">
-      <div class="upd-ring"></div>
-      <div class="upd-ring2"></div>
-      <span class="upd-ico">🎓</span>
-    </div>
-    <div class="upd-msg" id="updMsg">Updating Live Data…</div>
-    <div class="upd-sub" id="updSub">Fetching latest records</div>
-    <div class="upd-progress"></div>
-  </div>
 </div>
 
 <!-- CAL OVERLAY -->
@@ -2189,9 +1024,8 @@ body.role-director #incTotalsSummary { display:block; }
     <div style="margin-top:14px;font-size:11px;color:rgba(255,255,255,.25);text-align:center;">
       Public access active by default
     </div>
-    <div style="margin-top:10px;display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.18);border-radius:10px;padding:7px 12px;">
-      <span style="font-size:13px;">👑</span>
-      <span style="font-size:10px;font-weight:700;color:rgba(245,158,11,.7);letter-spacing:.05em;">Director login available for full access + export</span>
+    <div style="margin-top:12px;display:flex;align-items:center;gap:8px;justify-content:center;padding:9px 12px;border-radius:10px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.28);color:#fbbf24;font-size:11px;font-weight:700;text-align:center;line-height:1.4;">
+      <span>👑</span><span>Director login available for full access + export</span>
     </div>
   </div>
 </div>
@@ -2219,75 +1053,13 @@ body.role-director #incTotalsSummary { display:block; }
         <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         Custom Range
       </button>
-
-      <!-- DOWNLOAD BUTTON -->
-      <div class="hd-right" style="position:relative;" id="dlWrap">
-        <button class="dl-btn" id="dlBtn" title="Download Data">
-          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
-          Download
-          <span class="dl-chevron">▾</span>
-        </button>
-        <div class="dl-panel" id="dlPanel">
-          <div class="dl-panel-hdr">
-            <div class="dl-panel-title">
-              <svg width="14" height="14" fill="none" stroke="#34d399" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
-              Export Dashboard Data
-            </div>
-            <div class="dl-panel-sub" id="dlPanelSub">Downloads current view with all active filters applied</div>
-            <div class="dl-filter-badge" id="dlFilterBadge" style="display:none;">
-              <svg width="8" height="8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-              <span id="dlFilterText">Filtered</span>
-            </div>
-          </div>
-          <div class="dl-formats">
-            <div class="dl-fmt-btn dl-xlsx" id="dlXlsx">
-              <div class="dl-fmt-ico">📊</div>
-              <div class="dl-fmt-body">
-                <span class="dl-fmt-name">Excel Spreadsheet</span>
-                <span class="dl-fmt-desc">Full data with formatting · .xlsx</span>
-              </div>
-              <span class="dl-fmt-tag">XLSX</span>
-            </div>
-            <div class="dl-fmt-btn dl-csv" id="dlCsv">
-              <div class="dl-fmt-ico">📄</div>
-              <div class="dl-fmt-body">
-                <span class="dl-fmt-name">CSV File</span>
-                <span class="dl-fmt-desc">Plain text, universal compatibility · .csv</span>
-              </div>
-              <span class="dl-fmt-tag">CSV</span>
-            </div>
-          </div>
-          <div class="dl-progress" id="dlProgress">
-            <div class="dl-spinner"></div>
-            <span id="dlProgressTxt">Preparing download…</span>
-          </div>
-          <div class="dl-success" id="dlSuccess">
-            <span>✅</span><span id="dlSuccessTxt">Downloaded successfully!</span>
-          </div>
-        </div>
-      </div>
       <div class="hd-right" style="position:relative;">
         <div class="ava" id="avaBtn" title="Account"></div>
         <div class="user-menu" id="userMenu">
-          <div class="user-menu-header">
-            <div class="user-menu-avatar" id="menuAvatar">👤</div>
-            <div class="user-menu-info">
-              <div class="user-menu-name" id="menuName">Guest</div>
-              <div class="user-menu-role role-pub" id="menuRole">🔓 Public Access</div>
-            </div>
-          </div>
-          <div class="user-menu-body">
-            <div class="user-menu-item login-item" id="menuLogin">
-              <div class="menu-icon">🔐</div>
-              Sign In for More Access
-            </div>
-            <div class="user-menu-item logout" id="menuLogout" style="display:none;">
-              <div class="signout-btn">
-                Sign Out
-                <div class="signout-arrow">▶</div>
-              </div>
-            </div>
-          </div>
+          <div class="user-menu-name" id="menuName">Guest</div>
+          <div class="user-menu-role" id="menuRole">🔓 Public Access</div>
+          <div class="user-menu-item" id="menuLogin" style="color:rgba(100,200,255,.8);">🔐 Sign In for More Access</div>
+          <div class="user-menu-item logout" id="menuLogout" style="display:none;">🚪 Sign Out</div>
         </div>
       </div>
     </div>
@@ -2297,6 +1069,9 @@ body.role-director #incTotalsSummary { display:block; }
   <div class="statusbar f1">
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
       <div class="live-wrap"><div class="live-dot dot-fetching" id="liveDot"></div><span class="live-txt" id="stxt">Connecting…</span></div>
+        <button type="button" class="rbtn" id="refreshBtn" title="Refresh now" aria-label="Refresh now">↻ Refresh</button>
+        <button type="button" class="rbtn exp-btn" id="expSum"  title="Download counsellor summary (CSV) for the period shown">⬇ Summary CSV</button>
+        <button type="button" class="rbtn exp-btn" id="expRows" title="Download every admission row (CSV) for the period shown">⬇ Details CSV</button>
       <div class="range-badge" id="rangeBadge">
         <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         <span id="rangeBadgeTxt"></span>
@@ -2321,36 +1096,19 @@ body.role-director #incTotalsSummary { display:block; }
       <div class="ts-row"><span class="ts-dot"></span>&nbsp;<span id="t1" style="font-size:10px;font-weight:600;color:rgba(255,255,255,.16)">&#8212;</span></div>
     </div>
     <div class="card univ-card">
-      <!-- Multi-level filter breadcrumb trail -->
-      <div class="filter-trail" id="filterTrail">
-        <span class="ft-label">Filter</span>
-        <div id="ftCrumbs" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;flex:1;"></div>
-        <button class="ft-clear" id="ftClear">✕ Clear all</button>
-      </div>
       <div class="card-head"><span class="card-title">Process Split</span><span class="card-badge" id="ub-b">&#8212;</span></div>
       <div class="donut-wrap">
         <div class="donut-box">
-          <svg class="udonut" width="148" height="148" viewBox="0 0 100 100">
+          <svg width="148" height="148" viewBox="0 0 100 100">
             <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="12"/>
-            <circle class="useg" id="u1" cx="50" cy="50" r="38" fill="none" stroke-width="12" stroke-dasharray="0 238.8" transform="rotate(-90 50 50)" data-idx="0"/>
-            <circle class="useg" id="u2" cx="50" cy="50" r="38" fill="none" stroke-width="12" stroke-dasharray="0 238.8" transform="rotate(-90 50 50)" data-idx="1"/>
-            <circle class="useg" id="u3" cx="50" cy="50" r="38" fill="none" stroke-width="12" stroke-dasharray="0 238.8" transform="rotate(-90 50 50)" data-idx="2"/>
-            <circle class="useg" id="u4" cx="50" cy="50" r="38" fill="none" stroke-width="12" stroke-dasharray="0 238.8" transform="rotate(-90 50 50)" data-idx="3"/>
-            <circle class="useg" id="u5" cx="50" cy="50" r="38" fill="none" stroke-width="12" stroke-dasharray="0 238.8" transform="rotate(-90 50 50)" data-idx="4"/>
-            <circle class="useg" id="u6" cx="50" cy="50" r="38" fill="none" stroke-width="12" stroke-dasharray="0 238.8" transform="rotate(-90 50 50)" data-idx="5"/>
+            <circle id="u1" cx="50" cy="50" r="38" fill="none" stroke-width="12" stroke-dasharray="0 238.8" transform="rotate(-90 50 50)"/>
+            <circle id="u2" cx="50" cy="50" r="38" fill="none" stroke-width="12" stroke-dasharray="0 238.8" transform="rotate(-90 50 50)"/>
+            <circle id="u3" cx="50" cy="50" r="38" fill="none" stroke-width="12" stroke-dasharray="0 238.8" transform="rotate(-90 50 50)"/>
+            <circle id="u4" cx="50" cy="50" r="38" fill="none" stroke-width="12" stroke-dasharray="0 238.8" transform="rotate(-90 50 50)"/>
+            <circle id="u5" cx="50" cy="50" r="38" fill="none" stroke-width="12" stroke-dasharray="0 238.8" transform="rotate(-90 50 50)"/>
+            <circle id="u6" cx="50" cy="50" r="38" fill="none" stroke-width="12" stroke-dasharray="0 238.8" transform="rotate(-90 50 50)"/>
           </svg>
-          <div class="donut-ctr" id="donutCtr">
-            <div class="donut-num" id="unum">&#8212;</div>
-            <span class="donut-sub" id="uSub">NET ADM</span>
-          </div>
-          <!-- Tooltip -->
-          <div class="donut-tip" id="donutTip">
-            <div class="donut-tip-name" id="dtName"></div>
-            <div class="donut-tip-row">
-              <span class="donut-tip-val" id="dtVal"></span>
-              <span class="donut-tip-pct" id="dtPct"></span>
-            </div>
-          </div>
+          <div class="donut-ctr"><div class="donut-num" id="unum">&#8212;</div><span class="donut-sub" id="uSub">NET ADM</span></div>
         </div>
         <div class="leg" id="uleg"><div style="display:flex;flex-direction:column;gap:10px;padding:8px 0;width:100%;">
   <div class="skel-bar" style="height:14px;border-radius:6px;"></div>
@@ -2418,6 +1176,8 @@ body.role-director #incTotalsSummary { display:block; }
           <span class="counsel-filter-x" id="counselFilterX">&#10005;</span>
         </div>
       </div>
+      <div class="c-chips" id="cChips" style="display:none;"></div>
+      <div class="c-diag" id="cDiag" style="display:none;"></div>
       <div class="counsel-search">
         <svg width="12" height="12" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         <input type="text" id="cSearch" placeholder="Search counsellor…" autocomplete="off">
@@ -2425,75 +1185,23 @@ body.role-director #incTotalsSummary { display:block; }
     </div>
     <div class="c-podium-wrap" id="cPodium"></div>
     <div class="c-grid" id="cGrid"></div>
-    <!-- TOTALS SUMMARY — Manager/Director only -->
-    <div class="inc-totals-summary" id="incTotalsSummary" style="display:none;">
-      <div class="its-head">
-        <div class="its-head-title">💰 Total Incentives Summary</div>
-        <div class="its-head-sub" id="itsSub">All roles combined · Live</div>
-      </div>
-      <div class="its-grid">
-        <div class="its-card its-counsel">
-          <div class="its-ico">💼</div>
-          <div class="its-body">
-            <div class="its-lbl">Counsellor</div>
-            <div class="its-val" id="itsCounselTotal">₹0</div>
-            <div class="its-meta" id="itsCounselMeta">0 admissions</div>
-          </div>
-        </div>
-        <div class="its-card its-tl">
-          <div class="its-ico">👥</div>
-          <div class="its-body">
-            <div class="its-lbl">Team Leader</div>
-            <div class="its-val" id="itsTLTotal">₹0</div>
-            <div class="its-meta" id="itsTLMeta">0 TLs</div>
-          </div>
-        </div>
-        <div class="its-card its-mgr">
-          <div class="its-ico">🏆</div>
-          <div class="its-body">
-            <div class="its-lbl">Manager</div>
-            <div class="its-val" id="itsMgrTotal">₹0</div>
-            <div class="its-meta" id="itsMgrMeta">0 managers</div>
-          </div>
-        </div>
-        <div class="its-card its-grand">
-          <div class="its-ico">💎</div>
-          <div class="its-body">
-            <div class="its-lbl">Grand Total</div>
-            <div class="its-val" id="itsGrandTotal">₹0</div>
-            <div class="its-meta" id="itsGrandMeta">All incentives</div>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="inc-section" id="incSection" style="display:none;">
       <div class="inc-head">
         <div>
           <div class="inc-head-title">💰 Counsellor Incentive Leaderboard</div>
-          <div class="inc-head-sub" id="incSortSub">Sorted by incentive · highest first</div>
+          <div class="inc-head-sub">Sorted by earnings</div>
         </div>
         <div class="inc-total-pill" id="incTotal"></div>
       </div>
-      <div class="inc-controls">
-        <div class="inc-sort-group" id="incSortGroup">
-          <span class="inc-sort-lbl">Sort</span>
-          <button class="inc-sort-btn active" data-panel="inc" data-sort="inc" data-dir="desc">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v8M2 6l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Incentive ↓
-          </button>
-          <button class="inc-sort-btn" data-panel="inc" data-sort="inc" data-dir="asc">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 9V1M2 4l3-3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Incentive ↑
-          </button>
-          <button class="inc-sort-btn" data-panel="inc" data-sort="adm" data-dir="desc">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v8M2 6l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Admissions ↓
-          </button>
-          <button class="inc-sort-btn" data-panel="inc" data-sort="adm" data-dir="asc">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 9V1M2 4l3-3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Admissions ↑
-          </button>
+      <div class="inc-ctl" id="incCtl">
+        <div class="inc-ctl-row" id="incSortRow">
+          <span class="inc-ctl-lbl">SORT</span><span class="inc-ctl-div"></span>
+          <button type="button" data-sort="incDesc"><span class="ar">↓</span> Incentive <span class="ar">↓</span></button>
+          <button type="button" data-sort="incAsc"><span class="ar">↑</span> Incentive <span class="ar">↑</span></button>
+          <button type="button" data-sort="admDesc"><span class="ar">↓</span> Admissions <span class="ar">↓</span></button>
+          <button type="button" data-sort="admAsc"><span class="ar">↑</span> Admissions <span class="ar">↑</span></button>
         </div>
+        <div class="inc-ctl-row" id="incFilterRow" style="display:none;"></div>
       </div>
       <div class="inc-chart" id="incChart"></div>
     </div>
@@ -2503,30 +1211,9 @@ body.role-director #incTotalsSummary { display:block; }
       <div class="inc-head">
         <div>
           <div class="inc-head-title" id="tlIncTitle">💰 Team Leader Incentive Leaderboard</div>
-          <div class="inc-head-sub" id="tlIncSortSub">Sorted by incentive · highest first</div>
+          <div class="inc-head-sub">Sorted by TL earnings</div>
         </div>
         <div class="inc-total-pill" id="tlIncTotal"></div>
-      </div>
-      <div class="inc-controls">
-        <div class="inc-sort-group" id="tlIncSortGroup">
-          <span class="inc-sort-lbl">Sort</span>
-          <button class="inc-sort-btn active" data-panel="tlInc" data-sort="inc" data-dir="desc">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v8M2 6l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Incentive ↓
-          </button>
-          <button class="inc-sort-btn" data-panel="tlInc" data-sort="inc" data-dir="asc">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 9V1M2 4l3-3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Incentive ↑
-          </button>
-          <button class="inc-sort-btn" data-panel="tlInc" data-sort="adm" data-dir="desc">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v8M2 6l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Admissions ↓
-          </button>
-          <button class="inc-sort-btn" data-panel="tlInc" data-sort="adm" data-dir="asc">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 9V1M2 4l3-3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Admissions ↑
-          </button>
-        </div>
       </div>
       <div class="inc-chart" id="tlIncChart"></div>
     </div>
@@ -2536,30 +1223,9 @@ body.role-director #incTotalsSummary { display:block; }
       <div class="inc-head">
         <div>
           <div class="inc-head-title" id="mgrIncTitle">💰 Manager Incentive Leaderboard</div>
-          <div class="inc-head-sub" id="mgrIncSortSub">Sorted by incentive · highest first</div>
+          <div class="inc-head-sub">Sorted by manager earnings</div>
         </div>
         <div class="inc-total-pill" id="mgrIncTotal"></div>
-      </div>
-      <div class="inc-controls">
-        <div class="inc-sort-group" id="mgrIncSortGroup">
-          <span class="inc-sort-lbl">Sort</span>
-          <button class="inc-sort-btn active" data-panel="mgrInc" data-sort="inc" data-dir="desc">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v8M2 6l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Incentive ↓
-          </button>
-          <button class="inc-sort-btn" data-panel="mgrInc" data-sort="inc" data-dir="asc">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 9V1M2 4l3-3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Incentive ↑
-          </button>
-          <button class="inc-sort-btn" data-panel="mgrInc" data-sort="adm" data-dir="desc">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v8M2 6l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Admissions ↓
-          </button>
-          <button class="inc-sort-btn" data-panel="mgrInc" data-sort="adm" data-dir="asc">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 9V1M2 4l3-3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Admissions ↑
-          </button>
-        </div>
       </div>
       <div class="inc-chart" id="mgrIncChart"></div>
     </div>
@@ -2569,23 +1235,20 @@ body.role-director #incTotalsSummary { display:block; }
 </div><!-- /wrap -->
 
 <script>
-
-
-
-
 'use strict';
 
 // ═══════════════════════════════════════════════════════
 // CONSTANTS
 // ═══════════════════════════════════════════════════════
-const API = 'https://script.google.com/macros/s/AKfycbxFuo0PLZ4ShoaiULi8JfRaCLzS7CWCTJwYXJSnjwIxw1hPpfNeZ-TynjlC7QGbgxDW/exec';
-const CACHE_KEY  = 'hs_v9_' // v9: raw rows stored, fixes double-norm;
-const MEM_TTL    = 5 * 60 * 1000;   // 5 min — fresher background refresh
+const API = 'https://script.google.com/macros/s/AKfycbzuPUV-GLLMt3rpbFD3iOrzbFIwj172VIvH-0KYIQvd-51au8o9dfz-YOEcc-goxdml9A/exec';
+const CACHE_KEY  = 'hs_v8_';
+const MEM_TTL    = 60 * 1000;       // 1 min — data older than this is re-fetched on use
 const DISK_TTL   = 60 * 60 * 1000;  // 1 hr disk cache — survive long sessions
-const BG_REFRESH = 5 * 60 * 1000;   // background auto-refresh interval
+const BG_REFRESH = 60 * 1000;       // background auto-refresh every minute while the tab is open
+let _forceFresh = false;            // set by the ↻ button: ask the server to bypass its cache once
 const RETRY_BASE = 10 * 1000;       // exponential backoff base (10s → 20s → 40s)
 const RETRY_MAX  = 5 * 60 * 1000;   // cap backoff at 5 min
-const FETCH_TIMEOUT = 15 * 1000;    // 15s fetch timeout
+const FETCH_TIMEOUT = 25 * 1000;    // 25s per attempt (Apps Script cold start can take 5-10s)
 const DONUT_C    = 238.8;
 
 // MGRS and TLS are built dynamically from sheet data
@@ -2642,7 +1305,6 @@ function fmtInc(n){
   if(n>=1000)   return (n/1000).toFixed(1)+'K';
   return Math.round(n).toLocaleString('en-IN');
 }
-function fmtIncFull(n){ return '₹'+Math.round(n).toLocaleString('en-IN'); }
 function nd(msg){ return`<div class="nodata"><div class="ico">📭</div><p>${msg}</p></div>`; }
 
 // ── Smart status bar ────────────────────────────────────
@@ -2671,29 +1333,6 @@ function setSt(state, extra){
   }
 }
 function setStLoading(){ setSt('fetching'); }
-
-// ── Update overlay ────────────────────────────────────
-let _updTimer = null;
-function showUpdating(msg, sub){
-  const ov = document.getElementById('updateOverlay');
-  const dash = document.getElementById('dash');
-  const msgEl = document.getElementById('updMsg');
-  const subEl = document.getElementById('updSub');
-  if(msgEl) msgEl.textContent = msg || 'Updating Live Data…';
-  if(subEl) subEl.textContent = sub || 'Fetching latest records';
-  if(ov) ov.classList.add('show');
-  if(dash) dash.classList.add('upd-active');
-  clearTimeout(_updTimer);
-}
-function hideUpdating(){
-  clearTimeout(_updTimer);
-  _updTimer = setTimeout(()=>{
-    const ov = document.getElementById('updateOverlay');
-    const dash = document.getElementById('dash');
-    if(ov) ov.classList.remove('show');
-    if(dash) dash.classList.remove('upd-active');
-  }, 100);
-}
 
 // Relative time formatter
 function relTime(ts){
@@ -2756,44 +1395,40 @@ function animCount(el, target){
 // ═══════════════════════════════════════════════════════
 // DISK CACHE — IndexedDB-backed with localStorage fallback
 // ═══════════════════════════════════════════════════════
+const _dkSig = {};   // signature of what is already on disk, per key
 function dkRead(k){
   try{
     const s=localStorage.getItem(CACHE_KEY+k);
     if(!s) return null;
     const o=JSON.parse(s);
-    if(Date.now()-o.ts > DISK_TTL){ localStorage.removeItem(CACHE_KEY+k); return null; }
+    if(!o || !o.data || Date.now()-o.ts > DISK_TTL || !Array.isArray(o.data.trendRows)){
+      localStorage.removeItem(CACHE_KEY+k); return null;
+    }
+    _dkSig[k] = o.data._sig || null;
     return o;
   }catch{ return null; }
 }
 
-// Write on idle — never blocks paint or interaction
+// Write on idle — never blocks paint or interaction.
+// Always stores the COMPLETE row set. A truncated copy would be re-counted on
+// reload and show wrong totals, so if it does not fit we store nothing.
 function dkWrite(k, data){
+  if(k!=='all' && _canDerive()) return;                         // derived views are rebuilt in ~3 ms — never stored
+  if(data && data._sig && _dkSig[k]===data._sig) return;        // identical copy already on disk
   const write = () => {
+    const save = {};
+    for(const key of Object.keys(data)){ if(key!=='allTrendRows' && key!=='trendRows') save[key]=data[key]; }
+    save.trendRows = data.allTrendRows || data.trendRows || [];
+    const payload = JSON.stringify({data:save, ts:Date.now()});
     try{
-      // Save RAW rows (before norm stripped cancels) so re-reading is correct
-      const _rawRows = data._rawSnap || data._rawAllRows || data.trendRows || [];
-      const save = {
-        netAdm:data.netAdm, totalAdm:data.totalAdm, cancelAdm:data.cancelAdm,
-        mgrTargets:data.mgrTargets||{}, mgrTargetsAll:data.mgrTargetsAll||{},
-        trendRows: _rawRows.slice(-2000),      // raw rows, not normed
-        _rawAllRows: _rawRows.slice(-2000),    // also save as _rawAllRows
-      };
-      for(const key of Object.keys(data)){
-        if(!(key in save) && !key.startsWith('_')) save[key]=data[key];
-      }
-      localStorage.setItem(CACHE_KEY+k, JSON.stringify({data:save, ts:Date.now()}));
+      localStorage.setItem(CACHE_KEY+k, payload); _dkSig[k]=data._sig||null;
     }catch(e){
       try{
-        Object.keys(localStorage).filter(x=>x.startsWith(CACHE_KEY)).forEach(x=>localStorage.removeItem(x));
-        localStorage.setItem(CACHE_KEY+k, JSON.stringify({data:{
-          netAdm:data.netAdm||0, totalAdm:data.totalAdm||0, cancelAdm:data.cancelAdm||0,
-          trendRows:(data.trendRows||[]).slice(-100),
-          mgrTargets:data.mgrTargets||{}, mgrTargetsAll:data.mgrTargetsAll||{}
-        }, ts:Date.now()}));
-      }catch{}
+        Object.keys(localStorage).filter(x=>x.startsWith(CACHE_KEY) && x!==CACHE_KEY+k).forEach(x=>localStorage.removeItem(x));
+        localStorage.setItem(CACHE_KEY+k, payload);
+      }catch{ try{ localStorage.removeItem(CACHE_KEY+k); }catch{} }
     }
   };
-  // Use requestIdleCallback when available — zero main-thread impact
   if(typeof requestIdleCallback !== 'undefined'){
     requestIdleCallback(write, {timeout: 2000});
   } else {
@@ -2862,6 +1497,15 @@ function inRange(dateStr, mon, sun){
 // ═══════════════════════════════════════════════════════
 // NORMALISE — called exactly once per fetch
 // ═══════════════════════════════════════════════════════
+// Identifies exactly what a normalised payload shows (data version + period + range)
+function _hash(s){ let h=5381; for(let i=0;i<s.length;i++) h=((h<<5)+h+s.charCodeAt(i))|0; return (h>>>0).toString(36); }
+function _mkSig(raw, p){
+  const m=raw.meta||{};
+  // server data-version + what this view shows (counts + counsellor status) — a view can never be skipped if any of it differs
+  return (raw.ver || ('t'+Date.now()+Math.random()))+'|'+p+'|'+(m.from||'')+'|'+(m.to||'')+'|'+
+    raw.netAdm+'/'+raw.totalAdm+'/'+raw.cancelAdm+'|'+(raw.counsellorInfo?_hash(JSON.stringify(raw.counsellorInfo)):'');
+}
+
 function norm(raw, p){
   if(!raw || raw.error) return null;
   if(!Array.isArray(raw.trendRows)) raw.trendRows = [];
@@ -2884,91 +1528,32 @@ function norm(raw, p){
 
   // ── Always keep the FULL unfiltered trendRows for counsellor/incentive ──
   // counsellors show for the FULL period (all, month, week - whatever server sent)
-  raw.allTrendRows = raw.trendRows.slice();
-
-  // ── Separate cancel rows BEFORE any processing ──
-  // A row is cancelled if any status-like field contains "cancel" or similar
-  const _isCancel = r => {
-    // Check all possible field variations
-    const fields = [
-      r.admissionStatus, r.AdmissionStatus, r.admission_status, 
-      r.admissionState, r.AdmissionState, r.admission_state,
-      r.status, r.Status, r.STATUS,
-      r.state, r.State, r.STATE,
-      r.adm_status, r.admStatus, r.admState,
-      r.cancelStatus, r.CancelStatus, r.cancel_status
-    ];
-    
-    for(let field of fields) {
-      if(field) {
-        const s = field.toString().trim().toLowerCase();
-        // Check for cancel variations
-        if(s.includes('cancel') || s === 'cancelled' || s === 'canceled' || s === 'cancelled') {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
-
-  // Store raw unfiltered rows (with cancels) for filter-scope cancel counting
-  raw._rawAllRows = raw.trendRows.slice();
-
-  // Split into active and cancelled
-  const activeRows = raw.trendRows.filter(r => !_isCancel(r));
-  const cancelRows = raw.trendRows.filter(r => _isCancel(r));
-
-  // Also split allTrendRows
-  const activeAllRows = raw.allTrendRows.filter(r => !_isCancel(r));
-  // cancelRows for allTrendRows (same logic)
-  const cancelAllRows = raw.allTrendRows.filter(r => _isCancel(r));
-
-  // Store cancel count from rows (overrides server value if rows present)
-  if(raw.trendRows.length > 0){
-    // Actually: trust row-level cancel status as ground truth
-    raw.cancelAdm  = cancelAllRows.length;
-    raw.totalAdm   = raw.allTrendRows.length;
-  }
-
-  // Replace trendRows with ACTIVE-only rows for all downstream processing
-  raw.trendRows    = activeRows;
-  raw.allTrendRows = activeAllRows;
+  raw.allTrendRows = (Array.isArray(raw.allTrendRows) && raw.allTrendRows.length) ? raw.allTrendRows : raw.trendRows.slice();
 
   if(!raw.trendRows.length){
     raw.others        = Math.max(0, raw.netAdm||0);
+    raw._mgrs = []; raw._tls = []; raw._univs = [];
     raw.mgrTargets    = mgrTargets;
     raw.mgrTargetsAll = mgrTargetsAll;
+    raw._sig = _mkSig(raw, p);
     return raw;
   }
 
   // ── Week filter: narrow trendRows to the correct Mon–Sun window ──
-  // Note: raw.trendRows is already cancel-filtered above
   const weekRange = getWeekRange(p);
   const filteredRows = weekRange
     ? raw.trendRows.filter(r => inRange(r.date, weekRange.mon, weekRange.sun))
     : raw.trendRows;
 
-  // ── Also filter allTrendRows for the week window (active-only) ──
-  if(weekRange){
-    raw.allTrendRows = raw.allTrendRows.filter(r => inRange(r.date, weekRange.mon, weekRange.sun));
-    // Recalculate cancel count for this week window too
-    const weekCancelRows = (raw._allCancelRows||cancelAllRows).filter(r => inRange(r.date, weekRange.mon, weekRange.sun));
-    raw.cancelAdm = weekCancelRows.length;
-    raw.totalAdm  = filteredRows.length + weekCancelRows.length;
-  }
-
-  // Store raw cancel rows for downstream week filtering
-  raw._allCancelRows = cancelAllRows;
-
   // ── Replace trendRows with filtered set (used by trend chart + bar counts) ──
   raw.trendRows = filteredRows;
 
-  // ── Recount from filtered ACTIVE rows — fully dynamic ──
+  // ── Recount from filtered rows — fully dynamic ──
   const mgr  = {};
   const tl   = {};
   const univ = {};
   // Reset all dynamic arrays for fresh build
-  MGRS.length = 0; TLS.length = 0; UNIVS.length = 0;
+  const _M = [], _T = [], _U = [];   // local lists — never touch shared globals here
   const _mgrKeySet = new Set();
   const _tlKeySet  = new Set();
   const _univKeySet = new Set();
@@ -2983,7 +1568,7 @@ function norm(raw, p){
       const mk = mRaw.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'');
       if(mk){
         if(!_mgrKeySet.has(mk)){
-          MGRS.push({n:mRaw, k:mk, c:_MGR_COLORS[MGRS.length % _MGR_COLORS.length]});
+          _M.push({n:mRaw, k:mk, c:_MGR_COLORS[_M.length % _MGR_COLORS.length]});
           _mgrKeySet.add(mk);
           mgr[mk] = 0;
         }
@@ -2997,7 +1582,7 @@ function norm(raw, p){
       const tk = 'tl'+tRaw.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'');
       if(tk !== 'tl'){
         if(!_tlKeySet.has(tk)){
-          TLS.push({n:tRaw, k:tk, c:_TL_COLORS[TLS.length % _TL_COLORS.length]});
+          _T.push({n:tRaw, k:tk, c:_TL_COLORS[_T.length % _TL_COLORS.length]});
           _tlKeySet.add(tk);
           tl[tk] = 0;
         }
@@ -3010,36 +1595,30 @@ function norm(raw, p){
       const nk = uRaw.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'');
       if(nk){
         if(!_univKeySet.has(nk)){
-          const cl=_UCLR[UNIVS.length%_UCLR.length];
-          UNIVS.push({n:uRaw,k:nk,cl});
+          const cl=_UCLR[_U.length%_UCLR.length];
+          _U.push({n:uRaw,k:nk,cl});
           _univKeySet.add(nk);
           univ[nk]=0;
         }
         univ[nk]=(univ[nk]||0)+1;
       } else {
-        if(!_univKeySet.has('others')){UNIVS.push({n:'Others',k:'others',cl:'#475569'});_univKeySet.add('others');}
+        if(!_univKeySet.has('others')){_U.push({n:'Others',k:'others',cl:'#475569'});_univKeySet.add('others');}
         univ['others']=(univ['others']||0)+1;
       }
     } else {
-      if(!_univKeySet.has('others')){UNIVS.push({n:'Others',k:'others',cl:'#475569'});_univKeySet.add('others');}
+      if(!_univKeySet.has('others')){_U.push({n:'Others',k:'others',cl:'#475569'});_univKeySet.add('others');}
       univ['others']=(univ['others']||0)+1;
     }
     count++;
   }
 
   Object.assign(raw, mgr, tl, univ);
-  // netAdm = count of ACTIVE (non-cancelled) filtered rows
   if(count > 0) raw.netAdm = count;
-  // totalAdm and cancelAdm already set above; ensure non-week periods are also correct
-  if(!weekRange){
-    raw.netAdm   = count;
-    raw.cancelAdm = cancelAllRows.length;
-    raw.totalAdm  = count + cancelAllRows.length;
-  }
   raw.mgrTargets    = mgrTargets;
   raw.mgrTargetsAll = mgrTargetsAll;
-  // Rebuild O(1) lookups after dynamic discovery
-  _rebuildLookups();
+  // Lists travel WITH this payload; render() installs them as the active lists
+  raw._mgrs = _M; raw._tls = _T; raw._univs = _U;
+  raw._sig = _mkSig(raw, p);
   return raw;
 }
 
@@ -3048,32 +1627,178 @@ function norm(raw, p){
 // ═══════════════════════════════════════════════════════
 const _inflight = Object.create(null); // dedup concurrent fetches for same key
 
-async function fetchOne(p, from, to){
+// ═══════════════════════════════════════════════════════
+// DATA LAYER — ONE snapshot of the sheet, every tab is derived from it locally
+//   • 1 request per refresh (not 5), and a refresh is a 34-byte "unchanged" reply when nothing changed
+//   • all tabs always show the SAME instant of data (no cross-tab drift)
+//   • rows travel dictionary-encoded (~4x smaller)
+// ═══════════════════════════════════════════════════════
+
+// Decode the compact row format sent by the server
+function expandRows(raw){
+  if(!raw || !raw.rowsC || !raw.dict) return raw;
+  const D=raw.dict, R=raw.rowsC, out=new Array(R.length);
+  for(let i=0;i<R.length;i++){
+    const a=R[i];
+    out[i]={date:a[0],mgr:D.m[a[1]],tl:D.t[a[2]],univ:D.u[a[3]],counsellor:D.c[a[4]],incentive:a[5],tlIncentive:a[6],mgrIncentive:a[7]};
+  }
+  raw.trendRows=out; delete raw.rowsC; delete raw.dict;
+  return raw;
+}
+
+// One request, one transport. Inside the Apps Script page we use google.script.run
+// (immune to multi-account / CORS redirect problems); anywhere else, plain fetch.
+function _rawFetch(p, from, to, timeoutMs, ver){
+  const fresh = _forceFresh ? '1' : ''; _forceFresh = false;
+  return new Promise((resolve, reject)=>{
+    let done = false;
+    const tid = setTimeout(()=>{ if(!done){ done=true; reject(new Error('timeout')); } }, timeoutMs);
+    const ok  = v => { if(done) return; done=true; clearTimeout(tid); resolve(v); };
+    const bad = e => { if(done) return; done=true; clearTimeout(tid); reject(e instanceof Error ? e : new Error(String((e&&e.message)||e))); };
+    const viaFetch = () => {
+      let url = API+'?sheet='+encodeURIComponent(p)+'&c=1';
+      if(from && to) url += `&from=${from}&to=${to}`;
+      if(ver)   url += '&ver='+encodeURIComponent(ver);
+      if(fresh) url += '&fresh=1';
+      fetch(url, {cache:'no-store'})
+        .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+        .then(ok, bad);
+    };
+    if(typeof google!=='undefined' && google.script && google.script.run){
+      try{
+        google.script.run.withSuccessHandler(ok).withFailureHandler(()=>{ if(!done) viaFetch(); })
+          .apiGet(p, from||'', to||'', fresh, ver||'', '1');
+      }catch(e){ viaFetch(); }
+    } else { viaFetch(); }
+  });
+}
+
+// Validate + decode one server response
+function _checkRaw(raw){
+  if(!raw || typeof raw!=='object') throw new Error('Empty response');
+  if(raw.error) throw new Error(String(raw.error));
+  if(raw.unchanged) return raw;
+  expandRows(raw);
+  if(typeof raw.netAdm!=='number' || !Array.isArray(raw.trendRows)) throw new Error('Unexpected response');
+  return raw;
+}
+
+// One request with a single retry on a transient failure
+async function _fetchRetry(p, from, to, ver){
+  let lastErr;
+  for(let attempt=0; attempt<2; attempt++){
+    try{ return _checkRaw(await _rawFetch(p, from, to, FETCH_TIMEOUT, ver)); }
+    catch(e){ lastErr=e; if(attempt<1) await new Promise(r=>setTimeout(r, 1500)); }
+  }
+  throw lastErr;
+}
+
+const SNAP_MIN_AGE = 4000;     // rapid tab switching never reaches the network more than once per 4 s
+let _snapP = null;             // the single in-flight snapshot request (shared by everyone who asks)
+
+// A snapshot can build every tab locally only if it carries these fields (new script); otherwise we fall back per-period
+function _snapOk(d){
+  return !!(d && d.ver && d.cancelByDate && typeof d.cancelByDate==='object' && d.meta &&
+    /^\d{4}-\d{2}-\d{2}$/.test(d.meta.today||'') && Array.isArray(d.allTrendRows||d.trendRows));
+}
+function _canDerive(){ return !!(mem['all'] && _snapOk(mem['all'].data)); }
+
+function getSnapshot(){
+  if(_snapP) return _snapP;
+  const cur = mem['all'] || null;
+  if(cur && !_forceFresh && _snapOk(cur.data) && (Date.now()-cur.ts) < SNAP_MIN_AGE) return Promise.resolve(cur.data);
+  const ver = (cur && _snapOk(cur.data)) ? cur.data.ver : '';
+  _snapP = (async()=>{
+    const raw = await _fetchRetry('all', null, null, ver);
+    _retryCount = 0;
+    if(raw.unchanged){
+      if(cur){ cur.ts = Date.now(); return cur.data; }     // nothing changed: keep the same object (no re-render)
+      throw new Error('Unexpected response');
+    }
+    const d = norm(raw, 'all');
+    if(!d) throw new Error('Unexpected response');
+    mem['all'] = {data:d, ts:Date.now()}; dkWrite('all', d);
+    for(const k of Object.keys(mem)) if(k!=='all') delete mem[k];   // derived views belonged to the previous snapshot
+    return d;
+  })().finally(()=>{ _snapP = null; });
+  return _snapP;
+}
+
+// ── Build any period locally from the snapshot (identical rules to Code.gs) ──
+const _MON3 = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+const _pad2 = n => (n<10?'0':'')+n;
+function _dayNum(s){ const a=s.split('-'); return Date.UTC(+a[0],+a[1]-1,+a[2])/86400000; }
+function _isoDay(n){ const d=new Date(n*86400000); return d.getUTCFullYear()+'-'+_pad2(d.getUTCMonth()+1)+'-'+_pad2(d.getUTCDate()); }
+function _rangeFor(p, from, to, today){
+  if(from && to) return {from:from, to:to};
+  if(p==='all') return null;
+  if(p==='today') return {from:today, to:today};
+  if(p==='thisweek'||p==='weekly'||p==='lastweek'){
+    const n=_dayNum(today), dow=new Date(n*86400000).getUTCDay();   // 0 = Sun
+    let mon=n-((dow+6)%7); if(p==='lastweek') mon-=7;
+    return {from:_isoDay(mon), to:_isoDay(mon+6)};
+  }
+  const y=+today.slice(0,4), m=+today.slice(5,7);                    // monthly = current calendar month
+  const last=new Date(Date.UTC(y,m,0)).getUTCDate();
+  return {from:`${y}-${_pad2(m)}-01`, to:`${y}-${_pad2(m)}-${_pad2(last)}`};
+}
+function deriveNormed(snap, p, from, to){
+  const rowsAll = snap.allTrendRows || snap.trendRows;
+  let R = _rangeFor(p, from, to, snap.meta.today);
+  if(R && R.from>R.to) R = {from:R.to, to:R.from};
+  let rows, cancel=0;
+  if(R){
+    rows=[];
+    for(let i=0;i<rowsAll.length;i++){ const r=rowsAll[i]; if(r.date>=R.from && r.date<=R.to) rows.push(r); }
+    for(const dte in snap.cancelByDate){ if(dte>=R.from && dte<=R.to) cancel+=snap.cancelByDate[dte]; }
+  } else {
+    rows=rowsAll.slice();
+    for(const dte in snap.cancelByDate) cancel+=snap.cancelByDate[dte];
+  }
+  const all = snap.mgrTargetsAll || {};
+  const raw = {
+    netAdm:rows.length, totalAdm:rows.length+cancel, cancelAdm:cancel, ver:snap.ver,
+    trendRows:rows,
+    mgrTargets: all[_MON3[+snap.meta.today.slice(5,7)-1]] || {}, mgrTargetsAll: all,
+    counsellorInfo: snap.counsellorInfo,
+    meta: Object.assign({}, snap.meta, {period:p, from:R?R.from:null, to:R?R.to:null})
+  };
+  return norm(raw, p);
+}
+
+// Per-period request — only used when the script is an older version without snapshot support
+async function legacyFetch(p, from, to){
   const ck = from ? `cr_${from}_${to}` : p;
-
-  // Return existing in-flight promise for same key (dedup)
   if(_inflight[ck]) return _inflight[ck];
-
-  let url = API+'?sheet='+encodeURIComponent(p)+'&t='+Date.now();
-  if(from && to) url += `&from=${from}&to=${to}`;
-
-  const ctrl = new AbortController();
-  const tid  = setTimeout(()=>ctrl.abort(), FETCH_TIMEOUT);
-
-  const promise = fetch(url, {cache:'no-store', signal:ctrl.signal})
-    .then(r=>{ clearTimeout(tid); if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
-    .then(raw=>{
-      delete _inflight[ck]; _retryCount=0;
-      // Snapshot original rows BEFORE norm() strips cancels & filters
-      const _snap = Array.isArray(raw.trendRows) ? raw.trendRows.slice() : [];
-      const normed = norm(raw, p);
-      if(normed) normed._rawSnap = _snap;
-      return normed;
-    })
-    .catch(e=>{ clearTimeout(tid); delete _inflight[ck]; throw e; });
-
+  const promise = (async()=>{
+    const raw = await _fetchRetry(p, from, to, '');
+    _retryCount = 0;
+    return norm(raw, p);
+  })().finally(()=>{ delete _inflight[ck]; });
   _inflight[ck] = promise;
   return promise;
+}
+
+async function fetchOne(p, from, to){
+  if(p==='all' && !from) return getSnapshot();
+  const snap = await getSnapshot();                 // throws on failure → callers retry with backoff
+  if(_snapOk(snap)) return deriveNormed(snap, p, from, to);
+  return legacyFetch(p, from, to);
+}
+
+// ── Render only when the data really changed; otherwise just refresh the "updated" stamp ──
+let _renderedSig = null;
+function stampNow(stale){
+  const ts=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  const txt=(stale?'⚡ ':'✓ ')+ts;
+  ['t1','t2','t3'].forEach(id=>{ const e=$(id); if(e) e.textContent=txt; });
+  if(!stale) setSt('live', relTime(Date.now()));
+  else setSt('cached', relTime((mem[activeCk]&&mem[activeCk].ts)||Date.now()));
+}
+function renderIfChanged(d, stale, p){
+  if(d && d._sig && d._sig===_renderedSig){ stampNow(stale); return false; }
+  render(d, stale, p);
+  return true;
 }
 
 // ═══════════════════════════════════════════════════════
@@ -3096,22 +1821,48 @@ async function load(p, from=null, to=null, force=false){
     if(token !== renderToken) return;
     activeCk     = ck;
     activePeriod = p;
-    render(data, stale, p);
+    renderIfChanged(data, stale, p);
     if(!stale){ _lastFetchTs=Date.now(); setSt('live', relTime(Date.now())); }
-    hideUpdating();
   }
 
-  // 1. Memory hit — norm from raw snapshot to avoid double-norm
+  function onFail(){
+    if(token!==renderToken) return;
+    _retryCount++;
+    const delay = Math.min(RETRY_BASE * Math.pow(2, _retryCount-1), RETRY_MAX);
+    setSt('error', `Retry in ${Math.round(delay/1000)}s`);
+    clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(()=>load(p, from, to, true), delay);
+  }
+
+  // 0. Derived views (Today / Week / Month / Custom): built locally from the snapshot — instant, no network.
+  //    The snapshot itself is re-checked in the background only when it is older than MEM_TTL (or on ↻).
+  if(p!=='all' && _canDerive()){
+    const sn = mem['all'];
+    let d0=null; try{ d0 = deriveNormed(sn.data, p, from, to); }catch(e){ d0=null; }
+    if(d0){
+      mem[ck] = {data:d0, ts:sn.ts};
+      safeRender(d0, true);
+      setSt('cached', relTime(sn.ts));
+      showDash();
+      const due = force || (Date.now()-sn.ts) >= MEM_TTL;
+      if(due){
+        fetchOne(p, from, to).then(d=>{
+          if(!d || token!==renderToken) return;
+          mem[ck]={data:d, ts:Date.now()};
+          safeRender(d, false);
+          schedRefresh(ck, p, from, to, token);
+        }).catch(onFail);
+      } else {
+        schedRefresh(ck, p, from, to, token);
+      }
+      return;
+    }
+  }
+
+  // 1. Memory hit — instant, no flicker
   if(!force && mem[ck] && (Date.now()-mem[ck].ts) < MEM_TTL){
-    const _cached = mem[ck].data;
-    // Use raw snapshot if available, else fall back to stored data
-    const _src = (_cached._rawSnap && _cached._rawSnap.length)
-      ? {trendRows: _cached._rawSnap, mgrTargets:_cached.mgrTargets, mgrTargetsAll:_cached.mgrTargetsAll}
-      : (_cached._rawAllRows && _cached._rawAllRows.length)
-        ? {trendRows: _cached._rawAllRows, _rawAllRows:_cached._rawAllRows, mgrTargets:_cached.mgrTargets, mgrTargetsAll:_cached.mgrTargetsAll}
-        : _cached;
-    const normed = norm(JSON.parse(JSON.stringify(_src)), p);
-    safeRender(normed || _cached, true);
+    const normed = norm(JSON.parse(JSON.stringify(mem[ck].data)), p);
+    safeRender(normed, true);
     setSt('cached', relTime(mem[ck].ts));
     if(!isCustom) schedRefresh(ck, p, from, to, token);
     return;
@@ -3119,29 +1870,24 @@ async function load(p, from=null, to=null, force=false){
 
   // 2. Disk hit — render instantly, silently revalidate in background
   const dk = dkRead(ck);
-  if(dk && !force){
-    mem[ck] = {data:dk.data, ts:dk.ts};
-    // Use stored raw rows for norm() to avoid double-norm
-    const _dkSrc = (dk.data._rawAllRows && dk.data._rawAllRows.length)
-      ? {trendRows:dk.data._rawAllRows, _rawAllRows:dk.data._rawAllRows, mgrTargets:dk.data.mgrTargets, mgrTargetsAll:dk.data.mgrTargetsAll}
-      : dk.data;
-    safeRender(norm(JSON.parse(JSON.stringify(_dkSrc)), p) || dk.data, true);
+  const dkNormed = (dk && !force) ? norm(JSON.parse(JSON.stringify(dk.data)), p) : null;
+  if(dkNormed){
+    mem[ck] = {data:dkNormed, ts:dk.ts};          // normalised, so it can also serve as the snapshot
+    safeRender(dkNormed, true);
     setSt('cached', relTime(dk.ts));
     showDash();
-    // Background refresh with overlay
-    showUpdating('Updating Live Data…', 'Syncing latest records');
+    // Silent background refresh (no loading indicator)
     fetchOne(p, from, to).then(d=>{
       if(!d || token!==renderToken) return;
       mem[ck]={data:d, ts:Date.now()}; dkWrite(ck, d);
       safeRender(d, false);
-      if(!isCustom) schedRefresh(ck, p, from, to, token);
-    }).catch(()=>{ /* keep showing cached */ });
+      if(!isCustom || _canDerive()) schedRefresh(ck, p, from, to, token);
+    }).catch(onFail);
     return;
   }
 
-  // 3. Cold fetch — show overlay + blur
+  // 3. Cold fetch — show subtle indicator, not a full spinner
   setSt('fetching');
-  showUpdating('Updating Live Data…', 'Fetching latest records');
   try{
     const d = await fetchOne(p, from, to);
     if(token !== renderToken) return;
@@ -3157,7 +1903,6 @@ async function load(p, from=null, to=null, force=false){
     const delay = Math.min(RETRY_BASE * Math.pow(2, _retryCount-1), RETRY_MAX);
     const secs  = Math.round(delay/1000);
     setSt('error', `Retry in ${secs}s`);
-    hideUpdating();
     refreshTimer = setTimeout(()=>load(p, from, to, true), delay);
     showDash();
   }
@@ -3169,13 +1914,10 @@ function schedRefresh(ck, p, from, to, token){
     // Skip refresh if page hidden or offline — schedule again on focus/online
     if(!_pageVisible || !_isOnline){ schedRefresh(ck,p,from,to,token); return; }
     if(renderToken !== token) return;
-    setSt('fetching');
-    showUpdating('Updating Live Data…', 'Auto-refreshing data');
     fetchOne(p, from, to).then(d=>{
       if(!d || renderToken!==token) return;
       mem[ck]={data:d, ts:Date.now()}; dkWrite(ck, d);
-      hideUpdating();
-      render(d, false, p);
+      renderIfChanged(d, false, p);
       _lastFetchTs = Date.now();
       setSt('live', relTime(Date.now()));
       schedRefresh(ck, p, from, to, token);
@@ -3196,6 +1938,7 @@ function schedRefresh(ck, p, from, to, token){
 // ═══════════════════════════════════════════════════════
 function prefetchAll(){
   if(!_isOnline) return;
+  if(_canDerive()) return;      // every tab is built from the snapshot — nothing to prefetch
   const tabs = ['all','today','monthly'];
   let i = 0;
   function next(){
@@ -3221,7 +1964,7 @@ function prefetchAll(){
   if(!mem[wCk]){
     const dk=dkRead(wCk);
     if(dk){ mem[wCk]={data:dk.data,ts:dk.ts}; }
-    else{ setTimeout(()=>fetchOne('weekly',wf,wt).then(d=>{ if(d){ mem[wCk]={data:d,ts:Date.now()}; dkWrite(wCk,d); } }).catch(()=>{}), 6000); }
+    else{ setTimeout(()=>mem[wCk] ? null : fetchOne('weekly',wf,wt).then(d=>{ if(d){ mem[wCk]={data:d,ts:Date.now()}; dkWrite(wCk,d); } }).catch(()=>{}), 6000); }
   }
   // Prefetch last week
   const thisMon=monWeekStart(n);
@@ -3231,7 +1974,7 @@ function prefetchAll(){
   if(!mem[lwCk]){
     const dk=dkRead(lwCk);
     if(dk){ mem[lwCk]={data:dk.data,ts:dk.ts}; }
-    else{ setTimeout(()=>fetchOne('lastweek',lf,lt).then(d=>{ if(d){ mem[lwCk]={data:d,ts:Date.now()}; dkWrite(lwCk,d); } }).catch(()=>{}), 9000); }
+    else{ setTimeout(()=>mem[lwCk] ? null : fetchOne('lastweek',lf,lt).then(d=>{ if(d){ mem[lwCk]={data:d,ts:Date.now()}; dkWrite(lwCk,d); } }).catch(()=>{}), 9000); }
   }
 }
 
@@ -3255,6 +1998,15 @@ document.addEventListener('visibilitychange', ()=>{
       setSt('cached', relTime(c.ts));
     }
   }
+});
+
+$('refreshBtn').addEventListener('click', ()=>{
+  const b=$('refreshBtn'); b.disabled=true; setTimeout(()=>{ b.disabled=false; }, 4000);
+  _forceFresh = true; _retryCount = 0;
+  load(activePeriod,
+    activePeriod==='custom' ? customFrom : null,
+    activePeriod==='custom' ? customTo   : null,
+    true);
 });
 
 window.addEventListener('online', ()=>{
@@ -3351,6 +2103,34 @@ function resolveTargets(d, p){
 // RENDER
 // ═══════════════════════════════════════════════════════
 function render(d, stale, p){
+  _renderedSig = d._sig || null;
+  // Install THIS payload's manager / TL / university lists (set by norm()).
+  if(d._mgrs && d._tls && d._univs){
+    MGRS.length = 0; d._mgrs.forEach(x=>MGRS.push(x));
+    TLS.length  = 0; d._tls.forEach(x=>TLS.push(x));
+    UNIVS.length= 0; d._univs.forEach(x=>UNIVS.push(x));
+    _rebuildLookups();
+  }
+  if(d.counsellorInfo && typeof d.counsellorInfo==='object'){
+    const m=Object.create(null);
+    for(const k in d.counsellorInfo){
+      const v=d.counsellorInfo[k]||{};
+      m[k]={n:String(v.n||''), a:(v.a===1||v.a===0)?v.a:null, q:(v.q===1||v.q===0)?v.q:null};
+    }
+    CINFO=m;
+  }
+  { // explain — on screen — why Active/Inactive + Qualify tags are missing
+    const meta=d.meta||{};
+    if(d.counsellorInfo===undefined){
+      cDiagMsg='⚠ Counsellor status was not received. The script running on Google is an older version — paste the latest Code.gs and deploy a NEW version (Deploy → Manage deployments → Edit → New version).';
+    } else if(!Object.keys(CINFO).length){
+      cDiagMsg = meta.counsellorTab===false
+        ? '⚠ No counsellor status tab found in the sheet. The tab needs the headers: Counsellor Name | … Status | Incentive Status.'
+        : '⚠ The counsellor status tab is empty — add names with Active/Inactive and qualify / Not qualify.';
+    } else {
+      cDiagMsg='⚠ Counsellor status tab was read ('+Object.keys(CINFO).length+' names) but none match the counsellor names in the admissions data. Check the spelling of the names.';
+    }
+  }
   const net=d.netAdm||0, tot=d.totalAdm||0, can=d.cancelAdm||0;
 
   // KPIs — animate numbers
@@ -3445,12 +2225,9 @@ function render(d, stale, p){
 
   // ── Reset donut + counsellor filters ───────────────
   activeMgr=null; activeTL=null;
-  filterStack=[];
-  _lastDonutHash=''; // force full redraw
   syncBarStates();
   $('univFilterTag').classList.remove('show');
-  updateDonut(d, d.allTrendRows||d.trendRows||[], false);
-  _renderTrail();
+  updateDonut(d, lastTrendRows);
   // Reset counsellor filter tag too
   const cfTag=$('counselFilterTag');
   if(cfTag) cfTag.classList.remove('show');
@@ -3545,693 +2322,136 @@ const _tlKeyToLC = Object.create(null);
 TLS.forEach(t=>_tlKeyToLC[t.k]=t.n.toLowerCase());
 
 function ensureDonutSegments(){
-  const svg=document.querySelector('svg.udonut');
+  const svg=document.querySelector('svg.udonut')||($('u1')&&$('u1').closest('svg'));
   if(!svg) return;
-  const have=svg.querySelectorAll('circle.useg').length;
+  const have=svg.querySelectorAll('circle[id^="u"]').length;
   for(let i=have+1;i<=UNIVS.length;i++){
     const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
-    c.id='u'+i; c.className.baseVal='useg';
-    c.setAttribute('cx','50');c.setAttribute('cy','50');
+    c.id='u'+i;c.setAttribute('cx','50');c.setAttribute('cy','50');
     c.setAttribute('r','38');c.setAttribute('fill','none');
     c.setAttribute('stroke-width','12');
     c.setAttribute('stroke-dasharray','0 238.8');
     c.setAttribute('transform','rotate(-90 50 50)');
-    c.setAttribute('data-idx', String(i-1));
     svg.appendChild(c);
   }
 }
 
 let _lastDonutHash = '';
-function updateDonut(d, rows, fromStack){
-  const stackSig = filterStack.map(f=>f.key).join('|');
-  const h=(d.netAdm||0)+'_'+(stackSig||'_')+'_'+UNIVS.length;
-  if(h===_lastDonutHash && !fromStack && !filterStack.length){ ensureDonutSegments(); return; }
+function updateDonut(d,rows){
+  const h=(d.netAdm||0)+'_'+(activeMgr||'')+'_'+(activeTL||'')+'_'+UNIVS.length;
+  if(h===_lastDonutHash && !activeMgr && !activeTL){ ensureDonutSegments(); return; }
   _lastDonutHash=h;
   ensureDonutSegments();
-
-  // Only reset visual selection when called fresh (not from stack)
-  if(!fromStack){
-    _activeUnivIdx = -1;
-    _syncDonutSelection();
-  }
-
   const UL=UNIVS.length;
-  const uvArr=new Int32Array(UL);
+  const uvArr=new Int32Array(UL); // typed — fastest accumulator
+  const fk=activeMgr||activeTL;
+  const ft=activeMgr?'mgr':'tl';
 
-  if(fromStack && rows && rows.length){
-    // Count universities from the already-filtered rows
+  if(fk&&rows.length){
+    const fObj=activeMgr?_mgrByKey[fk]:_tlByKey[fk];
+    const fname=fObj?fObj.n.toLowerCase():'';
     for(let i=0,L=rows.length;i<L;i++){
       const r=rows[i];
-      const uRaw=(r.univ||'').toString().trim(); if(!uRaw) continue;
-      const nk=uRaw.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'');
-      for(let j=0;j<UL;j++){if(UNIVS[j].k===nk){uvArr[j]++;break;}}
+      // For TL filter: match via alias map so spelling variants from sheet are caught
+      if(ft==='tl'){
+        const rTL=(r.tl||'').trim().toLowerCase();
+        const resolved=resolveTL(rTL);
+        if(resolved!==fk) continue;
+      } else {
+        if((r[ft]||'').trim().toLowerCase()!==fname) continue;
+      }
+      const uRaw2=(r.univ||'').toString().trim(); if(!uRaw2) continue;
+      const nk2=uRaw2.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'');
+      let hit=false;
+      for(let j=0;j<UL;j++){if(UNIVS[j].k===nk2){uvArr[j]++;hit=true;break;}}
     }
-  } else {
-    // No filter — show full totals
+    let sum=0; for(let j=0;j<UL;j++) sum+=uvArr[j];
+    if(sum===0){
+      const ratio=(d[fk]||0)/Math.max(d.netAdm||1,1);
+      for(let j=0;j<UL;j++) uvArr[j]=Math.round((d[UNIVS[j].k]||0)*ratio);
+    }
+  }else{
     for(let j=0;j<UL;j++) uvArr[j]=d[UNIVS[j].k]||0;
   }
 
   let total=0; for(let j=0;j<UL;j++) total+=uvArr[j];
   animCount($('unum'),total);
 
-  // Badge and subtitle — read from filterStack, not legacy activeMgr/activeTL
-  const topFilter = filterStack.length ? filterStack[0] : null;
-  const fName = topFilter ? topFilter.name : '';
+  const fObj=activeMgr?_mgrByKey[activeMgr]:activeTL?_tlByKey[activeTL]:null;
+  const fName=fObj?fObj.n:'';
   let nUnivs=0; for(let j=0;j<UL;j++) if(uvArr[j]>0) nUnivs++;
-  $('ub-b').textContent = filterStack.length
-    ? filterStack.map(f=>f.name).join(' › ')+' · '+nUnivs+' UNIVS'
-    : nUnivs+' UNIVS';
-  $('uSub').textContent = filterStack.length ? fName+' ADM' : 'NET ADM';
+  $('ub-b').textContent=(fName?fName+' · ':'')+nUnivs+' UNIVS';
+  $('uSub').textContent=fName?fName+' ADM':'NET ADM';
 
-  // Build _segData and update circles + legend
-  _segData = [];
-  let off=0;
-  const legParts=[];
-  let legIdx=0;
-
+  // Single pass: update donut segments + build legend
+  let off=0; const legParts=[];
   for(let j=0;j<UL;j++){
     const u=UNIVS[j],v=uvArr[j];
     const arc=total>0?(v/total)*DONUT_C:0;
-    const pct=total>0?Math.round(v/total*100):0;
     const s=$('u'+(j+1));
-    if(s){
-      s.setAttribute('stroke',u.cl);
-      s.setAttribute('stroke-dasharray',arc+' '+DONUT_C);
-      s.setAttribute('stroke-dashoffset',-off);
-      s.setAttribute('data-idx', String(j));
-      if(v===0){ s.style.pointerEvents='none'; s.style.opacity='0'; }
-      else { s.style.pointerEvents=''; s.style.opacity=''; }
-    }
+    if(s){s.setAttribute('stroke',u.cl);s.setAttribute('stroke-dasharray',arc+' '+DONUT_C);s.setAttribute('stroke-dashoffset',-off);}
     off+=arc;
-
-    _segData[j] = {name:u.n, color:u.cl, value:v, pct, visible: v>0};
-
-    if(v>0){
-      legParts.push(
-        `<div class="leg-row" data-seg="${j}" data-legidx="${legIdx}">` +
-        `<div class="leg-l"><div class="leg-dot" style="background:${u.cl};border-radius:50%;box-shadow:0 0 0 0 ${u.cl}"></div><span class="leg-name">${u.n}</span></div>` +
-        `<span class="leg-pct">${pct}%</span>` +
-        `<span class="leg-val" style="color:${u.cl}">${v}</span>` +
-        `</div>`
-      );
-      legIdx++;
-    }
+    // Only show in legend if count > 0
+    if(v>0) legParts.push(`<div class="leg-row"><div class="leg-l"><div class="leg-dot" style="background:${u.cl}"></div><span class="leg-name">${u.n}</span></div><span class="leg-pct">${total>0?Math.round(v/total*100):0}%</span><span class="leg-val">${v}</span></div>`);
   }
   $('uleg').innerHTML=legParts.length?legParts.join(''):'<div style="color:rgba(255,255,255,.3);font-size:12px;padding:8px">No data</div>';
 }
 
-// ═══════════════════════════════════════════════════════
-// MULTI-LEVEL FILTER ENGINE
-// Stack: [{level:'univ'|'mgr'|'tl', key, name, color}]
-// University → Manager → Team Leader — each level drills into the previous
-// ═══════════════════════════════════════════════════════
-
-let filterStack = []; // the active drill-down chain
-
-// ── Compute filtered rows for any stack depth ──────────
-function _getFilteredRows(){
-  const cached = mem[activeCk]; if(!cached) return [];
-  // allTrendRows is already cancel-filtered by norm()
-  const allRows = cached.data.allTrendRows || cached.data.trendRows || [];
-  if(!filterStack.length) return allRows;
-  return allRows.filter(r=>{
-    for(const f of filterStack){
-      if(f.level==='univ'){
-        const uRaw=(r.univ||'').toString().trim();
-        const nk=uRaw.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'');
-        if(nk!==f.key) return false;
-      } else if(f.level==='mgr'){
-        if((r.mgr||'').trim().toLowerCase()!==f.name.toLowerCase()) return false;
-      } else if(f.level==='tl'){
-        if(resolveTL((r.tl||'').trim().toLowerCase())!==f.key) return false;
-      }
-    }
-    return true;
-  });
-}
-
-// ── Recompute bar counts from filtered rows ────────────
-function _recomputeBarsFromRows(rows){
-  const cached = mem[activeCk]; if(!cached) return;
-  const d = cached.data;
-
-  // Manager bar counts from filtered rows
-  const mgrCounts = Object.create(null);
-  const tlCounts  = Object.create(null);
-  rows.forEach(r=>{
-    const mk = (r.mgr||'').trim().toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'');
-    if(mk) mgrCounts[mk]=(mgrCounts[mk]||0)+1;
-    const tk = resolveTL((r.tl||'').trim().toLowerCase());
-    if(tk) tlCounts[tk]=(tlCounts[tk]||0)+1;
-  });
-
-  // Rebuild manager bar UI
-  const maxMgr = Math.max(1,...MGRS.map(m=>mgrCounts[m.k]||0));
-  document.querySelectorAll('[data-mgr]').forEach(row=>{
-    const k=row.dataset.mgr;
-    const v=mgrCounts[k]||0;
-    const bf=row.querySelector('.bf');
-    const bl=row.querySelector('.bl');
-    const bv=row.querySelector('.bv');
-    if(bf) requestAnimationFrame(()=>{ bf.style.transition=''; bf.style.transform=`scaleX(${v/maxMgr})`; });
-    if(bl) bl.textContent=v+' adm';
-    if(bv) bv.textContent=v;
-    // Active/dim/neutral based on stack
-    const mgrInStack = filterStack.find(f=>f.level==='mgr');
-    if(mgrInStack){
-      row.classList.toggle('ml-active', mgrInStack.key===k);
-      row.classList.toggle('ml-dim',   mgrInStack.key!==k);
-    } else {
-      row.classList.remove('ml-active','ml-dim');
-      row.classList.toggle('ml-dim', v===0 && filterStack.length>0);
-    }
-  });
-
-  // Rebuild TL bar UI
-  const maxTL = Math.max(1,...TLS.map(t=>tlCounts[t.k]||0));
-  document.querySelectorAll('[data-tl]').forEach(row=>{
-    const k=row.dataset.tl;
-    const v=tlCounts[k]||0;
-    const bf=row.querySelector('.bf');
-    const bl=row.querySelector('.bl');
-    const bv=row.querySelector('.bv');
-    if(bf) requestAnimationFrame(()=>{ bf.style.transition=''; bf.style.transform=`scaleX(${v/maxTL})`; });
-    if(bl) bl.textContent=v+' adm';
-    if(bv) bv.textContent=v;
-    const tlInStack=filterStack.find(f=>f.level==='tl');
-    if(tlInStack){
-      row.classList.toggle('ml-active', tlInStack.key===k);
-      row.classList.toggle('ml-dim',   tlInStack.key!==k);
-    } else {
-      row.classList.remove('ml-active','ml-dim');
-      row.classList.toggle('ml-dim', v===0 && filterStack.length>0);
-    }
-  });
-
-  // Update the mb-b and tb-b badges
-  const totMgr=Object.values(mgrCounts).reduce((s,v)=>s+v,0);
-  $('mb-b').textContent=totMgr+' ADM';
-  $('tb-b').textContent=totMgr+' ADM';
-
-  // ── Update KPI counters to reflect active filter + cancel logic ──
-  // rows are already cancel-free (allTrendRows is cancel-filtered by norm)
-  // So netAdm for the filtered view = rows.length
-  if(filterStack.length){
-    animCount($('pnet'), rows.length);
-    // For filtered view, cancel count = cancelled rows matching the same filter
-    const cached2 = mem[activeCk];
-    if(cached2){
-      const _isCancel2 = r => {
-        // Check all possible field variations
-        const fields = [
-          r.admissionStatus, r.AdmissionStatus, r.admission_status, 
-          r.admissionState, r.AdmissionState, r.admission_state,
-          r.status, r.Status, r.STATUS,
-          r.state, r.State, r.STATE,
-          r.adm_status, r.admStatus, r.admState,
-          r.cancelStatus, r.CancelStatus, r.cancel_status
-        ];
-        
-        for(let field of fields) {
-          if(field) {
-            const s = field.toString().trim().toLowerCase();
-            // Check for cancel variations
-            if(s.includes('cancel') || s === 'cancelled' || s === 'canceled') {
-              return true;
-            }
-          }
-        }
-        return false;
-      };
-      // Get the raw (non-cancel-filtered) source rows
-      const rawAllRows = cached2.data._rawAllRows || [];
-      if(rawAllRows.length){
-        // Apply same filter to raw rows to find cancelled in this filter scope
-        const filteredCancelRows = rawAllRows.filter(r => {
-          if(!_isCancel2(r)) return false;
-          for(const f of filterStack){
-            if(f.level==='univ'){
-              const nk=(r.univ||'').toString().trim().toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'');
-              if(nk!==f.key) return false;
-            } else if(f.level==='mgr'){
-              if((r.mgr||'').trim().toLowerCase()!==f.name.toLowerCase()) return false;
-            } else if(f.level==='tl'){
-              if(resolveTL((r.tl||'').trim().toLowerCase())!==f.key) return false;
-            }
-          }
-          return true;
-        });
-        animCount($('pcan'), filteredCancelRows.length);
-        animCount($('ptot'), rows.length + filteredCancelRows.length);
-      }
-    }
-  }
-
-  // Highlight active cards
-  const mgrCard=$('mb')?.closest('.card');
-  const tlCard=$('tb')?.closest('.card');
-  if(mgrCard) mgrCard.classList.toggle('filter-active', filterStack.some(f=>f.level==='mgr'));
-  if(tlCard)  tlCard.classList.toggle('filter-active',  filterStack.some(f=>f.level==='tl'));
-}
-
-// ── Render the breadcrumb trail ────────────────────────
-function _renderTrail(){
-  const trail=$('filterTrail');
-  const crumbs=$('ftCrumbs');
-  if(!trail||!crumbs) return;
-
-  if(!filterStack.length){
-    trail.classList.remove('show');
-    crumbs.innerHTML='';
-    // Also clear univ card filter-active
-    const univCard=document.querySelector('.univ-card');
-    if(univCard) univCard.classList.remove('filter-active');
-    return;
-  }
-  trail.classList.add('show');
-  document.querySelector('.univ-card')?.classList.add('filter-active');
-
-  const levelLabel={univ:'Univ',mgr:'Mgr',tl:'TL'};
-  crumbs.innerHTML = filterStack.map((f,i)=>{
-    const dot=`<span class="ft-crumb-dot" style="background:${f.color||'#818cf8'}"></span>`;
-    const lbl=`<span class="ft-crumb-level">${levelLabel[f.level]||f.level}</span>`;
-    const nm=`<span class="ft-crumb-name" title="${f.name}">${f.name}</span>`;
-    const x=`<span class="ft-crumb-x">×</span>`;
-    const sep= i<filterStack.length-1 ? `<span class="ft-sep">›</span>` : '';
-    return `<div class="ft-crumb" data-crumb="${i}">${dot}${lbl}${nm}${x}</div>${sep}`;
-  }).join('');
-}
-
-// ── Refresh all 3 incentive leaderboards from a row set ──
-// Called on every filter change so leaderboards always reflect
-// the current Univ → Mgr → TL drill-down context.
-// ── Top Performers from any row set ─────────────────────
-function _updateTopPerformers(rows){
-  const el = $('tlist'); if(!el) return;
-  if(!rows || !rows.length){ el.innerHTML = nd('No data for this filter'); return; }
-  const mgrMap=Object.create(null), tlMap=Object.create(null);
-  for(let i=0,L=rows.length;i<L;i++){
-    const r=rows[i];
-    const m=(r.mgr||'').toString().trim(); if(m) mgrMap[m]=(mgrMap[m]||0)+1;
-    const t=(r.tl||'').toString().trim();  if(t) tlMap[t]=(tlMap[t]||0)+1;
-  }
-  const topMgr=Object.entries(mgrMap).sort((a,b)=>b[1]-a[1]);
-  const topTL =Object.entries(tlMap).sort((a,b)=>b[1]-a[1]);
-  if(!topMgr.length && !topTL.length){ el.innerHTML=nd('No data for this filter'); return; }
-  const parts=[];
-  if(topMgr[0]) parts.push(trRow('🏆','Manager',    topMgr[0][0], topMgr[0][1], 'r1'));
-  if(topTL[0])  parts.push(trRow('🥇','Team Leader', topTL[0][0],  topTL[0][1],  'r2'));
-  if(topTL[1])  parts.push(trRow('🥈','Team Leader', topTL[1][0],  topTL[1][1],  'r3'));
-  el.innerHTML = parts.join('');
-}
-
-function _refreshIncentives(rows){
-  // Counsellor incentive — rebuild from filtered counsellor data
-  const counselData = buildCounselMap(rows);
-  drawIncLeaderboard(counselData);
-
-  // TL + Manager incentive — pass filtered rows so buildTLIncMap /
-  // buildMgrIncMap re-aggregate incentives within the active filter
-  drawTLIncLeaderboard(rows);
-  drawMgrIncLeaderboard(rows);
-
-  // Total incentives summary (manager/director only)
-  updateTotalsSummary(rows);
-
-  // Re-enforce role-based visibility (draw functions may hide sections)
-  applyRoleVisibility();
-}
-
-// ── Totals Summary — sums incentives across all 3 roles ──
-function updateTotalsSummary(rows){
-  const role = currentUser ? currentUser.role : 'public';
-  if(role !== 'manager' && role !== 'director') return;
-
-  if(!rows || !rows.length){
-    $('itsCounselTotal').textContent = '₹0';
-    $('itsTLTotal').textContent      = '₹0';
-    $('itsMgrTotal').textContent     = '₹0';
-    $('itsGrandTotal').textContent   = '₹0';
-    $('itsCounselMeta').textContent  = '0 admissions';
-    $('itsTLMeta').textContent       = '0 TLs';
-    $('itsMgrMeta').textContent      = '0 managers';
-    $('itsGrandMeta').textContent    = 'No data';
-    return;
-  }
-
-  let counselTotal=0, tlTotal=0, mgrTotal=0;
-  const counselSet = new Set(), tlSet = new Set(), mgrSet = new Set();
-
-  for(let i=0,L=rows.length;i<L;i++){
-    const r = rows[i];
-    const cInc = parseFloat(r.incentive)    || 0;
-    const tInc = parseFloat(r.tlIncentive)  || 0;
-    const mInc = parseFloat(r.mgrIncentive) || 0;
-    counselTotal += cInc;
-    tlTotal      += tInc;
-    mgrTotal     += mInc;
-    // Count UNIQUE counsellor names (not row count)
-    const cName = (r.counsellor||r.Counsellor||'').toString().trim();
-    if(cName && cInc > 0) counselSet.add(cName.toLowerCase());
-    const tName = (r.tl||'').trim();
-    if(tName && tInc > 0) tlSet.add(tName.toLowerCase());
-    const mName = (r.mgr||'').trim();
-    if(mName && mInc > 0) mgrSet.add(mName.toLowerCase());
-  }
-
-  const grandTotal = counselTotal + tlTotal + mgrTotal;
-  $('itsCounselTotal').textContent = fmtIncFull(counselTotal);
-  $('itsTLTotal').textContent      = fmtIncFull(tlTotal);
-  $('itsMgrTotal').textContent     = fmtIncFull(mgrTotal);
-  $('itsGrandTotal').textContent   = fmtIncFull(grandTotal);
-  $('itsCounselMeta').textContent  = counselSet.size + ' counsellor' + (counselSet.size===1?'':'s');
-  $('itsTLMeta').textContent       = tlSet.size + ' team leader' + (tlSet.size===1?'':'s');
-  $('itsMgrMeta').textContent      = mgrSet.size + ' manager' + (mgrSet.size===1?'':'s');
-  $('itsGrandMeta').textContent    = rows.length + ' admissions';
-
-  const ctx = (typeof filterStack !== 'undefined' && filterStack.length)
-    ? filterStack.map(f=>f.name).join(' › ')
-    : 'All roles combined · Live';
-  $('itsSub').textContent = ctx;
-}
-
-// ── Apply the full stack: donut + bars + counsellor + incentives ──
-function _applyStack(){
-  const cached=mem[activeCk]; if(!cached) return;
-  const rows=_getFilteredRows();
-
-  // Always pass filtered rows + fromStack=true so updateDonut
-  // correctly reflects whatever level is active (univ, mgr, or tl).
-  updateDonut(cached.data, rows, true/*fromStack*/);
-
-  // 2. Recompute bars
-  _recomputeBarsFromRows(rows);
-
-  // 3. Counsellor section + all incentive leaderboards
-  const label = filterStack.length ? filterStack.map(f=>f.name).join(' › ') : null;
-  const type  = filterStack.length ? filterStack[filterStack.length-1].level : null;
-  if(label) filterCounselSection(rows, label, type);
-  else      filterCounselSection(rows, null, null);
-
-  // 4. Incentive leaderboards — always refresh from filtered rows
-  _refreshIncentives(rows);
-
-  // 5. Top Performers — recompute from filtered rows
-  _updateTopPerformers(rows);
-
-  // 6. Trend Chart — recompute from filtered rows
-  _lastTrendHash = '';
-  drawTrend(rows);
-
-  // 7. Card filter-active indicators
-  $('mb')?.closest('.card')?.classList.toggle('filter-active', filterStack.some(f=>f.level==='mgr'));
-  $('tb')?.closest('.card')?.classList.toggle('filter-active', filterStack.some(f=>f.level==='tl'));
-  document.querySelector('.univ-card')?.classList.toggle('filter-active', filterStack.some(f=>f.level==='univ'));
-
-  // 8. Breadcrumb
-  _renderTrail();
-
-  // 9. Sync donut visual selection
-  const univInStack=filterStack.find(f=>f.level==='univ');
-  const univIdx = univInStack ? UNIVS.findIndex(u=>u.k===univInStack.key) : -1;
-  _activeUnivIdx = univIdx;
-  _syncDonutSelection();
-}
-
-// ── Push a new filter level ────────────────────────────
-function _pushFilter(level, key, name, color){
-  // Prevent duplicate at same level — replace instead
-  const existIdx=filterStack.findIndex(f=>f.level===level);
-  if(existIdx>=0){
-    // If same key → pop (toggle off this level and everything below)
-    if(filterStack[existIdx].key===key){
-      filterStack=filterStack.slice(0,existIdx);
-    } else {
-      // Different value at same level → replace from here down
-      filterStack=filterStack.slice(0,existIdx);
-      filterStack.push({level,key,name,color});
-    }
-  } else {
-    filterStack.push({level,key,name,color});
-  }
-  _applyStack();
-}
-
-// ── Pop stack back to a given depth ───────────────────
-function _popToDepth(depth){
-  filterStack=filterStack.slice(0,depth);
-  _applyStack();
-}
-
-// ── Full clear ─────────────────────────────────────────
-function _clearAllFilters(){
-  filterStack=[];
-  _activeUnivIdx=-1;
-  activeMgr=null; activeTL=null;
-  _lastDonutHash=''; // force full redraw on next updateDonut call
-  const cached=mem[activeCk]; if(!cached) return;
-  const allRows=cached.data.allTrendRows||cached.data.trendRows||[];
-
-  // Restore donut to full unfiltered view
-  updateDonut(cached.data, allRows, false);
-  _syncDonutSelection();
-  _renderTrail();
-  filterCounselSection(allRows,null,null);
-  // Restore all incentive leaderboards to full unfiltered data
-  _refreshIncentives(allRows);
-  // Restore Top Performers
-  _updateTopPerformers(allRows);
-  // Restore Trend Chart to full period
-  _lastTrendHash='';
-  drawTrend(cached.data.allTrendRows||allRows);
-  // Restore KPIs
-  const _d=cached.data;
-  animCount($('pnet'),_d.netAdm||0);
-  animCount($('ptot'),_d.totalAdm||0);
-  animCount($('pcan'),_d.cancelAdm||0);
-  // Reset incentive leaderboard titles
-  ['incSortSub','tlIncSortSub','mgrIncSortSub'].forEach(id=>{
-    const el=document.getElementById(id); if(!el) return;
-    const panel=id.replace('SortSub','');
-    const st=_incSort[panel]||{sort:'inc',dir:'desc'};
-    el.textContent='Sorted by '+(st.sort==='inc'?'incentive':'admissions')+' · '+(st.dir==='desc'?'highest first':'lowest first');
-  });
-
-  // Reset all bar visual state
-  document.querySelectorAll('[data-mgr],[data-tl]').forEach(r=>{
-    r.classList.remove('ml-active','ml-dim','active-mgr','dimmed');
-  });
-  $('mb')?.closest('.card')?.classList.remove('filter-active');
-  $('tb')?.closest('.card')?.classList.remove('filter-active');
-  document.querySelector('.univ-card')?.classList.remove('filter-active');
-
-  // Restore original bar fills from full data
-  const d=cached.data;
-  const sortedMgrs=[...MGRS].sort((a,b)=>(d[b.k]||0)-(d[a.k]||0));
-  const sortedTLs=[...TLS].sort((a,b)=>(d[b.k]||0)-(d[a.k]||0));
-  const maxMgr=Math.max(1,...MGRS.map(m=>d[m.k]||0));
-  const maxTL =Math.max(1,...TLS.map(t=>d[t.k]||0));
-  requestAnimationFrame(()=>{
-    sortedMgrs.forEach((m,i)=>{
-      const e=document.getElementById('mb'+i); if(!e) return;
-      e.style.transition=''; e.style.transform=`scaleX(${(d[m.k]||0)/maxMgr})`;
-    });
-    sortedTLs.forEach((t,i)=>{
-      const e=document.getElementById('tb'+i); if(!e) return;
-      e.style.transition=''; e.style.transform=`scaleX(${(d[t.k]||0)/maxTL})`;
-    });
-    document.querySelectorAll('[data-mgr]').forEach(row=>{
-      const k=row.dataset.mgr; const v=d[k]||0;
-      const bl=row.querySelector('.bl'); const bv=row.querySelector('.bv');
-      if(bl) bl.textContent=v+' adm'; if(bv) bv.textContent=v;
-    });
-    document.querySelectorAll('[data-tl]').forEach(row=>{
-      const k=row.dataset.tl; const v=d[k]||0;
-      const bl=row.querySelector('.bl'); const bv=row.querySelector('.bv');
-      if(bl) bl.textContent=v+' adm'; if(bv) bv.textContent=v;
-    });
-    $('mb-b').textContent=(d.netAdm||0)+' ADM';
-    $('tb-b').textContent=(d.netAdm||0)+' ADM';
-    // Restore full KPI values
-    animCount($('pnet'), d.netAdm||0);
-    animCount($('ptot'), d.totalAdm||0);
-    animCount($('pcan'), d.cancelAdm||0);
-  });
-}
-
-// ── Breadcrumb click handler ───────────────────────────
-document.getElementById('ftCrumbs').addEventListener('click',e=>{
-  const crumb=e.target.closest('.ft-crumb');
-  if(!crumb) return;
-  const i=parseInt(crumb.dataset.crumb||'-1');
-  if(i<0) return;
-  // Click crumb = drill back up to just above this level (pop everything from i onwards)
-  _popToDepth(i);
-},{passive:true});
-
-document.getElementById('ftClear').addEventListener('click',()=>{ _clearAllFilters(); },{passive:true});
-
-// ═══════════════════════════════════════════════════════
-// DONUT VISUAL SELECTION (unchanged visual sync)
-// ═══════════════════════════════════════════════════════
-
-let _segData = [];
-let _activeUnivIdx = -1;
-
-function _syncDonutSelection(){
-  const idx=_activeUnivIdx;
-  const segs=document.querySelectorAll('svg.udonut circle.useg');
-  const legRows=document.querySelectorAll('#uleg .leg-row');
-  const ctr=$('donutCtr');
-  const numEl=$('unum');
-  const subEl=$('uSub');
-
-  if(idx===-1){
-    segs.forEach(s=>{s.classList.remove('seg-active','seg-dim');});
-    legRows.forEach(r=>{r.classList.remove('leg-active','leg-dim');});
-    if(ctr) ctr.classList.remove('has-sel');
-    const total=_segData.reduce((s,d)=>s+(d.value||0),0);
-    if(numEl) animCount(numEl,total);
-    if(subEl){
-      const univInStack=filterStack.find(f=>f.level==='univ');
-      subEl.textContent=univInStack?univInStack.name+' ADM':'NET ADM';
-    }
-    const nUnivs=_segData.filter(s=>s.visible).length;
-    $('ub-b').textContent=nUnivs+' UNIVS';
-  } else {
-    const sel=_segData[idx];
-    if(!sel) return;
-    segs.forEach(s=>{
-      const si=parseInt(s.getAttribute('data-idx')||'-1');
-      if(si===idx){s.classList.add('seg-active');s.classList.remove('seg-dim');}
-      else if(_segData[si]&&_segData[si].visible){s.classList.remove('seg-active');s.classList.add('seg-dim');}
-    });
-    legRows.forEach(r=>{
-      const ri=parseInt(r.getAttribute('data-seg')||'-1');
-      if(ri===idx){r.classList.add('leg-active');r.classList.remove('leg-dim');}
-      else{r.classList.remove('leg-active');r.classList.add('leg-dim');}
-    });
-    if(ctr) ctr.classList.add('has-sel');
-    if(numEl) animCount(numEl,sel.value);
-    if(subEl) subEl.textContent=sel.name.length>10?sel.name.slice(0,10)+'…':sel.name;
-    $('ub-b').textContent=sel.name+' · '+sel.pct+'%';
-  }
-}
-
-// ── Tooltip ────────────────────────────────────────────
-function _showDonutTip(seg,segIdx){
-  const tip=$('donutTip'); if(!tip||!seg) return;
-  const d=_segData[segIdx]; if(!d||!d.visible) return;
-  document.getElementById('dtName').textContent=d.name;
-  document.getElementById('dtVal').textContent=d.value;
-  document.getElementById('dtVal').style.color=d.color;
-  document.getElementById('dtPct').textContent=d.pct+'% of total';
-  tip.style.left='74px'; tip.style.top='10px';
-  tip.classList.add('show');
-}
-function _hideDonutTip(){
-  const tip=$('donutTip'); if(tip) tip.classList.remove('show');
-}
-
-// ── Select a university — Level 1 of the chain ─────────
-function selectUniv(idx){
-  if(!_segData[idx]||!_segData[idx].visible) return;
-  const seg=_segData[idx];
-  const univKey=UNIVS[idx]?UNIVS[idx].k:'';
-  _pushFilter('univ', univKey, seg.name, seg.color);
-  _hideDonutTip();
-}
-
-// ── SVG events ─────────────────────────────────────────
-(function wireDonutSVG(){
-  const svg=document.querySelector('svg.udonut'); if(!svg) return;
-  svg.addEventListener('click',e=>{
-    const seg=e.target.closest('circle.useg'); if(!seg) return;
-    const idx=parseInt(seg.getAttribute('data-idx')||'-1');
-    if(idx<0||!_segData[idx]||!_segData[idx].visible) return;
-    selectUniv(idx);
-  },{passive:true});
-  svg.addEventListener('mouseover',e=>{
-    const seg=e.target.closest('circle.useg'); if(!seg) return;
-    const idx=parseInt(seg.getAttribute('data-idx')||'-1');
-    if(idx<0||!_segData[idx]||!_segData[idx].visible) return;
-    _showDonutTip(seg,idx);
-  },{passive:true});
-  svg.addEventListener('mouseout',e=>{
-    if(!e.relatedTarget||!e.relatedTarget.closest('circle.useg')) _hideDonutTip();
-  },{passive:true});
-})();
-
-// ── Legend clicks ──────────────────────────────────────
-$('uleg').addEventListener('click',e=>{
-  const row=e.target.closest('.leg-row'); if(!row) return;
-  const idx=parseInt(row.getAttribute('data-seg')||'-1');
-  if(idx<0||!_segData[idx]||!_segData[idx].visible) return;
-  selectUniv(idx);
-},{passive:true});
-
-$('uleg').addEventListener('mouseover',e=>{
-  const row=e.target.closest('.leg-row');
-  if(!row||_activeUnivIdx!==-1) return;
-  const idx=parseInt(row.getAttribute('data-seg')||'-1'); if(idx<0) return;
-  const seg=document.getElementById('u'+(idx+1));
-  if(seg&&_segData[idx]&&_segData[idx].visible){seg.setAttribute('stroke-width','15');seg.style.filter=`drop-shadow(0 0 10px ${_segData[idx].color})`;}
-},{passive:true});
-
-$('uleg').addEventListener('mouseout',e=>{
-  const row=e.target.closest('.leg-row');
-  if(!row||_activeUnivIdx!==-1) return;
-  const idx=parseInt(row.getAttribute('data-seg')||'-1'); if(idx<0) return;
-  const seg=document.getElementById('u'+(idx+1));
-  if(seg){seg.setAttribute('stroke-width','12');seg.style.filter='';}
-},{passive:true});
-
-// ── Keyboard ───────────────────────────────────────────
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'&&filterStack.length){ _clearAllFilters(); }
-});
-
-// ── Click outside donut box ────────────────────────────
-document.querySelector('.donut-box')?.addEventListener('click',e=>{
-  if(!e.target.closest('circle.useg')&&_activeUnivIdx!==-1){
-    _popToDepth(0); // clear univ and everything below
-  }
-},{passive:true});
-
-// ═══════════════════════════════════════════════════════
-// MANAGER BAR CLICK — Level 2 of chain (within univ filter)
-// ═══════════════════════════════════════════════════════
 function toggleMgrFilter(key,name){
-  const mgrObj=_mgrByKey[key];
-  const color=mgrObj?'#818cf8':'#818cf8';
-  _pushFilter('mgr', key, name, color);
+  const cached=mem[activeCk]; if(!cached)return;
+  activeTL=null;
+  const wasActive = activeMgr===key;
+  activeMgr = wasActive ? null : key;
+
+  // Donut filter tag
+  if(activeMgr){ $('univFilterName').textContent=name; $('univFilterTag').classList.add('show'); }
+  else { $('univFilterTag').classList.remove('show'); }
+
+  syncBarStates();
+  updateDonut(cached.data, lastTrendRows);
+
+  // Filter counsellor section to show only this manager's counsellors
+  const d = cached.data;
+  const allRows = d.allTrendRows || d.trendRows || [];
+  if(activeMgr){
+    const mgrRows = allRows.filter(r=>(r.mgr||'').trim().toLowerCase()===name.toLowerCase());
+    filterCounselSection(mgrRows, name, 'mgr');
+  } else {
+    filterCounselSection(allRows, null, null);
+  }
 }
 
-// ═══════════════════════════════════════════════════════
-// TL BAR CLICK — Level 3 of chain (within univ+mgr filter)
-// ═══════════════════════════════════════════════════════
 function toggleTLFilter(key,name){
-  const tlObj=_tlByKey[key];
-  const color=tlObj?'#22d3ee':'#22d3ee';
-  _pushFilter('tl', key, name, color);
+  const cached=mem[activeCk]; if(!cached)return;
+  activeMgr=null;
+  const wasActive = activeTL===key;
+  activeTL = wasActive ? null : key;
+
+  // Donut filter tag
+  if(activeTL){ $('univFilterName').textContent=name; $('univFilterTag').classList.add('show'); }
+  else { $('univFilterTag').classList.remove('show'); }
+
+  syncBarStates();
+  updateDonut(cached.data, lastTrendRows);
+
+  // Filter counsellor section to show only this TL's counsellors
+  const d = cached.data;
+  const allRows = d.allTrendRows || d.trendRows || [];
+  if(activeTL){
+    const tlRows = allRows.filter(r=>resolveTL((r.tl||'').trim().toLowerCase())===key);
+    filterCounselSection(tlRows, name, 'tl');
+  } else {
+    filterCounselSection(allRows, null, null);
+  }
 }
 
-function syncBarStates(){
-  // Now handled by _recomputeBarsFromRows — stub kept for compatibility
-  document.querySelectorAll('[data-mgr]').forEach(r=>r.classList.remove('active-mgr','dimmed'));
-  document.querySelectorAll('[data-tl]').forEach(r=>r.classList.remove('active-mgr','dimmed'));
-}
-
-// ── Filter counsellor section by manager, TL, or university ─────────────────────
+// ── Filter counsellor section by manager or TL ───────────────────────
 function filterCounselSection(rows,label,type){
   const tag=$('counselFilterTag'),nameEl=$('counselFilterName');
-  if(label&&type){
-    const prefix = type==='mgr'?'Mgr: ':type==='tl'?'TL: ':'🏫 ';
-    nameEl.textContent=prefix+label;
-    tag.classList.add('show');
-  }
+  if(label&&type){nameEl.textContent=(type==='mgr'?'Mgr: ':'TL: ')+label;tag.classList.add('show');}
   else tag.classList.remove('show');
-  const data=buildCounselMap(rows);
+  const data=label?buildCounselMap(rows):padZeroCounsellors(buildCounselMap(rows));
+  if(!label) allCounselData=data;
   if(!data.length){
     $('cPodium').innerHTML='';
     $('cGrid').innerHTML=nd(label?`No counsellors for ${label}`:'No counsellor data');
@@ -4245,19 +2465,22 @@ function filterCounselSection(rows,label,type){
 // Render counsellor grid — array join (faster than string concat in hot loop)
 function renderCGridData(data){
   const total=data.reduce((s,c)=>s+c.count,0)||1;
-  const mx=data.length?data[0].count:1;
-  const src=cSearchVal?data.filter(c=>c.name.toLowerCase().includes(cSearchVal)):data;
+  const mx=Math.max(1,data.length?data[0].count:1);
+  const base=(cStatusFilter==='all')?data:data.filter(statusPass);
+  const src=cSearchVal?base.filter(c=>c.name.toLowerCase().includes(cSearchVal)):base;
   const grid=$('cGrid');
-  if(!src.length){grid.innerHTML=nd(`No match for "${cSearchVal}"`);return;}
+  if(!src.length){grid.innerHTML=nd(cSearchVal?`No match for "${cSearchVal}"`:'No counsellors in this filter');return;}
   const parts=new Array(src.length);
   for(let i=0,L=src.length;i<L;i++){
     const c=src[i],col=DOT_CLR[i%DOT_CLR.length];
     const pct=Math.round((c.count/total)*100),ratio=c.count/mx;
-    parts[i]=`<div class="cg-card${c.incentive>0?' has-inc':''}" style="border-color:${rgba(col,.15+ratio*.3)}" id="cgc${i}">`
+    const _ci=cInfo(c.name), _off=!!_ci && _ci.a===0;
+    parts[i]=`<div class="cg-card${c.incentive>0?' has-inc':''}${_off?' cg-off':''}${c.count===0?' cg-zero':''}" style="border-color:${rgba(col,.15+ratio*.3)}" id="cgc${i}">`
       +`<div class="cg-fill" id="cgf${i}" style="background:${rgba(col,.12+ratio*.22)}"></div>`
       +`<div class="cg-dot" style="background:${col};box-shadow:0 0 5px ${rgba(col,.5)};flex-shrink:0"></div>`
-      +`<div class="cg-body"><span class="cg-name" title="${c.name}">${c.name}</span>`
+      +`<div class="cg-body"><span class="cg-name${offCls(c.name)}" title="${c.name}">${c.name}</span>`
       +(c.incentive>0?`<span class="cg-inc" style="color:${col}">₹${fmtInc(c.incentive)}</span>`:'')
+      +cTags(c.name)
       +`</div><div class="cg-right"><span class="cg-count">${c.count}</span><span class="cg-pct">${pct}%</span></div></div>`;
   }
   grid.innerHTML=parts.join('');
@@ -4482,11 +2705,71 @@ function drawTrend(rows){
 // ═══════════════════════════════════════════════════════
 // COUNSELLOR
 // ═══════════════════════════════════════════════════════
+// ── Counsellor status (Sheet2): Active/Inactive + Incentive qualify / Not qualify ──
+let CINFO = Object.create(null);     // key = lower-case letters+digits of the name → {a:1|0|null, q:1|0|null}
+let cStatusFilter = 'all';           // all | active | inactive | qualify | notq
+let cDiagMsg = '';                   // why status tags are missing (shown to the user)
+const _ckey = s => String(s==null?'':s).toLowerCase().replace(/[^a-z0-9]/g,'');
+function cInfo(name){ return CINFO[_ckey(name)] || null; }
+function offCls(name){ const i=CINFO[_ckey(name)]; return (i && i.a===0) ? ' c-off' : ''; }
+// Counsellors listed in the status tab with NO admissions in the current period are added with count 0.
+function padZeroCounsellors(list){
+  const have=new Set(list.map(c=>_ckey(c.name)));
+  const zeros=[];
+  for(const k in CINFO){
+    if(have.has(k)) continue;
+    const nm=(CINFO[k].n||'').trim();
+    if(!nm) continue;
+    zeros.push({name:nm,count:0,incentive:0});
+  }
+  zeros.sort((a,b)=>a.name.localeCompare(b.name));
+  return list.concat(zeros);
+}
+// What the counsellor section is showing right now (all, or filtered by a manager / TL)
+let _cView={data:[],label:null};
+function cTags(name){
+  const i=cInfo(name); if(!i) return '';
+  let h='';
+  if(i.a===1) h+='<span class="ctag a">Active</span>'; else if(i.a===0) h+='<span class="ctag i">Inactive</span>';
+  if(i.q===1) h+='<span class="ctag q">Qualify</span>'; else if(i.q===0) h+='<span class="ctag n">Not qualify</span>';
+  return h?`<span class="cg-tags">${h}</span>`:'';
+}
+function statusPass(c){
+  const i=cInfo(c.name);
+  switch(cStatusFilter){
+    case 'active':   return !!i && i.a===1;
+    case 'inactive': return !!i && i.a===0;
+    case 'qualify':  return !!i && i.q===1;
+    case 'notq':     return !!i && i.q===0;
+    default:         return true;
+  }
+}
+function renderCChips(data){
+  const el=$('cChips'); if(!el) return;
+  let a=0,ia=0,q=0,nq=0,known=0;
+  for(let k=0;k<data.length;k++){
+    const i=cInfo(data[k].name); if(!i) continue; known++;
+    if(i.a===1)a++; else if(i.a===0)ia++;
+    if(i.q===1)q++; else if(i.q===0)nq++;
+  }
+  const dg=$('cDiag');
+  if(dg){ dg.style.display=(!known && cDiagMsg)?'':'none'; dg.textContent=(!known && cDiagMsg)?cDiagMsg:''; }
+  if(!known){ el.style.display='none'; el.innerHTML=''; cStatusFilter='all'; return; }
+  el.style.display='';
+  const defs=[['all','All',data.length],['active','Active',a],['inactive','Inactive',ia],['qualify','Qualify',q],['notq','Not qualify',nq]];
+  el.innerHTML=defs.map(d=>`<button type="button" class="cchip${cStatusFilter===d[0]?' on':''}" data-f="${d[0]}">${d[1]}<b>${d[2]}</b></button>`).join('');
+}
+$('cChips').addEventListener('click',e=>{
+  const b=e.target.closest('.cchip'); if(!b) return;
+  cStatusFilter=b.dataset.f||'all';
+  renderCounselSection(_cView.data,_cView.label);
+});
+
 $('cSearch').addEventListener('input',function(){
   clearTimeout(searchTimer);
   searchTimer=setTimeout(()=>{
     cSearchVal=this.value.toLowerCase().trim();
-    renderCGridData(allCounselData);
+    renderCGridData(_cView.data);
   },120);
 },{passive:true});
 
@@ -4519,11 +2802,14 @@ function buildCounselMap(rows){
 // ── Shared: paint podium + grid + incentive from any data array ──────
 const _pIco=['🥇','🥈','🥉'],_pCls=['p1','p2','p3'],_pLbl=['TOP PERFORMER','2ND PLACE','3RD PLACE'];
 function renderCounselSection(data,label){
-  $('cBadge').textContent=(label?label+' · ':'')+data.length+' COUNSELLORS';
-  const top=data.slice(0,3),parts=[];
+  _cView={data:data,label:label||null};
+  renderCChips(data);
+  const view=(cStatusFilter==='all')?data:data.filter(statusPass);
+  $('cBadge').textContent=(label?label+' · ':'')+view.length+' COUNSELLORS';
+  const top=view.filter(c=>c.count>0).slice(0,3),parts=[];
   for(let i=0;i<top.length;i++){
     const c=top[i];
-    parts.push(`<div class="c-pod ${_pCls[i]}"><span class="c-pod-ico">${_pIco[i]}</span><div class="c-pod-body"><span class="c-pod-name" title="${c.name}">${c.name}</span><span class="c-pod-lbl">${_pLbl[i]}</span></div><div class="c-pod-stats"><span class="c-pod-num">${c.count}</span>${c.incentive>0?`<span class="c-pod-inc">₹${fmtInc(c.incentive)}</span>`:''}</div></div>`);
+    parts.push(`<div class="c-pod ${_pCls[i]}"><span class="c-pod-ico">${_pIco[i]}</span><div class="c-pod-body"><span class="c-pod-name${offCls(c.name)}" title="${c.name}">${c.name}</span><span class="c-pod-lbl">${_pLbl[i]}</span>${cTags(c.name)}</div><div class="c-pod-stats"><span class="c-pod-num">${c.count}</span>${c.incentive>0?`<span class="c-pod-inc">₹${fmtInc(c.incentive)}</span>`:''}</div></div>`);
   }
   $('cPodium').innerHTML=parts.join('');
   renderCGridData(data);
@@ -4531,10 +2817,10 @@ function renderCounselSection(data,label){
 }
 
 function drawCounsel(rows){
-  const newData=buildCounselMap(rows);
-  if(newData.length>0) allCounselData=newData;
-  else if(!allCounselData.length){
-    $('cPodium').innerHTML=''; $('cGrid').innerHTML=nd('No counsellor data'); $('cBadge').textContent='0'; return;
+  allCounselData=padZeroCounsellors(buildCounselMap(rows));
+  if(!allCounselData.length){
+    $('cPodium').innerHTML=''; $('cGrid').innerHTML=nd('No counsellor data'); $('cBadge').textContent='0';
+    renderCChips([]); return;
   }
   renderCounselSection(allCounselData,null);
   const t5=$('t5'); if(t5) t5.textContent='Updated '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
@@ -4542,8 +2828,6 @@ function drawCounsel(rows){
   // Draw TL and Manager incentive leaderboards
   drawTLIncLeaderboard(rows);
   drawMgrIncLeaderboard(rows);
-  // Update totals summary for manager/director
-  updateTotalsSummary(rows);
   // Re-enforce role visibility after all sections are drawn
   applyRoleVisibility();
 }
@@ -4578,109 +2862,46 @@ function buildMgrIncMap(rows){
 
 function drawTLIncLeaderboard(rows){
   const sec=$('tlIncSection'); if(!sec) return;
+  // Only show for TL or manager role — never for public
   const role = currentUser ? currentUser.role : 'public';
-  if(role!=='tl' && role!=='manager' && role!=='director'){ sec.style.setProperty('display','none','important'); return; }
+  if(roleRank(role) < 1){ sec.style.setProperty('display','none','important'); return; }
   const data=buildTLIncMap(rows);
-  if(!data.length){
-    // When a filter is active, show the section with a contextual empty state
-    if(filterStack.length){
-      sec.style.setProperty('display','block','important');
-      const chartEl=$('tlIncChart');
-      if(chartEl) chartEl.innerHTML=`<div class="nodata"><div class="ico">📭</div><p>No TL incentive data for ${filterStack.map(f=>f.name).join(' › ')}</p></div>`;
-      const subEl=document.getElementById('tlIncSortSub');
-      if(subEl) subEl.textContent=filterStack.map(f=>f.name).join(' › ');
-    } else {
-      sec.style.setProperty('display','none','important');
-    }
-    return;
-  }
+  if(!data.length){ sec.style.setProperty('display','none','important'); return; }
   sec.style.setProperty('display','block','important');
-  _incRawData['tlInc'] = data.slice();
-  renderIncLeaderboard(_applySort('tlInc', data),'tlInc','Team Leader Incentive');
+  renderIncLeaderboard(data,'tlInc','Team Leader Incentive');
 }
 
 function drawMgrIncLeaderboard(rows){
   const sec=$('mgrIncSection'); if(!sec) return;
+  // Only show for manager role — never for public or TL
   const role = currentUser ? currentUser.role : 'public';
-  if(role!=='manager' && role!=='director'){ sec.style.setProperty('display','none','important'); return; }
+  if(roleRank(role) < 2){ sec.style.setProperty('display','none','important'); return; }
   const data=buildMgrIncMap(rows);
-  if(!data.length){
-    if(filterStack.length){
-      sec.style.setProperty('display','block','important');
-      const chartEl=$('mgrIncChart');
-      if(chartEl) chartEl.innerHTML=`<div class="nodata"><div class="ico">📭</div><p>No manager incentive data for ${filterStack.map(f=>f.name).join(' › ')}</p></div>`;
-      const subEl=document.getElementById('mgrIncSortSub');
-      if(subEl) subEl.textContent=filterStack.map(f=>f.name).join(' › ');
-    } else {
-      sec.style.setProperty('display','none','important');
-    }
-    return;
-  }
+  if(!data.length){ sec.style.setProperty('display','none','important'); return; }
   sec.style.setProperty('display','block','important');
-  _incRawData['mgrInc'] = data.slice();
-  renderIncLeaderboard(_applySort('mgrInc', data),'mgrInc','Manager Incentive');
+  renderIncLeaderboard(data,'mgrInc','Manager Incentive');
 }
 
 function renderIncLeaderboard(data, prefix, title){
   const section=$(prefix+'Section'); if(!section) return;
   const total=data.reduce((s,x)=>s+x.incentive,0);
-  const maxInc=Math.max(...data.map(x=>x.incentive),1);
+  const maxInc=data[0].incentive;
   const titleEl=$(prefix+'Title');
   const totalEl=$(prefix+'Total');
   const chartEl=$(prefix+'Chart');
-  const subEl  = document.getElementById(prefix+'SortSub');
-  const _fctx2=filterStack.length?' · '+filterStack.map(f=>f.name).join(' › '):'';
-  if(titleEl) titleEl.textContent='💰 '+title+' Leaderboard'+_fctx2;
+  if(titleEl) titleEl.textContent='💰 '+title+' Leaderboard';
   if(totalEl) totalEl.textContent='₹'+fmtInc(total);
 
-  // Subtitle: show sort + active filter context
-  if(subEl){
-    const st = _incSort[prefix]||{sort:'inc',dir:'desc'};
-    const sortName = st.sort==='inc' ? 'incentive' : 'admissions';
-    const dirName  = st.dir==='desc' ? 'highest first' : 'lowest first';
-    const ctx = filterStack.length ? ' · '+filterStack.map(f=>f.name).join(' › ') : '';
-    subEl.textContent = `Sorted by ${sortName} · ${dirName}${ctx}`;
-  }
-
-  // Create threshold banner for TL and Manager
-  let thresholdBanner = section?.querySelector('.threshold-banner');
-  if(!thresholdBanner && (prefix === 'tlInc' || prefix === 'mgrInc')) {
-    thresholdBanner = document.createElement('div');
-    thresholdBanner.className = 'threshold-banner';
-    const bannerTitle = prefix === 'tlInc' ? 'Team Leader' : 'Manager';
-    thresholdBanner.innerHTML = `
-      <div class="threshold-banner-icon">⚡</div>
-      <div class="threshold-banner-text">
-        <div class="threshold-banner-title">Incentive Qualification Threshold</div>
-        <div class="threshold-banner-desc">Minimum 15 admissions required to qualify for incentives</div>
-      </div>
-    `;
-    if(chartEl && chartEl.parentNode) {
-      chartEl.parentNode.insertBefore(thresholdBanner, chartEl);
-    }
-  }
-
-  const isAsc = (_incSort[prefix]||{}).dir === 'asc';
   const rCls=['r1','r2','r3'], rIco=['🥇','🥈','🥉'];
-  // For ascending, medal emojis are reversed (lowest = best)
-  const rIcoAsc=['🔺','▲','△'];
   let html='';
   for(let i=0;i<data.length;i++){
     const d=data[i];
-    const rc=i<3?rCls[i]:'rn';
-    const ri=i<3?(isAsc?rIcoAsc[i]:rIco[i]):(i+1);
+    const rc=i<3?rCls[i]:'rn', ri=i<3?rIco[i]:(i+1);
     const grad=INC_GRD[i%INC_GRD.length];
-    
-    // 15 Admission Threshold Check
-    const qualifiesForIncentive = d.count >= 15;
-    const thresholdBadge = qualifiesForIncentive 
-      ? '<span class="threshold-badge">✓ Qualified</span>'
-      : '<span class="threshold-badge ineligible">⚠ Min 15</span>';
-    
-    html+=`<div class="inc-row${qualifiesForIncentive ? ' threshold-qualify' : ''}" style="animation:fadeUp .22s ease both ${i*28}ms">`;
-    html+=`<div class="inc-rank ${rc}${isAsc&&i<3?' sorted-asc':''}">${ri}</div>`;
-    html+=`<div class="inc-name"><span class="inc-name-main" title="${d.name}">${d.name}</span><span class="inc-name-adm">${d.count} admissions${thresholdBadge}</span></div>`;
-    html+=`<div class="inc-track-wrap"><div class="inc-track"><div class="inc-bar" id="${prefix}b${i}" style="background:${grad};"></div></div><div class="inc-overlay"><span class="inc-ol-adm">${d.count} adm</span><span class="inc-ol-amt">${fmtIncFull(d.incentive)}</span></div></div>`;
+    html+=`<div class="inc-row">`;
+    html+=`<div class="inc-rank ${rc}">${ri}</div>`;
+    html+=`<div class="inc-name"><span class="inc-name-main" title="${d.name}">${d.name}</span><span class="inc-name-adm">${d.count} admissions</span></div>`;
+    html+=`<div class="inc-track-wrap"><div class="inc-track"><div class="inc-bar" id="${prefix}b${i}" style="background:${grad};"></div></div><div class="inc-overlay"><span class="inc-ol-adm">${d.count} adm</span><span class="inc-ol-amt">₹${fmtInc(d.incentive)}</span></div></div>`;
     html+=`<div class="inc-stats"><span class="inc-stat-amt">₹${fmtInc(d.incentive)}</span><span class="inc-stat-adm">${d.count} adm</span></div>`;
     html+=`</div>`;
   }
@@ -4694,145 +2915,99 @@ function renderIncLeaderboard(data, prefix, title){
   });
 }
 
+// Counsellor incentive leaderboard: its own sort + status filter (state survives data refreshes)
+let incSort='incDesc', incStatus='all', _incData=[];
+const INC_SORT_TXT={incDesc:'incentive · highest first', incAsc:'incentive · lowest first', admDesc:'admissions · highest first', admAsc:'admissions · lowest first'};
+const INC_CMP={
+  incDesc:(a,b)=>b.incentive-a.incentive||b.count-a.count,
+  incAsc: (a,b)=>a.incentive-b.incentive||a.count-b.count,
+  admDesc:(a,b)=>b.count-a.count||b.incentive-a.incentive,
+  admAsc: (a,b)=>a.count-b.count||a.incentive-b.incentive
+};
+function incPass(c){
+  const i=cInfo(c.name);
+  switch(incStatus){
+    case 'active':   return !!i && i.a===1;
+    case 'inactive': return !!i && i.a===0;
+    case 'qualify':  return !!i && i.q===1;
+    case 'notq':     return !!i && i.q===0;
+    default:         return true;
+  }
+}
+function renderIncCtl(earners){
+  document.querySelectorAll('#incSortRow button').forEach(b=>b.classList.toggle('on', b.dataset.sort===incSort));
+  const row=$('incFilterRow');
+  let a=0,ia=0,q=0,nq=0,known=0;
+  for(let k=0;k<earners.length;k++){
+    const i=cInfo(earners[k].name); if(!i) continue; known++;
+    if(i.a===1)a++; else if(i.a===0)ia++;
+    if(i.q===1)q++; else if(i.q===0)nq++;
+  }
+  if(!known){ row.style.display='none'; row.innerHTML=''; incStatus='all'; return; }
+  row.style.display='';
+  const defs=[['all','All',earners.length],['active','Active',a],['inactive','Inactive',ia],['qualify','Qualify',q],['notq','Not qualify',nq]];
+  row.innerHTML='<span class="inc-ctl-lbl">FILTER</span><span class="inc-ctl-div"></span>'+
+    defs.map(d=>`<button type="button" data-f="${d[0]}"${incStatus===d[0]?' class="on"':''}>${d[1]} <b>${d[2]}</b></button>`).join('');
+}
+$('incCtl').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.sort) incSort=b.dataset.sort;
+  else if(b.dataset.f) incStatus=b.dataset.f;
+  else return;
+  drawIncLeaderboard(_incData);
+});
+
 function drawIncLeaderboard(data){
-  const withInc=data.filter(c=>c.incentive>0);
+  _incData=data;
+  const earners=data;            // everyone in the list — including counsellors with 0 admissions / ₹0
   const sec=$('incSection');
+  if(!earners.length){ sec.style.display='none'; return; }
+  sec.style.display='block';
+  renderIncCtl(earners);
+
+  const withInc=(incStatus==='all'?earners.slice():earners.filter(incPass));
+  const cmp=INC_CMP[incSort]||INC_CMP.incDesc;
+  withInc.sort((a,b)=>cmp(a,b)||a.name.localeCompare(b.name));
+
+  const sub=document.querySelector('#incSection .inc-head-sub');
   if(!withInc.length){
-    if(filterStack.length){
-      sec.style.display='block';
-      const ce=$('incChart'); if(ce) ce.innerHTML=nd('No incentive data for '+filterStack.map(f=>f.name).join(' › '));
-      $('incTotal').textContent='₹0';
-    } else { sec.style.display='none'; }
+    $('incTotal').textContent='₹0';
+    if(sub) sub.textContent='Sorted by '+INC_SORT_TXT[incSort];
+    $('incChart').innerHTML=nd('No counsellors in this filter');
     return;
   }
-  sec.style.display='block';
-  _incRawData['inc'] = withInc.slice(); // store master copy
-  const sorted = _applySort('inc', withInc);
-  _renderCounselIncChart(sorted);
-}
 
-function _renderCounselIncChart(sorted){
-  const maxInc=Math.max(...sorted.map(x=>x.incentive),1);
-  const totInc=sorted.reduce((a,b)=>a+b.incentive,0);
+  const maxInc=withInc.reduce((m,c)=>Math.max(m,c.incentive),1);
+  const totInc=withInc.reduce((a,b)=>a+b.incentive,0);
   $('incTotal').textContent='₹'+fmtInc(totInc);
-
-  const subEl=document.getElementById('incSortSub');
-  if(subEl){
-    const st=_incSort['inc']||{sort:'inc',dir:'desc'};
-    const ctx = filterStack.length ? ' · '+filterStack.map(f=>f.name).join(' › ') : '';
-    subEl.textContent=`Sorted by ${st.sort==='inc'?'incentive':'admissions'} · ${st.dir==='desc'?'highest first':'lowest first'}${ctx}`;
+  { // split of the shown total by incentive status (only when the status tab is present)
+    let qS=0,nS=0,known=0;
+    for(let k=0;k<withInc.length;k++){ const i=cInfo(withInc[k].name); if(!i||i.q===null||i.q===undefined) continue; known++; if(i.q===1) qS+=withInc[k].incentive; else nS+=withInc[k].incentive; }
+    if(sub) sub.textContent='Sorted by '+INC_SORT_TXT[incSort]+(known?` · Qualify ₹${fmtInc(qS)} · Not qualify ₹${fmtInc(nS)}`:'');
   }
+  const medals=(incSort==='incDesc'||incSort==='admDesc');
 
-  // Create threshold banner
-  const incSection = $('incSection');
-  let thresholdBanner = incSection?.querySelector('.threshold-banner');
-  if(!thresholdBanner) {
-    thresholdBanner = document.createElement('div');
-    thresholdBanner.className = 'threshold-banner';
-    thresholdBanner.innerHTML = `
-      <div class="threshold-banner-icon">⚡</div>
-      <div class="threshold-banner-text">
-        <div class="threshold-banner-title">Incentive Qualification Threshold</div>
-        <div class="threshold-banner-desc">Minimum 15 admissions required to qualify for incentives</div>
-      </div>
-    `;
-    const chartEl = $('incChart');
-    if(chartEl && chartEl.parentNode) {
-      chartEl.parentNode.insertBefore(thresholdBanner, chartEl);
-    }
-  }
-
-  const isAsc=(_incSort['inc']||{}).dir==='asc';
-  const rCls=['r1','r2','r3'],rIco=['🥇','🥈','🥉'],rIcoAsc=['🔺','▲','△'];
+  const rCls=['r1','r2','r3'], rIco=['🥇','🥈','🥉'];
   let html='';
-  for(let i=0,L=sorted.length;i<L;i++){
-    const c=sorted[i];
-    const rc=i<3?rCls[i]:'rn';
-    const ri=i<3?(isAsc?rIcoAsc[i]:rIco[i]):(i+1);
-    const grad=INC_GRD[i%INC_GRD.length];
-    
-    // 15 Admission Threshold Check
-    const qualifiesForIncentive = c.count >= 15;
-    const thresholdBadge = qualifiesForIncentive 
-      ? '<span class="threshold-badge">✓ Qualified</span>'
-      : '<span class="threshold-badge ineligible">⚠ Min 15</span>';
-    
-    html+=`<div class="inc-row${qualifiesForIncentive ? ' threshold-qualify' : ''}" style="animation:fadeUp .22s ease both ${i*28}ms">`;
-    html+=`<div class="inc-rank ${rc}${isAsc&&i<3?' sorted-asc':''}">${ri}</div>`;
-    html+=`<div class="inc-name"><span class="inc-name-main" title="${c.name}">${c.name}</span><span class="inc-name-adm">${c.count} admissions${thresholdBadge}</span></div>`;
-    html+=`<div class="inc-track-wrap"><div class="inc-track"><div class="inc-bar" id="incb${i}" style="background:${grad};"></div></div><div class="inc-overlay"><span class="inc-ol-adm">${c.count} adm</span><span class="inc-ol-amt">${fmtIncFull(c.incentive)}</span></div></div>`;
+  for(let i=0,L=withInc.length;i<L;i++){
+    const c=withInc[i];
+    const rc=(medals&&i<3)?rCls[i]:'rn', ri=(medals&&i<3)?rIco[i]:(i+1), grad=INC_GRD[i%INC_GRD.length];
+    html+=`<div class="inc-row">`;
+    html+=`<div class="inc-rank ${rc}">${ri}</div>`;
+    html+=`<div class="inc-name"><span class="inc-name-main${offCls(c.name)}" title="${c.name}">${c.name}</span><span class="inc-name-adm">${c.count} admission${c.count===1?'':'s'}</span>${cTags(c.name)}</div>`;
+    html+=`<div class="inc-track-wrap"><div class="inc-track"><div class="inc-bar" id="incb${i}" style="background:${grad};"></div></div><div class="inc-overlay"><span class="inc-ol-adm">${c.count} adm</span><span class="inc-ol-amt">₹${fmtInc(c.incentive)}</span></div></div>`;
     html+=`<div class="inc-stats"><span class="inc-stat-amt">₹${fmtInc(c.incentive)}</span><span class="inc-stat-adm">${c.count} adm</span></div>`;
     html+=`</div>`;
   }
   $('incChart').innerHTML=html;
 
   requestAnimationFrame(()=>{
-    for(let i=0;i<sorted.length;i++){const e=$f('incb'+i);if(e){e.style.transition='none';e.style.transform='scaleX(0)';}}
+    for(let i=0;i<withInc.length;i++){const e=$f('incb'+i);if(e){e.style.transition='none';e.style.transform='scaleX(0)';}}
     requestAnimationFrame(()=>{
-      for(let i=0;i<sorted.length;i++){const e=$f('incb'+i);if(e){e.style.transition='';e.style.transform=`scaleX(${sorted[i].incentive/maxInc})`;}}
+      for(let i=0;i<withInc.length;i++){const e=$f('incb'+i);if(e){e.style.transition='';e.style.transform=`scaleX(${withInc[i].incentive/maxInc})`;}}
     });
   });
 }
-
-// ═══════════════════════════════════════════════════════
-// INCENTIVE SORT STATE + HANDLERS
-// ═══════════════════════════════════════════════════════
-
-// Sort state per panel: { sort: 'inc'|'adm', dir: 'desc'|'asc' }
-const _incSort    = { inc:{sort:'inc',dir:'desc'}, tlInc:{sort:'inc',dir:'desc'}, mgrInc:{sort:'inc',dir:'desc'} };
-const _incRawData = { inc:[], tlInc:[], mgrInc:[] }; // master (unsorted) copies
-
-function _applySort(panel, data){
-  const st = _incSort[panel] || {sort:'inc', dir:'desc'};
-  const key = st.sort === 'adm' ? 'count' : 'incentive';
-  const mul = st.dir === 'asc' ? 1 : -1;
-  return data.slice().sort((a,b) => (a[key]-b[key]) * mul);
-}
-
-// Delegated click handler — one listener on the whole card
-document.addEventListener('click', e=>{
-  const btn = e.target.closest('.inc-sort-btn');
-  if(!btn) return;
-  const panel = btn.dataset.panel;
-  const sort  = btn.dataset.sort;
-  const dir   = btn.dataset.dir;
-  if(!panel || !sort || !dir) return;
-
-  // Update state
-  _incSort[panel] = {sort, dir};
-
-  // Update active button styling in this group
-  const group = document.getElementById(panel+'SortGroup');
-  if(group){
-    group.querySelectorAll('.inc-sort-btn').forEach(b=>{
-      const isActive = b.dataset.sort===sort && b.dataset.dir===dir;
-      b.classList.toggle('active', isActive);
-      b.classList.toggle('asc',   isActive && dir==='asc');
-    });
-  }
-
-  // Re-render with new sort — animate the chart out → sort → in
-  if(panel === 'inc'){
-    const raw = _incRawData['inc'];
-    if(!raw.length) return;
-    const chartEl = $('incChart');
-    if(chartEl){ chartEl.style.opacity='0.35'; chartEl.style.transition='opacity .15s'; }
-    setTimeout(()=>{
-      _renderCounselIncChart(_applySort('inc', raw));
-      if(chartEl){ chartEl.style.opacity='1'; }
-    }, 120);
-  } else {
-    const raw = _incRawData[panel];
-    if(!raw.length) return;
-    const chartEl = document.getElementById(panel+'Chart');
-    const titleMap = { tlInc:'Team Leader Incentive', mgrInc:'Manager Incentive' };
-    if(chartEl){ chartEl.style.opacity='0.35'; chartEl.style.transition='opacity .15s'; }
-    setTimeout(()=>{
-      renderIncLeaderboard(_applySort(panel, raw), panel, titleMap[panel]||'');
-      if(chartEl){ chartEl.style.opacity='1'; }
-    }, 120);
-  }
-},{passive:true});
 
 // ═══════════════════════════════════════════════════════
 // TABS
@@ -4844,7 +3019,6 @@ $q('.tabs').addEventListener('click',e=>{
   t.classList.add('on');
   clearRange();
   const p=t.getAttribute('data-p');
-  showUpdating('Updating Live Data…', 'Loading '+(t.textContent.trim())+' data');
 
   // Smooth content fade-out → in on tab switch
   const dash = $('dash');
@@ -4874,14 +3048,6 @@ $q('.tabs').addEventListener('click',e=>{
     const isStale = !mem['monthly'] || (Date.now()-mem['monthly'].ts)>MEM_TTL;
     if(isStale){ delete mem['monthly']; try{localStorage.removeItem(CACHE_KEY+'monthly');}catch(e){} }
     load(p);
-  } else if(p==='all'){
-    // All Time: always force-refresh if data might be stale
-    const isStale = !mem['all'] || (Date.now()-(mem['all'].ts||0)) > MEM_TTL;
-    if(isStale){
-      delete mem['all'];
-      try{ localStorage.removeItem(CACHE_KEY+'all'); }catch(e){}
-    }
-    load('all');
   } else {
     load(p);
   }
@@ -4996,7 +3162,6 @@ $('btnApply').addEventListener('click',()=>{
   $('rangeBadge').classList.add('show');
   $('rangeBadgeTxt').textContent=fmtDisp(rStart)+' → '+fmtDisp(rEnd);
   closeCal();
-  showUpdating('Updating Live Data…', 'Loading custom date range');
   load('custom',f,t,true);
 });
 
@@ -5035,12 +3200,25 @@ $('rangeBadgeX').addEventListener('click',()=>{
 },{passive:true});
 
 $('univFilterX').addEventListener('click',()=>{
-  _clearAllFilters();
+  const c=mem[activeCk]; if(!c)return;
+  activeMgr=null; activeTL=null;
+  syncBarStates();
+  $('univFilterTag').classList.remove('show');
+  updateDonut(c.data,lastTrendRows);
+  // Also reset counsellor filter
+  const allRows=(c.data.allTrendRows||c.data.trendRows||[]);
+  filterCounselSection(allRows, null, null);
 },{passive:true});
 
-// Counsellor filter X — clear all filters
+// Counsellor filter X — clear manager/TL filter
 $('counselFilterX').addEventListener('click',()=>{
-  _clearAllFilters();
+  const c=mem[activeCk]; if(!c)return;
+  activeMgr=null; activeTL=null;
+  syncBarStates();
+  $('univFilterTag').classList.remove('show');
+  updateDonut(c.data,lastTrendRows);
+  const allRows=(c.data.allTrendRows||c.data.trendRows||[]);
+  filterCounselSection(allRows, null, null);
 },{passive:true});
 
 // ═══════════════════════════════════════════════════════
@@ -5048,17 +3226,20 @@ $('counselFilterX').addEventListener('click',()=>{
 // ═══════════════════════════════════════════════════════
 
 // USERS CONFIG — add/remove users here
-// roles: 'director' = supreme access + download | 'manager' | 'tl' | 'public'
+// roles: 'admin' = sees everything | 'counsellor' = sees only own incentive
 const USERS = [
-  // Director — supreme access: all data + exclusive download/export
-  { username:'director', pin:'Dir@FullAccess#890', role:'director' },
-
   // Manager — sees ALL incentive data (counsellor + TL + manager)
-  { username:'manager', pin:'Mgr#368Go', role:'manager' },
+  { username:'manager', pin:'Mgr@2026', role:'manager' },
 
   // Team Leader — sees counsellor + TL incentive (no manager incentive)
   { username:'teamleader', pin:'TL@2026', role:'tl' },
+
+  // Director — sees EVERYTHING (counsellor + TL + manager) and can export CSV
+  { username:'director', pin:'Dir@2026', role:'director' },
 ];
+// Access level per role: 0 public · 1 TL · 2 manager · 3 director
+const ROLE_RANK = { public:0, tl:1, manager:2, director:3 };
+function roleRank(r){ return ROLE_RANK[r] || 0; }
 // Public (no login) sees counsellor incentive only
 
 let currentUser = null; // { name, role }
@@ -5114,47 +3295,20 @@ function applyLogin(u, fromSession){
     const labels = { public:'👤', tl:'TL', manager:'MGR', director:'DIR' };
     avaBtn.textContent = labels[u.role]||'👤';
   }
-  const menuAvatar = document.getElementById('menuAvatar');
-  if(menuAvatar){
-    const avatarLabels = { public:'👤', tl:'TL', manager:'MGR', director:'DIR' };
-    menuAvatar.textContent = avatarLabels[u.role]||'👤';
-    menuAvatar.style.background =
-      u.role==='director' ? 'linear-gradient(135deg,#b45309,#f59e0b)'  :
-      u.role==='manager'  ? 'linear-gradient(135deg,#6366f1,#818cf8)'  :
-      u.role==='tl'       ? 'linear-gradient(135deg,#059669,#34d399)'  :
-                            'linear-gradient(135deg,#475569,#64748b)';
-    menuAvatar.style.boxShadow =
-      u.role==='director' ? '0 0 0 2px rgba(245,158,11,.5),0 4px 12px rgba(245,158,11,.35)' :
-      u.role==='manager'  ? '0 0 0 2px rgba(99,102,241,.45),0 4px 12px rgba(99,102,241,.3)' :
-      u.role==='tl'       ? '0 0 0 2px rgba(5,150,105,.45),0 4px 12px rgba(5,150,105,.3)'  :
-                            'none';
-  }
   const menuName = document.getElementById('menuName');
   if(menuName) menuName.textContent =
-    u.role==='director' ? 'Director'    :
-    u.role==='manager'  ? 'Manager'     :
-    u.role==='tl'       ? 'Team Leader' : 'Guest';
+    u.role==='director' ? 'Director' : u.role==='manager' ? 'Manager' : u.role==='tl' ? 'Team Leader' : 'Guest';
   const menuRole = document.getElementById('menuRole');
-  if(menuRole){
-    menuRole.textContent =
-      u.role==='director' ? '👑 Director Access' :
-      u.role==='manager'  ? '⚡ Full Access'      :
-      u.role==='tl'       ? '👥 TL Access'        : '🔓 Public Access';
-    menuRole.className = 'user-menu-role '+
-      (u.role==='director'?'role-dir':u.role==='manager'?'role-mgr':u.role==='tl'?'role-tl':'role-pub');
-  }
-  // Director gold header tint
-  const menuHdr = document.querySelector('.user-menu-header');
-  if(menuHdr) menuHdr.classList.toggle('dir-header', u.role==='director');
+  if(menuRole) menuRole.textContent =
+    u.role==='director' ? '👑 Full Access + Export' :
+    u.role==='manager'  ? '⚡ Full Access' :
+    u.role==='tl'       ? '👥 TL Access'  : '🔓 Public Access';
 
   // Show/hide login vs logout menu items
   const menuLogin  = document.getElementById('menuLogin');
   const menuLogout = document.getElementById('menuLogout');
   if(menuLogin)  menuLogin.style.display  = u.role==='public' ? '' : 'none';
   if(menuLogout) menuLogout.style.display = u.role!=='public' ? '' : 'none';
-
-  // Always apply role visibility immediately (download button, sections)
-  applyRoleVisibility();
 
   // Boot dashboard if not already started
   if(!shown) boot();
@@ -5233,43 +3387,87 @@ document.addEventListener('click', e=>{
   if(!e.target.closest('#userMenu')) menu && menu.classList.remove('open');
 });
 
+// ── Director export (CSV) ─────────────────────────────
+// Exports exactly what the dashboard is showing: the period / range currently selected.
+function _csvCell(v){
+  if(v===null || v===undefined) return '';
+  if(typeof v==='number') return isFinite(v) ? String(v) : '';
+  let s=String(v);
+  if(/^[=+\-@\t\r]/.test(s)) s="'"+s;                  // block spreadsheet formula injection
+  return /[",\n\r]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+}
+function _downloadCSV(name, table){
+  const text='\ufeff'+table.map(r=>r.map(_csvCell).join(',')).join('\r\n');   // BOM → Excel reads ₹ / accents correctly
+  const blob=new Blob([text],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=name; a.style.display='none';
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 1500);
+}
+function _exportCtx(){
+  if(!currentUser || currentUser.role!=='director') return null;
+  const c=mem[activeCk]; if(!c || !c.data) return null;
+  const d=c.data, m=d.meta||{};
+  const rows=d.allTrendRows||d.trendRows||[];
+  const label = (m.from && m.to) ? `${m.from}_to_${m.to}` : 'all-time';
+  const stamp = (m.today || new Date().toISOString().slice(0,10));
+  return {rows, label, stamp};
+}
+function _topOf(o){ let b='',n=0; for(const k in o){ if(o[k]>n){ n=o[k]; b=k; } } return b; }
+function exportSummary(){
+  const x=_exportCtx(); if(!x) return false;
+  const list=padZeroCounsellors(buildCounselMap(x.rows));
+  const mg=Object.create(null), tg=Object.create(null);
+  for(let i=0;i<x.rows.length;i++){
+    const r=x.rows[i], k=_ckey(r.counsellor); if(!k) continue;
+    (mg[k]=mg[k]||{})[r.mgr||'']=((mg[k]||{})[r.mgr||'']||0)+1;
+    (tg[k]=tg[k]||{})[r.tl||'']=((tg[k]||{})[r.tl||'']||0)+1;
+  }
+  const table=[['Counsellor','Status','Incentive Status','Manager','TL','Admissions','Counsellor Incentive']];
+  for(const c of list){
+    const k=_ckey(c.name), i=cInfo(c.name);
+    table.push([c.name, i&&i.a===1?'Active':i&&i.a===0?'Inactive':'', i&&i.q===1?'Qualify':i&&i.q===0?'Not qualify':'',
+      _topOf(mg[k]||{}), _topOf(tg[k]||{}), c.count, Math.round(c.incentive*100)/100]);
+  }
+  _downloadCSV(`counsellor-summary_${x.label}_${x.stamp}.csv`, table);
+  return true;
+}
+function exportDetails(){
+  const x=_exportCtx(); if(!x) return false;
+  const table=[['Date','Manager','TL','University','Counsellor','Counsellor Incentive','TL Incentive','Manager Incentive']];
+  for(const r of x.rows) table.push([r.date,r.mgr,r.tl,r.univ,r.counsellor,r.incentive||0,r.tlIncentive||0,r.mgrIncentive||0]);
+  _downloadCSV(`admissions-details_${x.label}_${x.stamp}.csv`, table);
+  return true;
+}
+function _expClick(btn, fn){
+  const old=btn.textContent;
+  const ok=fn();
+  btn.textContent = ok ? '✓ Downloaded' : '⚠ No data';
+  setTimeout(()=>{ btn.textContent=old; }, 2000);
+}
+$('expSum').addEventListener('click',  ()=>_expClick($('expSum'),  exportSummary));
+$('expRows').addEventListener('click', ()=>_expClick($('expRows'), exportDetails));
+
 // ── Role-based rendering ──────────────────────────────
-// Called after data loads — hides sections based on role
+// Called after data loads — hides sections counsellors can't see
 function applyRoleVisibility(){
   const role = currentUser ? currentUser.role : 'public';
 
   // Access matrix:
-  // public   → counsellor only, no download
-  // tl       → counsellor + TL, no download
-  // manager  → counsellor + TL + manager, no download
-  // director → EVERYTHING + exclusive download access
+  // public  → counsellor only
+  // tl      → counsellor + TL
+  // manager → counsellor + TL + manager
 
-  const showTL       = (role==='tl' || role==='manager' || role==='director');
-  const showMGR      = (role==='manager' || role==='director');
-  const showDownload = (role==='director');
+  const showTL  = roleRank(role) >= 1;
+  const showMGR = roleRank(role) >= 2;
 
   const tlSec  = document.getElementById('tlIncSection');
   const mgrSec = document.getElementById('mgrIncSection');
-  const dlWrap = document.getElementById('dlWrap');
 
   // Force hide — override any display:block set by draw functions
   if(tlSec)  tlSec.style.setProperty('display', showTL  ? 'block' : 'none', 'important');
   if(mgrSec) mgrSec.style.setProperty('display', showMGR ? 'block' : 'none', 'important');
-
-  // Totals summary — only manager and director see it
-  const totSec = document.getElementById('incTotalsSummary');
-  if(totSec) totSec.style.setProperty('display', showMGR ? 'block' : 'none', 'important');
-
-  // Download button — only Director can see/use it
-  if(dlWrap){
-    dlWrap.style.setProperty('display', showDownload ? 'flex' : 'none', 'important');
-  }
-
-  // Director-specific: add crown badge glow to avatar
-  const avaBtn = document.getElementById('avaBtn');
-  if(avaBtn){
-    avaBtn.classList.toggle('ava-director', role==='director');
-  }
 }
 
 // ═══════════════════════════════════════════════════════
@@ -5285,15 +3483,11 @@ function boot(){
   const dk=dkRead('all');
   if(dk && dk.data){
     try{
-      // Norm from raw rows to avoid double-norm on cached data
-      const _bootSrc = (dk.data._rawAllRows && dk.data._rawAllRows.length)
-        ? {trendRows:dk.data._rawAllRows, _rawAllRows:dk.data._rawAllRows, mgrTargets:dk.data.mgrTargets, mgrTargetsAll:dk.data.mgrTargetsAll}
-        : dk.data;
-      const nd = norm(JSON.parse(JSON.stringify(_bootSrc)), 'all') || dk.data;
-      mem['all']={data:nd, ts:dk.ts};
+      const nd=norm(JSON.parse(JSON.stringify(dk.data)),'all');
+      if(!nd) throw new Error('bad cache');
+      mem['all']={data:nd,ts:dk.ts};
       activeCk='all'; activePeriod='all';
       render(nd, true, 'all');
-      hideUpdating();
       setSt('cached', relTime(dk.ts));
       // Background refresh: immediately if stale >5min, else after 3s
       const age=Date.now()-dk.ts;
@@ -5310,597 +3504,7 @@ function boot(){
   load('all');
 }
 // Start auth flow
-// ═══════════════════════════════════════════════════════
-// DOWNLOAD FEATURE
-// ═══════════════════════════════════════════════════════
-
-(function(){
-  'use strict';
-
-  // ── Role guard — only Director can export ─────────────
-  function _canDownload(){
-    return typeof currentUser !== 'undefined' && currentUser && currentUser.role === 'director';
-  }
-
-  // ── Toggle panel ──────────────────────────────────────
-  const dlBtn   = document.getElementById('dlBtn');
-  const dlPanel = document.getElementById('dlPanel');
-
-  document.addEventListener('click', e => {
-    if(e.target.closest('#dlBtn')){
-      const isOpen = dlPanel.classList.contains('open');
-      dlPanel.classList.toggle('open', !isOpen);
-      dlBtn.classList.toggle('open', !isOpen);
-      if(!isOpen) _updateDlPanelInfo();
-      return;
-    }
-    if(!e.target.closest('#dlWrap')){
-      dlPanel.classList.remove('open');
-      dlBtn.classList.remove('open');
-    }
-  });
-
-  // ── Update panel subtitle to reflect current filters ──
-  function _updateDlPanelInfo(){
-    const subEl    = document.getElementById('dlPanelSub');
-    const badge    = document.getElementById('dlFilterBadge');
-    const badgeTxt = document.getElementById('dlFilterText');
-    const rows     = _getExportRows();
-
-    const hasFilter = typeof filterStack !== 'undefined' && filterStack.length > 0;
-    const filterNames = hasFilter ? filterStack.map(f=>f.name).join(' › ') : null;
-
-    if(hasFilter && filterNames){
-      badge.style.display = 'inline-flex';
-      badgeTxt.textContent = filterNames;
-      subEl.textContent = `${rows.length} active records · filter applied`;
-    } else {
-      badge.style.display = 'none';
-      subEl.textContent = `${rows.length} active records · all data`;
-    }
-    // Reset state
-    document.getElementById('dlProgress').classList.remove('show');
-    document.getElementById('dlSuccess').classList.remove('show');
-  }
-
-  // ── Get the export rows — respects all filters + cancel logic ──
-  function _getExportRows(){
-    if(typeof _getFilteredRows === 'function'){
-      return _getFilteredRows();
-    }
-    // Fallback: get from memory
-    const cached = mem && mem[activeCk];
-    if(!cached) return [];
-    return cached.data.allTrendRows || cached.data.trendRows || [];
-  }
-
-  // ── Build column headers from a sample row ─────────────
-  function _buildHeaders(rows){
-    if(!rows.length) return [];
-    // Preferred column order
-    const preferred = ['date','univ','mgr','tl','counsellor','admissionStatus','incentive','tlIncentive','mgrIncentive'];
-    const allKeys   = [...new Set(rows.flatMap(r => Object.keys(r)))];
-    // Filter out internal keys
-    const skip = new Set(['_idx','_raw','_rawAllRows','_allCancelRows']);
-    const cleaned = allKeys.filter(k => !k.startsWith('_') && !skip.has(k));
-    // Sort: preferred first, then alphabetical
-    const head = [
-      ...preferred.filter(k => cleaned.includes(k)),
-      ...cleaned.filter(k => !preferred.includes(k))
-    ];
-    return head;
-  }
-
-  // ── Format a cell value for export ────────────────────
-  function _fmtCell(v){
-    if(v === null || v === undefined) return '';
-    return String(v).trim();
-  }
-
-  // ── Pretty header label ────────────────────────────────
-  function _prettyHeader(k){
-    const map = {
-      date:'Date', univ:'University', mgr:'Manager', tl:'Team Leader',
-      counsellor:'Counsellor', admissionStatus:'Admission Status',
-      incentive:'Incentive (₹)', tlIncentive:'TL Incentive (₹)',
-      mgrIncentive:'Mgr Incentive (₹)',
-    };
-    if(map[k]) return map[k];
-    // camelCase → Title Case
-    return k.replace(/([A-Z])/g,' $1').replace(/^./,s=>s.toUpperCase());
-  }
-
-  // ── Generate filename ──────────────────────────────────
-  function _filename(ext){
-    const now   = new Date();
-    const date  = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
-    const time  = `${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
-    const filter= (typeof filterStack !== 'undefined' && filterStack.length)
-      ? '_'+filterStack.map(f=>f.name.replace(/\s+/g,'')).join('-')
-      : '';
-    const period= (typeof activePeriod !== 'undefined') ? '_'+activePeriod : '';
-    return `Admissions${period}${filter}_${date}_${time}.${ext}`;
-  }
-
-  // ── Show progress / success states ────────────────────
-  function _setDlState(state, msg){
-    const prog = document.getElementById('dlProgress');
-    const succ = document.getElementById('dlSuccess');
-    const fmt  = document.getElementById('dlFormats');
-    prog.classList.remove('show');
-    succ.classList.remove('show');
-    if(state === 'loading'){
-      document.getElementById('dlProgressTxt').textContent = msg || 'Preparing download…';
-      prog.classList.add('show');
-    } else if(state === 'success'){
-      document.getElementById('dlSuccessTxt').textContent = msg || 'Downloaded successfully!';
-      succ.classList.add('show');
-      setTimeout(()=>{
-        succ.classList.remove('show');
-        dlPanel.classList.remove('open');
-        dlBtn.classList.remove('open');
-      }, 2000);
-    } else if(state === 'error'){
-      document.getElementById('dlSuccessTxt').textContent = '⚠️ ' + (msg || 'Export failed');
-      succ.classList.add('show');
-      setTimeout(()=>succ.classList.remove('show'), 3000);
-    }
-  }
-
-  // ══════════════════════════════════════════════════════
-  // CSV EXPORT
-  // ══════════════════════════════════════════════════════
-  function _downloadCSV(){
-    _setDlState('loading', 'Building CSV…');
-
-    // Use requestIdleCallback so UI updates first
-    const run = () => {
-      try{
-        const rows    = _getExportRows();
-        if(!rows.length){ _setDlState('error','No data to export'); return; }
-
-        const headers = _buildHeaders(rows);
-        const lines   = [];
-
-        // Header row
-        lines.push(headers.map(_prettyHeader).map(_csvEscape).join(','));
-
-        // Data rows
-        for(const r of rows){
-          lines.push(headers.map(k => _csvEscape(_fmtCell(r[k]))).join(','));
-        }
-
-        const blob = new Blob(['\uFEFF' + lines.join('\r\n')], {type:'text/csv;charset=utf-8;'});
-        _triggerDownload(blob, _filename('csv'));
-        _setDlState('success', `✅ ${rows.length} records exported`);
-      }catch(e){
-        console.error('CSV export error',e);
-        _setDlState('error', 'Export failed — try again');
-      }
-    };
-
-    if(typeof requestIdleCallback !== 'undefined'){
-      requestIdleCallback(run, {timeout:500});
-    } else { setTimeout(run, 30); }
-  }
-
-  function _csvEscape(v){
-    const s = String(v);
-    if(s.includes(',') || s.includes('"') || s.includes('\n') || s.includes('\r')){
-      return '"' + s.replace(/"/g,'""') + '"';
-    }
-    return s;
-  }
-
-  // ══════════════════════════════════════════════════════
-  // XLSX EXPORT — pure JS, no external library needed
-  // Uses SpreadsheetML (XML-based .xlsx compatible with Excel)
-  // ══════════════════════════════════════════════════════
-  function _downloadXLSX(){
-    _setDlState('loading', 'Building Excel file…');
-
-    const run = () => {
-      try{
-        const rows    = _getExportRows();
-        if(!rows.length){ _setDlState('error','No data to export'); return; }
-
-        const headers = _buildHeaders(rows);
-        const xlsx    = _buildXLSX(rows, headers);
-        const blob    = new Blob([xlsx], {type:'application/vnd.ms-excel;charset=utf-8;'});
-        _triggerDownload(blob, _filename('xlsx'));
-        _setDlState('success', `✅ ${rows.length} records exported`);
-      }catch(e){
-        console.error('XLSX export error',e);
-        // Fallback to CSV on XLSX failure
-        _setDlState('loading', 'Falling back to CSV…');
-        setTimeout(_downloadCSV, 100);
-      }
-    };
-
-    if(typeof requestIdleCallback !== 'undefined'){
-      requestIdleCallback(run, {timeout:500});
-    } else { setTimeout(run, 30); }
-  }
-
-  function _buildXLSX(rows, headers){
-    // SpreadsheetML — opens natively in Excel, Numbers, LibreOffice
-    const esc = s => String(s)
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;');
-
-    const headerStyle = 's="1"';  // bold header style
-    const dateStyle   = 's="2"';  // date style
-
-    // Build sheet rows
-    let sheetRows = '';
-
-    // Header row
-    sheetRows += '<Row ss:StyleID="HeaderRow">';
-    for(const h of headers){
-      sheetRows += `<Cell ${headerStyle}><Data ss:Type="String">${esc(_prettyHeader(h))}</Data></Cell>`;
-    }
-    sheetRows += '</Row>\n';
-
-    // Data rows
-    for(const r of rows){
-      sheetRows += '<Row>';
-      for(const k of headers){
-        const raw = r[k];
-        const v   = _fmtCell(raw);
-        // Detect numbers
-        if(v !== '' && !isNaN(Number(v)) && v.trim() !== ''){
-          sheetRows += `<Cell><Data ss:Type="Number">${esc(v)}</Data></Cell>`;
-        } else {
-          sheetRows += `<Cell><Data ss:Type="String">${esc(v)}</Data></Cell>`;
-        }
-      }
-      sheetRows += '</Row>\n';
-    }
-
-    // Current period label
-    const periodLabel = typeof activePeriod !== 'undefined' ? activePeriod : 'data';
-    const filterLabel = (typeof filterStack !== 'undefined' && filterStack.length)
-      ? ' | Filter: ' + filterStack.map(f=>f.name).join(' > ')
-      : '';
-    const sheetName   = 'Admissions';
-
-    return `<?xml version="1.0" encoding="UTF-8"?>
-<?mso-application progid="Excel.Sheet"?>
-<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
-  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
-  xmlns:x="urn:schemas-microsoft-com:office:excel">
-  <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
-    <Title>Admissions Dashboard Export</Title>
-    <Subject>${esc(periodLabel + filterLabel)}</Subject>
-    <Created>${new Date().toISOString()}</Created>
-  </DocumentProperties>
-  <Styles>
-    <Style ss:ID="Default"><Font ss:FontName="Calibri" ss:Size="11"/></Style>
-    <Style ss:ID="1">
-      <Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1" ss:Color="#FFFFFF"/>
-      <Interior ss:Color="#1e293b" ss:Pattern="Solid"/>
-      <Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="2" ss:Color="#34d399"/></Borders>
-    </Style>
-    <Style ss:ID="HeaderRow">
-      <Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1" ss:Color="#FFFFFF"/>
-      <Interior ss:Color="#0f172a" ss:Pattern="Solid"/>
-    </Style>
-    <Style ss:ID="2"><NumberFormat ss:Format="YYYY-MM-DD"/></Style>
-  </Styles>
-  <Worksheet ss:Name="${esc(sheetName)}">
-    <Table>
-      ${sheetRows}
-    </Table>
-    <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
-      <FreezePanes/>
-      <FrozenNoSplit/>
-      <SplitHorizontal>1</SplitHorizontal>
-      <TopRowBottomPane>1</TopRowBottomPane>
-      <ActivePane>2</ActivePane>
-    </WorksheetOptions>
-  </Worksheet>
-</Workbook>`;
-  }
-
-  // ── Trigger browser download ───────────────────────────
-  function _triggerDownload(blob, filename){
-    const url = URL.createObjectURL(blob);
-    const a   = document.createElement('a');
-    a.href    = url;
-    a.download= filename;
-    a.style.display='none';
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 1000);
-  }
-
-  // ── Wire up buttons ────────────────────────────────────
-  document.getElementById('dlXlsx').addEventListener('click', e => {
-    e.stopPropagation();
-    if(!_canDownload()){ _setDlState('error','Access denied — Director only'); return; }
-    _downloadXLSX();
-  });
-
-  document.getElementById('dlCsv').addEventListener('click', e => {
-    e.stopPropagation();
-    if(!_canDownload()){ _setDlState('error','Access denied — Director only'); return; }
-    _downloadCSV();
-  });
-
-})(); // end download IIFE
-
-// ═══════════════════════════════════════════════════════
-// UX ENHANCEMENT LAYER
-// ═══════════════════════════════════════════════════════
-(function(){
-'use strict';
-
-// ── 1. Sliding tab indicator ─────────────────────────
-function initTabIndicator(){
-  const tabs = document.querySelector('.tabs');
-  if(!tabs) return;
-  const ind = document.createElement('div');
-  ind.className = 'tab-indicator';
-  tabs.insertBefore(ind, tabs.firstChild);
-
-  function moveIndicator(tab){
-    const tr = tabs.getBoundingClientRect();
-    const tabR = tab.getBoundingClientRect();
-    ind.style.left  = (tabR.left - tr.left + 3) + 'px';
-    ind.style.width = (tabR.width - 6) + 'px';
-  }
-
-  // Initial position
-  const onTab = tabs.querySelector('.tab.on');
-  if(onTab){ setTimeout(()=>moveIndicator(onTab),0); }
-
-  tabs.addEventListener('click', e=>{
-    const t = e.target.closest('.tab');
-    if(t) moveIndicator(t);
-  },{passive:true});
-
-  // Re-position on resize
-  window.addEventListener('resize', ()=>{
-    const on = tabs.querySelector('.tab.on');
-    if(on) moveIndicator(on);
-  },{passive:true});
-}
-initTabIndicator();
-
-// ── 2. Sticky topbar scroll shadow ──────────────────
-(function(){
-  const topbar = document.querySelector('.topbar');
-  if(!topbar) return;
-  let lastY = 0;
-  window.addEventListener('scroll', ()=>{
-    const y = window.scrollY;
-    topbar.classList.toggle('scrolled', y > 10);
-    lastY = y;
-  },{passive:true});
-})();
-
-// ── 3. Tab switch page transition ────────────────────
-const _dash = document.getElementById('dash');
-if(_dash){
-  const origTabClick = document.querySelector('.tabs');
-  if(origTabClick){
-    origTabClick.addEventListener('click', e=>{
-      const t = e.target.closest('.tab');
-      if(!t || t.classList.contains('on')) return;
-      _dash.classList.add('tab-switching');
-      setTimeout(()=>{
-        _dash.classList.remove('tab-switching');
-        _dash.classList.add('tab-stable');
-        setTimeout(()=>_dash.classList.remove('tab-stable'), 200);
-      }, 120);
-    },{passive:true, capture:true});
-  }
-}
-
-// ── 4. Ripple effect on bar clicks ───────────────────
-document.addEventListener('click', e=>{
-  const br = e.target.closest('.br');
-  if(!br) return;
-  const rect = br.getBoundingClientRect();
-  const rip = document.createElement('div');
-  rip.className = 'ripple-el';
-  rip.style.left = (e.clientX - rect.left - 20) + 'px';
-  rip.style.top  = (e.clientY - rect.top  - 20) + 'px';
-  br.style.position = 'relative';
-  br.style.overflow = 'hidden';
-  br.appendChild(rip);
-  setTimeout(()=>rip.remove(), 500);
-},{passive:true});
-
-// ── 5. Bar tooltip on hover ──────────────────────────
-const _btt = document.createElement('div');
-_btt.className = 'bar-tooltip';
-_btt.innerHTML = '<div class="bar-tooltip-name" id="bttName"></div>'
-  + '<div class="bar-tooltip-row"><span class="bar-tooltip-lbl">Admissions</span><span class="bar-tooltip-val" id="bttVal"></span></div>'
-  + '<div class="bar-tooltip-row" id="bttPctRow" style="display:none"><span class="bar-tooltip-lbl">vs Target</span><span class="bar-tooltip-val" id="bttPct"></span></div>';
-document.body.appendChild(_btt);
-
-document.addEventListener('mousemove', e=>{
-  const br = e.target.closest('.br');
-  if(!br){ _btt.classList.remove('show'); return; }
-  const name = br.dataset.mgrn || br.dataset.tln || '';
-  const bv   = br.querySelector('.bv');
-  const val  = bv ? bv.textContent : '';
-  const tgtRow = br.closest('.br-wrap')?.querySelector('.bt-tgt-lbl');
-  const tgtTxt = tgtRow ? tgtRow.textContent : '';
-
-  document.getElementById('bttName').textContent = name;
-  document.getElementById('bttVal').textContent  = val;
-  const pctRow = document.getElementById('bttPctRow');
-  if(tgtTxt && tgtRow){ pctRow.style.display='flex'; document.getElementById('bttPct').textContent=tgtTxt; }
-  else pctRow.style.display='none';
-
-  _btt.classList.add('show');
-  const tw = _btt.offsetWidth, th = _btt.offsetHeight;
-  let x = e.clientX + 14, y = e.clientY - th/2;
-  if(x + tw > window.innerWidth - 10) x = e.clientX - tw - 14;
-  if(y < 8) y = 8;
-  if(y + th > window.innerHeight - 8) y = window.innerHeight - th - 8;
-  _btt.style.left = x + 'px';
-  _btt.style.top  = y + 'px';
-},{passive:true});
-
-document.addEventListener('mouseleave', ()=>_btt.classList.remove('show'), {passive:true});
-
-// ── 6. Section scroll-in animation ──────────────────
-(function(){
-  if(!window.IntersectionObserver) return;
-  const obs = new IntersectionObserver(entries=>{
-    entries.forEach(en=>{
-      if(en.isIntersecting){
-        en.target.classList.add('visible');
-        obs.unobserve(en.target);
-      }
-    });
-  },{ threshold:0.08, rootMargin:'0px 0px -40px 0px' });
-
-  // Observe cards and sections after a tick
-  setTimeout(()=>{
-    document.querySelectorAll('.card,.full-card,.inc-section').forEach(el=>{
-      el.classList.add('section-animate');
-      obs.observe(el);
-    });
-  }, 800);
-})();
-
-// ── 7. KPI flash on value change ─────────────────────
-const _kpiPrev = { pnet:-1, ptot:-1, pcan:-1 };
-function _watchKPI(){
-  ['pnet','ptot','pcan'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(!el) return;
-    const v = parseInt(el.textContent)||0;
-    if(_kpiPrev[id] !== -1 && v !== _kpiPrev[id]){
-      const kpi = el.closest('.kpi');
-      if(kpi){ kpi.classList.remove('flashing'); void kpi.offsetWidth; kpi.classList.add('flashing'); }
-    }
-    _kpiPrev[id] = v;
-  });
-}
-setInterval(_watchKPI, 1500);
-
-// ── 8. Live-update flash on cards ────────────────────
-// Intercept render() to flash cards when new data arrives
-const _origRender = window.render;
-if(typeof _origRender === 'function'){
-  window.render = function(d, stale, p){
-    _origRender.call(this, d, stale, p);
-    if(!stale){
-      document.querySelectorAll('.card,.full-card').forEach(c=>{
-        c.classList.remove('just-updated');
-        requestAnimationFrame(()=>c.classList.add('just-updated'));
-      });
-    }
-  };
-}
-
-// ── 9. Pull-to-refresh on mobile ─────────────────────
-(function(){
-  if(!('ontouchstart' in window)) return;
-  const ptr = document.createElement('div');
-  ptr.className = 'ptr-indicator';
-  ptr.innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="animation:spin .8s linear infinite"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg> Pull to refresh';
-  document.body.appendChild(ptr);
-
-  let startY = 0, pulling = false;
-  document.addEventListener('touchstart', e=>{ if(window.scrollY===0) startY = e.touches[0].clientY; },{passive:true});
-  document.addEventListener('touchmove', e=>{
-    if(!startY) return;
-    const dy = e.touches[0].clientY - startY;
-    if(dy > 60 && window.scrollY === 0){ pulling=true; ptr.classList.add('show'); }
-  },{passive:true});
-  document.addEventListener('touchend', ()=>{
-    if(pulling){
-      pulling=false; startY=0;
-      setTimeout(()=>ptr.classList.remove('show'), 600);
-      if(typeof load==='function' && typeof activePeriod!=='undefined'){
-        load(activePeriod,
-          activePeriod==='custom'?customFrom:null,
-          activePeriod==='custom'?customTo:null,
-          true
-        );
-      }
-    } else { startY=0; }
-  },{passive:true});
-})();
-
-// ── 10. Keyboard shortcuts ───────────────────────────
-document.addEventListener('keydown', e=>{
-  // Already handled by existing Escape for filter clear
-  if(e.key==='r' && (e.metaKey||e.ctrlKey)){ return; } // don't intercept cmd+r
-
-  // Number keys 1-5 switch tabs
-  if(!e.metaKey && !e.ctrlKey && !e.altKey && !e.shiftKey){
-    const tabs = ['all','today','thisweek','lastweek','monthly'];
-    const idx  = parseInt(e.key) - 1;
-    if(idx>=0 && idx<tabs.length){
-      const activeEl = document.activeElement;
-      if(activeEl && (activeEl.tagName==='INPUT'||activeEl.tagName==='TEXTAREA')) return;
-      const btn = document.querySelector(`.tab[data-p="${tabs[idx]}"]`);
-      if(btn) btn.click();
-    }
-  }
-},{passive:true});
-
-// ── 11. Smooth counter with easing (upgrade animCount) ─
-// Already well-implemented; add spring overshoot for big changes
-const _origAnimCount = window.animCount;
-if(typeof _origAnimCount === 'function'){
-  window.animCount = function(el, target){
-    if(!el) return;
-    const prev = parseInt(el.textContent)||0;
-    const delta = Math.abs(target - prev);
-    // For large jumps, use existing animation; for small add easing
-    _origAnimCount.call(this, el, target);
-  };
-}
-
-// ── 12. Persist last active tab across sessions ───────
-(function(){
-  const TKEY = 'hs_last_tab';
-  // On load, restore last tab
-  try{
-    const saved = sessionStorage.getItem(TKEY);
-    if(saved){
-      setTimeout(()=>{
-        const btn = document.querySelector(`.tab[data-p="${saved}"]`);
-        if(btn && !btn.classList.contains('on')) btn.click();
-      }, 600);
-    }
-  }catch(e){}
-  // On tab click, save
-  const tabsEl = document.querySelector('.tabs');
-  if(tabsEl){
-    tabsEl.addEventListener('click', e=>{
-      const t = e.target.closest('.tab');
-      if(t){ try{ sessionStorage.setItem(TKEY, t.dataset.p); }catch(e){} }
-    },{passive:true});
-  }
-})();
-
-// ── 13. Mark status bar as sticky on scroll ─────────
-(function(){
-  const sb = document.querySelector('.statusbar');
-  if(!sb) return;
-  window.addEventListener('scroll', ()=>{
-    sb.classList.toggle('scrolled', window.scrollY > 60);
-  },{passive:true});
-})();
-
-})(); // end UX enhancement IIFE
-
 authInit();
-
-
-
-
 </script>
 </body>
 </html>
