@@ -1304,7 +1304,7 @@ body.role-director .exp-btn:hover{background:rgba(251,191,36,.14);border-color:r
 // ═══════════════════════════════════════════════════════
 // CONSTANTS
 // ═══════════════════════════════════════════════════════
-const API = 'https://script.google.com/macros/s/AKfycbzuPUV-GLLMt3rpbFD3iOrzbFIwj172VIvH-0KYIQvd-51au8o9dfz-YOEcc-goxdml9A/exec';
+const API = 'https://script.google.com/macros/s/AKfycbyzKPWHDTjKSnsIbEI-zWXDEd1vMr26UkQomUdP6jMg6S4vQnL6E19NyzpWCQHZXNbR8w/exec';
 const CACHE_KEY  = 'hs_v8_';
 const MEM_TTL    = 60 * 1000;       // 1 min — data older than this is re-fetched on use
 const DISK_TTL   = 60 * 60 * 1000;  // 1 hr disk cache — survive long sessions
@@ -2685,7 +2685,7 @@ function bucketLabel(S,i,full){
 
 // X-axis labels: month names on long daily ranges, dates on short ones, thinned so they never overlap
 function trendXTicks(S,cW){
-  const B=S.buckets, n=B.length, maxL=Math.max(3,Math.floor(cW/80)), cand=[];
+  const B=S.buckets, n=B.length, maxL=Math.max(3,Math.floor(cW/64)), cand=[];
   const o=i=>_ymd(B[i].s);
   if(S.mode==='monthly'){
     for(let i=0;i<n;i++) cand.push({i:i,t:MO_SHORT[o(i).m]});
