@@ -431,7 +431,11 @@ body::before{
 .tstat.up .tstat-val{color:#34d399;}
 .tstat.dn .tstat-val{color:#f87171;}
 .tstat.neu .tstat-val{color:#a5b4fc;}
-.chart-wrap{position:relative;height:200px;}
+.chart-wrap{position:relative;height:240px;touch-action:pan-y;}
+.trend-note{font-size:12px;font-weight:700;color:#fbbf24;margin:-6px 0 10px;}
+.trend-note:empty{display:none;}
+.trend-cap{font-size:11px;font-weight:600;color:rgba(255,255,255,.34);margin-top:8px;}
+.trend-cap:empty{display:none;}
 .chart-svg{width:100%;height:100%;overflow:visible;}
 .chart-tip{
   position:absolute;pointer-events:none;opacity:0;
@@ -578,6 +582,8 @@ body::before{
 .inc-ctl button.on{color:#34d399;background:rgba(16,185,129,.16);border-color:rgba(16,185,129,.4);}
 .inc-ctl button b{font-weight:800;opacity:.85;}
 .inc-ctl .ar{font-weight:900;}
+.period-note{font-size:11px;font-weight:700;color:#a5b4fc;background:rgba(129,140,248,.12);border:1px solid rgba(129,140,248,.3);padding:3px 11px;border-radius:999px;letter-spacing:.02em;white-space:nowrap;}
+.period-note:empty{display:none;}
 .rbtn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);font-family:var(--font);font-size:10px;font-weight:700;padding:4px 10px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s,border-color .15s;}
 .rbtn:hover{background:rgba(129,140,248,.2);border-color:rgba(129,140,248,.5);color:#fff;}
 .rbtn:disabled{opacity:.5;cursor:wait;}
@@ -872,6 +878,14 @@ body::before{
 }
 .login-field:focus{border-color:rgba(232,81,42,.6);}
 .login-field::placeholder{color:rgba(255,255,255,.25);}
+.login-select{
+  -webkit-appearance:none;appearance:none;cursor:pointer;padding-right:42px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-opacity='.55' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 16px center;
+}
+.login-select:invalid{color:rgba(255,255,255,.3);}          /* "Select user" placeholder look */
+.login-select option{background:#16181d;color:#fff;}
+.login-select option[disabled]{color:rgba(255,255,255,.35);}
 .login-btn{
   width:100%;padding:14px;border-radius:12px;border:none;
   background:linear-gradient(135deg,#e8512a,#c93d1a);
@@ -907,6 +921,33 @@ body.role-director #tlIncSection,
 body.role-director #mgrIncSection {
   display: block !important;
 }
+/* ── Total Incentives Summary — DIRECTOR ONLY ── */
+.tot-inc{display:none !important;}
+body.role-director .tot-inc{display:block !important;}
+.tot-inc{margin:18px 0 6px;padding:22px 24px 24px;border-radius:24px;background:linear-gradient(135deg,rgba(99,102,241,.07),rgba(16,185,129,.05));border:1px solid rgba(255,255,255,.09);position:relative;overflow:hidden;}
+.tot-inc::before{content:'';position:absolute;inset:0 0 auto 0;height:2px;background:linear-gradient(90deg,#6366f1,#22d3ee,#10b981);opacity:.7;}
+.tot-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px;}
+.tot-title{font-family:var(--font-display);font-size:18px;font-weight:800;color:#fff;letter-spacing:-.01em;}
+.tot-live{font-size:10px;font-weight:800;letter-spacing:.14em;color:rgba(255,255,255,.4);text-transform:uppercase;}
+.tot-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;}
+.tot-card{position:relative;display:flex;align-items:center;gap:12px;padding:18px 16px 22px;border-radius:18px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.1);overflow:hidden;min-width:0;}
+.tot-card::after{content:'';position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--tc);}
+.tot-ico{font-size:30px;line-height:1;flex-shrink:0;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35));}
+.tot-body{min-width:0;flex:1 1 auto;}
+.tot-lbl{font-size:11px;font-weight:800;letter-spacing:.14em;color:rgba(255,255,255,.5);text-transform:uppercase;}
+/* inline-block: the gradient box is exactly as wide as the number (a wider number used to run past its box and turn invisible);
+   the font is then shrunk by fitTotVals() until the whole number fits inside the card */
+.tot-val{display:inline-block;max-width:100%;font-family:var(--font-display);font-size:clamp(20px,2.1vw,28px);font-weight:800;line-height:1.2;margin:3px 0 2px;padding-right:2px;background:var(--tc);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;white-space:nowrap;font-variant-numeric:tabular-nums;}
+.tot-filt{display:flex;flex-wrap:wrap;gap:8px;margin:-6px 0 16px;font-size:11.5px;font-weight:700;}
+.tot-filt span{padding:4px 11px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.62);}
+.tot-filt span.f{background:rgba(251,191,36,.13);border-color:rgba(251,191,36,.5);color:#fbbf24;}
+.tot-n{font-size:12px;font-weight:600;color:rgba(255,255,255,.42);}
+.tot-card.t-cs  {--tc:linear-gradient(90deg,#c084fc,#ec4899);border-color:rgba(168,85,247,.35);}
+.tot-card.t-tl  {--tc:linear-gradient(90deg,#22d3ee,#3b82f6);border-color:rgba(34,211,238,.3);}
+.tot-card.t-mgr {--tc:linear-gradient(90deg,#818cf8,#a78bfa);border-color:rgba(129,140,248,.35);}
+.tot-card.t-grand{--tc:linear-gradient(90deg,#34d399,#10b981);background:rgba(16,185,129,.08);border-color:rgba(52,211,153,.45);}
+@media (max-width:1000px){ .tot-grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
+@media (max-width:520px){ .tot-grid{grid-template-columns:1fr;} .tot-val{font-size:24px;} }
 /* Director-only export buttons */
 .exp-btn{display:none !important;}
 body.role-director .exp-btn{display:inline-flex !important;align-items:center;gap:4px;border-color:rgba(251,191,36,.45);color:#fbbf24;}
@@ -1017,7 +1058,12 @@ body.role-director .exp-btn:hover{background:rgba(251,191,36,.14);border-color:r
     <div class="login-logo">🎓</div>
     <div class="login-title">Sign In</div>
     <div class="login-sub">Enter credentials for elevated access</div>
-    <input class="login-field" id="loginName" type="text" placeholder="Username" autocomplete="off" />
+    <select class="login-field login-select" id="loginName" required aria-label="Select user">
+      <option value="" selected disabled>Select user</option>
+      <option value="director">👑 Director</option>
+      <option value="manager">⚡ Manager</option>
+      <option value="teamleader">👥 Team Leader</option>
+    </select>
     <input class="login-field" id="loginPin"  type="password" placeholder="PIN" autocomplete="off" />
     <button class="login-btn" id="loginBtn">Sign In →</button>
     <div class="login-error" id="loginError"></div>
@@ -1069,6 +1115,7 @@ body.role-director .exp-btn:hover{background:rgba(251,191,36,.14);border-color:r
   <div class="statusbar f1">
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
       <div class="live-wrap"><div class="live-dot dot-fetching" id="liveDot"></div><span class="live-txt" id="stxt">Connecting…</span></div>
+      <span class="period-note" id="periodNote"></span>
         <button type="button" class="rbtn" id="refreshBtn" title="Refresh now" aria-label="Refresh now">↻ Refresh</button>
         <button type="button" class="rbtn exp-btn" id="expSum"  title="Download counsellor summary (CSV) for the period shown">⬇ Summary CSV</button>
         <button type="button" class="rbtn exp-btn" id="expRows" title="Download every admission row (CSV) for the period shown">⬇ Details CSV</button>
@@ -1155,6 +1202,7 @@ body.role-director .exp-btn:hover{background:rgba(251,191,36,.14);border-color:r
       </div>
     </div>
     <div class="trend-stats" id="trendStats"></div>
+    <div class="trend-note" id="trendNote"></div>
     <div class="chart-wrap" id="chartWrap">
       <svg class="chart-svg" id="chartSvg"></svg>
       <div class="chart-tip" id="chartTip">
@@ -1162,6 +1210,7 @@ body.role-director .exp-btn:hover{background:rgba(251,191,36,.14);border-color:r
         <span style="color:#818cf8;margin-right:4px;">●</span><span class="tt-val" id="ttVal"></span>
       </div>
     </div>
+    <div class="trend-cap" id="trendCap"></div>
   </div>
 
   <!-- COUNSELLOR -->
@@ -1185,6 +1234,21 @@ body.role-director .exp-btn:hover{background:rgba(251,191,36,.14);border-color:r
     </div>
     <div class="c-podium-wrap" id="cPodium"></div>
     <div class="c-grid" id="cGrid"></div>
+    <!-- Total Incentives Summary — Director only (hidden by CSS for every other role; filled by drawTotalIncentives) -->
+    <div class="tot-inc" id="totIncSection">
+      <div class="tot-head">
+        <div class="tot-title">💰 Total Incentives Summary</div>
+        <div class="tot-live">All roles combined · Live</div>
+      </div>
+      <div class="tot-filt" id="totFilt"></div>
+      <div class="tot-grid">
+        <div class="tot-card t-cs"><div class="tot-ico">💼</div><div class="tot-body"><div class="tot-lbl">Counsellor</div><div class="tot-val" id="totCs"></div><div class="tot-n" id="totCsN"></div></div></div>
+        <div class="tot-card t-tl"><div class="tot-ico">👥</div><div class="tot-body"><div class="tot-lbl">Team Leader</div><div class="tot-val" id="totTl"></div><div class="tot-n" id="totTlN"></div></div></div>
+        <div class="tot-card t-mgr"><div class="tot-ico">🏆</div><div class="tot-body"><div class="tot-lbl">Manager</div><div class="tot-val" id="totMgr"></div><div class="tot-n" id="totMgrN"></div></div></div>
+        <div class="tot-card t-grand"><div class="tot-ico">💎</div><div class="tot-body"><div class="tot-lbl">Grand Total</div><div class="tot-val" id="totGrand"></div><div class="tot-n" id="totGrandN"></div></div></div>
+      </div>
+    </div>
+
     <div class="inc-section" id="incSection" style="display:none;">
       <div class="inc-head">
         <div>
@@ -1376,11 +1440,12 @@ function showDash(){
 const _animRaf = new WeakMap();
 function animCount(el, target){
   if(!el) return;
-  if(el._animTarget===target) return; // already animating to this value
+  const inflight = _animRaf.get(el);
+  if(inflight && el._animTarget===target) return;     // already on its way to this exact value
+  if(inflight){ cancelAnimationFrame(inflight); _animRaf.delete(el); }   // ALWAYS stop an older animation first — it used to survive and overwrite the new value
   el._animTarget = target;
   const start = parseInt(el.textContent)||0;
   if(start===target){ el.textContent=target; return; }
-  const prev = _animRaf.get(el); if(prev) cancelAnimationFrame(prev);
   const dur=380, t0=performance.now();
   function tick(now){
     const pct=Math.min(1,(now-t0)/dur);
@@ -2132,6 +2197,11 @@ function render(d, stale, p){
     }
   }
   const net=d.netAdm||0, tot=d.totalAdm||0, can=d.cancelAdm||0;
+  { // which period every section below is showing
+    const m=d.meta||{}, name=_PERIOD_TXT[p]||'Selected period';
+    const rng=(m.from&&m.to)?(m.from===m.to?_fmtDay(m.from):_fmtDay(m.from)+' – '+_fmtDay(m.to)):'';
+    const pn=$('periodNote'); if(pn) pn.textContent='📅 '+name+((rng&&p!=='all')?' · '+rng:'');
+  }
 
   // KPIs — animate numbers
   animCount($('pnet'), net);
@@ -2273,7 +2343,7 @@ function render(d, stale, p){
   // Defer charts by 2 frames — manager bars paint first
   const _rows = d.allTrendRows || d.trendRows || [];
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    drawTrend(_rows);
+    drawTrend(_rows, d.meta);
     drawCounsel(_rows);
   }));
 }
@@ -2419,6 +2489,7 @@ function toggleMgrFilter(key,name){
   } else {
     filterCounselSection(allRows, null, null);
   }
+  refreshTotalIncentives();
 }
 
 function toggleTLFilter(key,name){
@@ -2443,6 +2514,7 @@ function toggleTLFilter(key,name){
   } else {
     filterCounselSection(allRows, null, null);
   }
+  refreshTotalIncentives();
 }
 
 // ── Filter counsellor section by manager or TL ───────────────────────
@@ -2466,8 +2538,7 @@ function filterCounselSection(rows,label,type){
 function renderCGridData(data){
   const total=data.reduce((s,c)=>s+c.count,0)||1;
   const mx=Math.max(1,data.length?data[0].count:1);
-  const base=(cStatusFilter==='all')?data:data.filter(statusPass);
-  const src=cSearchVal?base.filter(c=>c.name.toLowerCase().includes(cSearchVal)):base;
+  const src=counselView(data);
   const grid=$('cGrid');
   if(!src.length){grid.innerHTML=nd(cSearchVal?`No match for "${cSearchVal}"`:'No counsellors in this filter');return;}
   const parts=new Array(src.length);
@@ -2512,195 +2583,283 @@ $q('.trend-filters').addEventListener('click',e=>{
   trendFilter=b.dataset.tf;
   // Use allTrendRows for trend chart so it shows full period data (not week-clipped)
   const c=mem[activeCk];
-  if(c) drawTrend(c.data.allTrendRows||c.data.trendRows||[]);
+  if(c) drawTrend(c.data.allTrendRows||c.data.trendRows||[], c.data.meta);
 },{passive:true});
 
-function groupRows(rows, mode){
-  // Map: sortKey → { label, count, ts (numeric, for sorting) }
-  const map = Object.create(null);
+// ───────────────────────────────────────────────────────
+// Trend engine: a real CALENDAR series — every day / week / month between the first and last date is a point
+// (empty ones are 0), so the x-axis is proportional to time and averages are per calendar unit.
+// ───────────────────────────────────────────────────────
+const _DOW      = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const _MON_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const _yy = y => "'"+String(y).slice(2);
+function _ymd(n){ const d=new Date(n*86400000); return {y:d.getUTCFullYear(), m:d.getUTCMonth(), d:d.getUTCDate(), dow:d.getUTCDay()}; }
+function _lblDM(n){ const o=_ymd(n); return o.d+' '+MO_SHORT[o.m]; }
+function _lblDMY(n){ const o=_ymd(n); return o.d+' '+MO_SHORT[o.m]+' '+o.y; }
+function _weekStartN(n){ return n-((n+3)%7); }                     // Monday (1970-01-01 was a Thursday)
+function _monthStartN(y,m){ return Date.UTC(y,m,1)/86400000; }
+function _todayISOLocal(){ const d=new Date(); return d.getFullYear()+'-'+_pad2(d.getMonth()+1)+'-'+_pad2(d.getDate()); }
 
-  for(let i=0, L=rows.length; i<L; i++){
-    const r = rows[i];
-    const dt = parseLocalDate(r.date);
-    if(!dt || isNaN(dt.getTime())) continue;
-
-    let key, ts;
-    if(mode==='daily'){
-      // Zero-padded YYYY-MM-DD — safe for string sort AND numeric ts
-      key = dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
-      ts  = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()).getTime();
-    } else if(mode==='weekly'){
-      const mon = monWeekStart(dt);
-      key = mon.getFullYear()+'-'+String(mon.getMonth()+1).padStart(2,'0')+'-'+String(mon.getDate()).padStart(2,'0');
-      ts  = mon.getTime();
-    } else {
-      // Monthly: YYYY-MM
-      key = dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0');
-      ts  = new Date(dt.getFullYear(), dt.getMonth(), 1).getTime();
-    }
-
-    if(!map[key]) map[key] = {key, ts, count:0};
-    map[key].count++;
+function buildTrendSeries(rows, mode, meta){
+  const perDay=new Map(); let minN=Infinity, maxN=-Infinity;
+  for(let i=0;i<rows.length;i++){
+    const iso=String(rows[i].date||'').slice(0,10);
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)) continue;
+    const n=_dayNum(iso);
+    perDay.set(n,(perDay.get(n)||0)+1);
+    if(n<minN) minN=n; if(n>maxN) maxN=n;
   }
-
-  // Sort by numeric timestamp (never by string comparison)
-  return Object.values(map)
-    .sort((a,b) => a.ts - b.ts)
-    .map(v => [v.key, v.count]);
+  if(!perDay.size) return null;
+  const m=meta||{};
+  const todayN=_dayNum(/^\d{4}-\d{2}-\d{2}$/.test(m.today||'') ? m.today : _todayISOLocal());
+  let start=minN, end=Math.max(maxN,todayN);
+  if(m.from && m.to){                                             // a selected period: the axis is exactly that period (up to today)
+    start=Math.min(_dayNum(m.from),minN);
+    end=Math.max(maxN,Math.min(_dayNum(m.to),todayN));
+    if(end<start) end=start;
+  }
+  const B=[];
+  if(mode==='daily'){
+    for(let n=start;n<=end;n++) B.push({s:n,e:n,c:0});
+  } else if(mode==='weekly'){
+    for(let w=_weekStartN(start); w<=end; w+=7) B.push({s:w,e:w+6,c:0});
+  } else {
+    const a0=_ymd(start), a1=_ymd(end);
+    for(let y=a0.y,mo=a0.m; y<a1.y || (y===a1.y && mo<=a1.m); ){
+      const s=_monthStartN(y,mo), nx=mo===11?_monthStartN(y+1,0):_monthStartN(y,mo+1);
+      B.push({s:s,e:nx-1,c:0});
+      if(++mo>11){ mo=0; y++; }
+    }
+  }
+  const first=B[0].s;
+  perDay.forEach((c,n)=>{
+    let idx;
+    if(mode==='daily') idx=n-first;
+    else if(mode==='weekly') idx=(_weekStartN(n)-first)/7;
+    else { const o=_ymd(n), f=_ymd(first); idx=(o.y-f.y)*12+(o.m-f.m); }
+    if(B[idx]) B[idx].c+=c;
+  });
+  B.forEach(b=>{ b.partial = b.s<=todayN && b.e>=todayN; });      // the bucket that contains today is still in progress
+  let total=0; B.forEach(b=>total+=b.c);
+  return {mode:mode, buckets:B, start:start, end:end, todayN:todayN, total:total};
 }
-function fmtKey(k, mode){
-  // k is always YYYY-MM-DD (daily/weekly) or YYYY-MM (monthly)
-  const p = k.split('-');
-  const yr   = p[0];
-  const mo   = +p[1]-1;  // 0-indexed month
-  const day  = p[2]?+p[2]:1;
-  const moStr = MO_SHORT[mo] || '?';
 
-  if(mode==='monthly') return moStr+' '+yr;
-  if(mode==='weekly')  return String(day)+' '+moStr;   // start of week date
-  return String(day)+' '+moStr;                        // daily: DD Mon
+// TOTAL · average per calendar unit · peak · trend (last k complete buckets vs the k before them)
+function trendMetrics(S){
+  const B=S.buckets, n=B.length;
+  const unit={daily:'DAY',weekly:'WEEK',monthly:'MONTH'}[S.mode];
+  const avg = S.mode==='daily' ? S.total/(S.end-S.start+1) : S.total/n;
+  let pk=0; for(let i=1;i<n;i++) if(B[i].c>B[pk].c) pk=i;
+  const done=B.filter(b=>!b.partial), m=done.length;
+  const cap={daily:30,weekly:8,monthly:3}[S.mode];
+  const k=Math.min(cap,Math.floor(m/2));
+  let pct=null, last=0, prev=0;
+  if(k>=1){
+    for(let i=m-k;i<m;i++) last+=done[i].c;
+    for(let i=m-2*k;i<m-k;i++) prev+=done[i].c;
+    if(prev>0) pct=Math.round((last-prev)/prev*100);
+  }
+  return {unit:unit, avg:avg, peak:B[pk].c, peakIdx:pk, pct:pct, k:k, last:last, prev:prev};
+}
+
+// Nice integer y-axis: 0 … max in steps of 1/2/5/10/20/25/50… (never more than 6 intervals)
+function niceTicks(maxV){
+  const steps=[1,2,5,10,20,25,50,100,200,250,500,1000,2000,2500,5000,10000];
+  maxV=Math.max(1,Math.ceil(maxV));
+  let step=steps[steps.length-1];
+  for(const s of steps){ if(Math.ceil(maxV/s)<=6){ step=s; break; } }
+  const top=Math.ceil(maxV/step)*step, ticks=[];
+  for(let v=0; v<=top; v+=step) ticks.push(v);
+  return {max:top, step:step, ticks:ticks};
+}
+
+function bucketLabel(S,i,full){
+  const b=S.buckets[i], o=_ymd(b.s);
+  if(S.mode==='monthly') return full ? _MON_FULL[o.m]+' '+o.y : MO_SHORT[o.m]+' '+o.y;
+  if(S.mode==='weekly'){
+    const e=_ymd(b.e);
+    return full ? 'Week of '+_lblDM(b.s)+' – '+_lblDMY(b.e) : _lblDM(b.s);
+  }
+  return full ? _DOW[o.dow]+', '+_lblDMY(b.s) : _lblDM(b.s);
+}
+
+// X-axis labels: month names on long daily ranges, dates on short ones, thinned so they never overlap
+function trendXTicks(S,cW){
+  const B=S.buckets, n=B.length, maxL=Math.max(3,Math.floor(cW/80)), cand=[];
+  const o=i=>_ymd(B[i].s);
+  if(S.mode==='monthly'){
+    for(let i=0;i<n;i++) cand.push({i:i,t:MO_SHORT[o(i).m]});
+  } else if(S.mode==='weekly'){
+    for(let i=0;i<n;i++) cand.push({i:i,t:_lblDM(B[i].s)});
+  } else if(n<=maxL || n<=92){
+    for(let i=0;i<n;i++) cand.push({i:i,t:_lblDM(B[i].s)});
+  } else {
+    for(let i=0;i<n;i++) if(o(i).d===1) cand.push({i:i,t:MO_SHORT[o(i).m]});
+  }
+  const step=Math.max(1,Math.ceil(cand.length/maxL)), pick=[];
+  for(let k=0;k<cand.length;k+=step) pick.push(cand[k]);
+  // never let two labels collide (≥ 56px apart)
+  const px=i=>n===1?cW/2:i*(cW/(n-1)), out=[];
+  for(const c of pick){ if(!out.length || px(c.i)-px(out[out.length-1].i)>=56) out.push(c); }
+  if(!out.length) out.push({i:0,t:_lblDM(B[0].s)});
+  // years: first label and every January
+  out.forEach((c,idx)=>{ const oo=o(c.i); if(idx===0 || (oo.m===0 && (S.mode==='monthly'||c.t===MO_SHORT[0]))) c.t+=' '+_yy(oo.y); });
+  return out;
+}
+
+// What looks wrong in the data: a handful of admissions dated far away (>30 days) from all the others — almost always a typo in the sheet
+function trendOutlierNote(rows, meta){
+  if(meta && meta.from && meta.to) return '';
+  const days=rows.map(r=>String(r.date||'').slice(0,10)).filter(s=>/^\d{4}-\d{2}-\d{2}$/.test(s)).sort();
+  if(days.length<8) return '';
+  const L=days.length, GAP=30;
+  let head=-1, tail=L;
+  for(let i=0;i<Math.min(3,L-1);i++){ if(_dayNum(days[i+1])-_dayNum(days[i])>GAP) head=i; }
+  for(let i=L-1;i>Math.max(L-4,0);i--){ if(_dayNum(days[i])-_dayNum(days[i-1])>GAP) tail=i; }
+  const odd=[];
+  if(head>=0) odd.push(...days.slice(0,head+1));
+  if(tail<L)  odd.push(...days.slice(tail));
+  if(!odd.length) return '';
+  const ds=[...new Set(odd)].map(s=>_lblDMY(_dayNum(s))).join(', ');
+  return '⚠ '+odd.length+' admission'+(odd.length===1?'':'s')+' dated '+ds+' '+(odd.length===1?'is':'are')+' far from all the others — please check the date in the sheet.';
 }
 
 let _lastTrendHash = '';
-function drawTrend(rows){
-  const h = rows.length+'_'+(rows[0]?.date||'')+'_'+(rows[rows.length-1]?.date||'');
-  if(h === _lastTrendHash) return; // no change
-  _lastTrendHash = h;
-  const wrap=$('chartWrap'), svg=$('chartSvg'), tip=$('chartTip'), stats=$('trendStats');
-  if(!rows.length){
-    svg.innerHTML=`<text x="50%" y="50%" fill="rgba(255,255,255,.1)" text-anchor="middle" font-size="12" font-family="Plus Jakarta Sans">No trend data</text>`;
-    stats.innerHTML=''; return;
-  }
-  const pts=groupRows(rows,trendFilter);
-  if(!pts.length){ svg.innerHTML=''; stats.innerHTML=''; return; }
+let _trendGeom = null, _trendIn = null;
+function drawTrend(rows, meta){
+  rows = rows||[];
+  _trendIn = {rows:rows, meta:meta||null};
+  const wrap=$('chartWrap'), tip=$('chartTip'), stats=$('trendStats'), noteEl=$('trendNote'), capEl=$('trendCap');
+  const W=wrap.offsetWidth||900, H=240;
+  const mm=meta||{};
+  const h=[trendFilter, mm.from||'', mm.to||'', mm.today||'', W, rows.length, _hash(rows.map(r=>r.date).join(','))].join('|');
+  if(h===_lastTrendHash) return;               // identical data, mode, period and width → nothing to redraw
+  _lastTrendHash=h;
 
-  const vals=pts.map(p=>p[1]);
-  const total=vals.reduce((a,b)=>a+b,0);
-  const avg=total/vals.length;
-  const peak=Math.max(...vals);
-  const peakKey=pts[vals.indexOf(peak)][0];
-  // Trend: compare average of last 30% of points vs first 30% (more stable than first/last)
-  let trendPct=0;
-  if(vals.length>1){
-    const chunk=Math.max(1,Math.floor(vals.length*0.3));
-    const firstAvg=vals.slice(0,chunk).reduce((a,b)=>a+b,0)/chunk;
-    const lastAvg =vals.slice(-chunk).reduce((a,b)=>a+b,0)/chunk;
-    trendPct=firstAvg>0?Math.round(((lastAvg-firstAvg)/firstAvg)*100):0;
+  const svg=$('chartSvg');
+  const S=buildTrendSeries(rows,trendFilter,meta);
+  _trendGeom=null;
+  if(!S){
+    svg.innerHTML=`<text x="50%" y="50%" fill="rgba(255,255,255,.28)" text-anchor="middle" font-size="13" font-family="Plus Jakarta Sans">No admissions in this period</text>`;
+    stats.innerHTML=''; if(noteEl) noteEl.textContent=''; if(capEl) capEl.textContent='';
+    return;
   }
-  const unit=trendFilter==='monthly'?'MONTH':trendFilter==='weekly'?'WEEK':'DAY';
+  const M=trendMetrics(S), B=S.buckets, n=B.length;
+  const vals=B.map(b=>b.c);
 
+  // ── stats ──
+  const trendTxt = M.pct===null ? '—' : (M.pct>=0?'+':'')+M.pct+'%';
+  const trendCls = M.pct===null ? 'neu' : (M.pct>=0?'up':'dn');
+  const trendLbl = M.k>=1 ? `${M.k}-${M.unit} TREND` : 'TREND';
+  const peakWhen = bucketLabel(S,M.peakIdx,false);
   stats.innerHTML=[
-    `<div class="tstat neu"><div class="tstat-val">${total}</div><div class="tstat-lbl">TOTAL</div></div>`,
-    `<div class="tstat neu"><div class="tstat-val">${avg.toFixed(1)}</div><div class="tstat-lbl">AVG/${unit}</div></div>`,
-    `<div class="tstat neu"><div class="tstat-val">${peak}</div><div class="tstat-lbl">PEAK · ${fmtKey(peakKey,trendFilter)}</div></div>`,
-    `<div class="tstat ${trendPct>=0?'up':'dn'}"><div class="tstat-val">${trendPct>=0?'+':''}${trendPct}%</div><div class="tstat-lbl">TREND</div></div>`,
+    `<div class="tstat neu"><div class="tstat-val">${S.total}</div><div class="tstat-lbl">TOTAL</div></div>`,
+    `<div class="tstat neu"><div class="tstat-val">${M.avg.toFixed(1)}</div><div class="tstat-lbl">AVG/${M.unit}</div></div>`,
+    `<div class="tstat neu"><div class="tstat-val">${M.peak}</div><div class="tstat-lbl">PEAK · ${peakWhen}</div></div>`,
+    `<div class="tstat ${trendCls}" title="${M.k>=1?`Last ${M.k} complete ${M.unit.toLowerCase()}${M.k===1?'':'s'}: ${M.last} admissions · the ${M.k} before: ${M.prev}`:'Not enough history yet'}"><div class="tstat-val">${trendTxt}</div><div class="tstat-lbl">${trendLbl}</div></div>`
   ].join('');
+  if(noteEl) noteEl.textContent=trendOutlierNote(rows,meta);
 
-  const W=wrap.offsetWidth||900, H=200;
-  const pL=38, pR=16, pT=20, pB=36;
-  const cW=W-pL-pR, cH=H-pT-pB;
-  const maxV=Math.max(...vals,1), n=pts.length;
+  // ── geometry ──
+  const pL=40, pR=18, pT=18, pB=34, cW=W-pL-pR, cH=H-pT-pB;
+  const Y=niceTicks(Math.max.apply(null,vals));
   const xOf=i=>pL+(n===1?cW/2:i*(cW/(n-1)));
-  const yOf=v=>pT+cH-(v/maxV)*cH;
+  const yOf=v=>pT+cH-(v/Y.max)*cH;
+  const dense=n>45;
 
-  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
-
-  // Grid lines
   let grid='';
-  [0,.25,.5,.75,1].forEach(t=>{
-    const y=pT+cH-t*cH;
-    grid+=`<line x1="${pL}" x2="${W-pR}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,.05)" stroke-width="1"/>`;
-    grid+=`<text x="${pL-6}" y="${y+4}" fill="rgba(255,255,255,.2)" font-size="9" text-anchor="end" font-family="Plus Jakarta Sans">${Math.round(t*maxV)}</text>`;
+  Y.ticks.forEach(v=>{
+    const y=yOf(v);
+    grid+=`<line x1="${pL}" x2="${W-pR}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,${v===0?.16:.06})" stroke-width="1"/>`;
+    grid+=`<text x="${pL-8}" y="${y+3.5}" fill="rgba(255,255,255,.38)" font-size="10" text-anchor="end" font-family="Plus Jakarta Sans">${v}</text>`;
+  });
+  const XT=trendXTicks(S,cW);
+  let xl='';
+  XT.forEach(c=>{
+    const x=xOf(c.i), anc = x-30<0 ? 'start' : (x+30>W ? 'end' : 'middle');
+    xl+=`<line x1="${x}" x2="${x}" y1="${pT+cH}" y2="${pT+cH+4}" stroke="rgba(255,255,255,.25)"/>`;
+    xl+=`<text x="${x}" y="${H-pB+17}" fill="rgba(255,255,255,.5)" font-size="10" text-anchor="${anc}" font-family="Plus Jakarta Sans">${c.t}</text>`;
   });
 
-  // Area + line path
   let area='', line='';
   if(n>1){
-    area=`M ${xOf(0)} ${H-pB}`;
-    pts.forEach((_,i)=>area+=` L ${xOf(i)} ${yOf(pts[i][1])}`);
-    area+=` L ${xOf(n-1)} ${H-pB} Z`;
-    line=`M ${xOf(0)} ${yOf(pts[0][1])}`;
+    area=`M ${xOf(0)} ${yOf(0)}`;
+    for(let i=0;i<n;i++) area+=` L ${xOf(i)} ${yOf(vals[i])}`;
+    area+=` L ${xOf(n-1)} ${yOf(0)} Z`;
+    line=`M ${xOf(0)} ${yOf(vals[0])}`;
     for(let i=1;i<n;i++){
-      const x0=xOf(i-1),y0=yOf(pts[i-1][1]),x1=xOf(i),y1=yOf(pts[i][1]),cx=(x0+x1)/2;
+      const x0=xOf(i-1), y0=yOf(vals[i-1]), x1=xOf(i), y1=yOf(vals[i]), cx=(x0+x1)/2;
       line+=` C ${cx} ${y0} ${cx} ${y1} ${x1} ${y1}`;
     }
   }
+  let dots='';
+  if(!dense){ for(let i=0;i<n;i++) dots+=`<circle class="tdot" cx="${xOf(i)}" cy="${yOf(vals[i])}" r="${vals[i]>0?3.5:2.5}" fill="${vals[i]>0?'#818cf8':'#3b3f66'}" stroke="#08091a" stroke-width="1.5"/>`; }
+  // peak marker (always)
+  const px_=xOf(M.peakIdx), py_=yOf(M.peak);
+  const peak=`<circle cx="${px_}" cy="${py_}" r="5" fill="#fbbf24" stroke="#08091a" stroke-width="2"/>`+
+             `<text x="${px_}" y="${py_-10}" fill="#fbbf24" font-size="11" font-weight="800" text-anchor="${px_<pL+20?'start':(px_>W-30?'end':'middle')}" font-family="Plus Jakarta Sans">${M.peak}</text>`;
 
-  // X labels
-  const maxL=Math.min(n,8), step=Math.ceil(n/maxL);
-  let xlbls='', dots='', hits='';
-  pts.forEach((p,i)=>{
-    const x=xOf(i), y=yOf(p[1]);
-    if(i%step===0||i===n-1)
-      xlbls+=`<text x="${x}" y="${H-pB+15}" fill="rgba(255,255,255,.22)" font-size="9" text-anchor="middle" font-family="Plus Jakarta Sans">${fmtKey(p[0],trendFilter)}</text>`;
-    dots+=`<circle class="tdot" cx="${x}" cy="${y}" r="4" fill="#818cf8" stroke="#08091a" stroke-width="2" filter="url(#glow)" style="opacity:0;transition:opacity .2s ${i*15}ms"/>`;
-    const hw=n>1?Math.max(16,cW/(n-1)/2):cW;
-    hits+=`<rect x="${Math.max(pL,x-hw/2)}" y="${pT}" width="${hw}" height="${cH}" fill="transparent" data-i="${i}" class="thit" style="cursor:crosshair"/>`;
-  });
-
-  const pathLen = 2200;
-
-  // ── Replace SVG first (clears old listeners), then write content into new node ──
-  const newSvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-  newSvg.id = 'chartSvg';
-  newSvg.classList.add('chart-svg');
-  newSvg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  wrap.replaceChild(newSvg, wrap.querySelector('#chartSvg') || wrap.querySelector('svg'));
-  delete _elCache['chartSvg'];          // clear DOM cache so $() finds new node
-  const liveSvg = newSvg;              // use newSvg directly — no stale reference
-
-  liveSvg.innerHTML = `
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  svg.innerHTML=`
     <defs>
-      <linearGradient id="tg" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#818cf8" stop-opacity="0.28"/>
-        <stop offset="100%" stop-color="#818cf8" stop-opacity="0"/>
-      </linearGradient>
-      <linearGradient id="lg" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stop-color="#6366f1"/>
-        <stop offset="55%" stop-color="#818cf8"/>
-        <stop offset="100%" stop-color="#22d3ee"/>
-      </linearGradient>
-      <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#818cf8" stop-opacity="0.30"/><stop offset="100%" stop-color="#818cf8" stop-opacity="0"/></linearGradient>
+      <linearGradient id="lg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#6366f1"/><stop offset="55%" stop-color="#818cf8"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
     </defs>
-    ${grid}
-    ${n>1 ? `<path d="${area}" fill="url(#tg)"/>
-    <path id="tline" d="${line}" fill="none" stroke="url(#lg)" stroke-width="2.5" stroke-linecap="round"
-      style="stroke-dasharray:${pathLen};stroke-dashoffset:${pathLen};transition:stroke-dashoffset 1.1s cubic-bezier(.16,1,.3,1)"/>` : ''}
-    ${xlbls}${dots}${hits}`;
+    ${grid}${xl}
+    ${n>1?`<path d="${area}" fill="url(#tg)"/><path id="tline" d="${line}" pathLength="1" fill="none" stroke="url(#lg)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1s cubic-bezier(.16,1,.3,1)"/>`:`<rect x="${xOf(0)-16}" y="${yOf(vals[0])}" width="32" height="${yOf(0)-yOf(vals[0])}" rx="4" fill="url(#lg)" opacity=".85"/>`}
+    ${dots}${peak}
+    <line id="tGuide" x1="0" x2="0" y1="${pT}" y2="${pT+cH}" stroke="rgba(255,255,255,.28)" stroke-dasharray="3 3" style="opacity:0"/>
+    <circle id="tHov" r="6" fill="#818cf8" stroke="#fff" stroke-width="2" style="opacity:0"/>
+    <rect id="tHit" x="${pL}" y="${pT}" width="${cW}" height="${cH}" fill="transparent" style="cursor:crosshair"/>`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ const tl=svg.querySelector('#tline'); if(tl) tl.style.strokeDashoffset='0'; }));
 
-  // ── Animate: draw line + fade in dots (on the LIVE node) ──
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    const tline = liveSvg.querySelector('#tline');
-    if(tline) tline.style.strokeDashoffset = '0';
-    liveSvg.querySelectorAll('.tdot').forEach(d => d.style.opacity = '1');
-  }));
-
-  // ── Tooltip hover (attached to the correct live node) ──
-  liveSvg.addEventListener('mouseover', e=>{
-    const h = e.target.closest('.thit'); if(!h) return;
-    const i = +h.dataset.i, pt = pts[i];
-    const dot = liveSvg.querySelectorAll('.tdot')[i];
-    if(dot) dot.setAttribute('r','6');
-    tip.style.opacity = '1';
-    $('ttDate').textContent = fmtKey(pt[0], trendFilter);
-    $('ttVal').textContent  = pt[1] + ' admissions';
-    const x = xOf(i), tipW = tip.offsetWidth||130;
-    let tx = x - tipW/2;
-    if(tx < 0) tx = 2;
-    if(tx + tipW > W) tx = W - tipW - 2;
-    tip.style.left = tx + 'px';
-    tip.style.top  = (yOf(pt[1]) - 56 < 0 ? yOf(pt[1]) + 10 : yOf(pt[1]) - 56) + 'px';
-  },{passive:true});
-
-  liveSvg.addEventListener('mouseout', e=>{
-    const h = e.target.closest('.thit'); if(!h) return;
-    const dot = liveSvg.querySelectorAll('.tdot')[+h.dataset.i];
-    if(dot) dot.setAttribute('r','4');
-    tip.style.opacity = '0';
-  },{passive:true});
-
+  _trendGeom={S:S, n:n, pL:pL, cW:cW, W:W, xOf:xOf, yOf:yOf, vals:vals};
+  if(capEl){
+    const unitTxt={daily:'Daily',weekly:'Weekly (Mon–Sun)',monthly:'Monthly'}[S.mode];
+    capEl.textContent=`${unitTxt} · ${_lblDMY(S.start)} → ${_lblDMY(S.end)} · ${n} ${S.mode==='daily'?'day':S.mode==='weekly'?'week':'month'}${n===1?'':'s'} · periods with no admissions count as 0`;
+  }
   const t4=$('t4'); if(t4) t4.textContent='Updated '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
 }
+
+// Hover / touch: one listener on the chart, finds the nearest point from the pointer position
+(function(){
+  const wrap=$('chartWrap'); if(!wrap) return;
+  function hover(e){
+    const g=_trendGeom; if(!g) return;
+    const svg=$('chartSvg'), r=svg.getBoundingClientRect();
+    const sx=g.W/(r.width||g.W), x=(e.clientX-r.left)*sx;
+    let i=g.n===1?0:Math.round((x-g.pL)/(g.cW/(g.n-1)));
+    i=Math.max(0,Math.min(g.n-1,i));
+    const b=g.S.buckets[i], v=g.vals[i], cx=g.xOf(i), cy=g.yOf(v);
+    const guide=svg.querySelector('#tGuide'), dot=svg.querySelector('#tHov');
+    if(guide){ guide.setAttribute('x1',cx); guide.setAttribute('x2',cx); guide.style.opacity='1'; }
+    if(dot){ dot.setAttribute('cx',cx); dot.setAttribute('cy',cy); dot.style.opacity='1'; }
+    const tip=$('chartTip');
+    $('ttDate').textContent=bucketLabel(g.S,i,true);
+    $('ttVal').textContent=v+' admission'+(v===1?'':'s')+(b.partial?(g.S.mode==='daily'?' · today so far':g.S.mode==='weekly'?' · week in progress':' · month in progress'):'');
+    tip.style.opacity='1';
+    const tipW=tip.offsetWidth||150;
+    let tx=cx/sx-tipW/2; tx=Math.max(2,Math.min((r.width||g.W)-tipW-2,tx));
+    tip.style.left=tx+'px';
+    const ty=cy/sx-60; tip.style.top=(ty<0?cy/sx+14:ty)+'px';
+  }
+  function leave(){
+    const svg=$('chartSvg'); if(!svg) return;
+    const guide=svg.querySelector('#tGuide'), dot=svg.querySelector('#tHov');
+    if(guide) guide.style.opacity='0'; if(dot) dot.style.opacity='0';
+    $('chartTip').style.opacity='0';
+  }
+  wrap.addEventListener('pointermove',hover,{passive:true});
+  wrap.addEventListener('pointerdown',hover,{passive:true});
+  wrap.addEventListener('pointerleave',leave,{passive:true});
+})();
+
+// Redraw when the window width changes (the chart is drawn for an exact pixel width)
+let _trendRz=null;
+window.addEventListener('resize',()=>{
+  clearTimeout(_trendRz);
+  _trendRz=setTimeout(()=>{ if(_trendIn){ _lastTrendHash=''; drawTrend(_trendIn.rows,_trendIn.meta); } },150);
+},{passive:true});
 
 // ═══════════════════════════════════════════════════════
 // COUNSELLOR
@@ -2744,19 +2903,29 @@ function statusPass(c){
     default:         return true;
   }
 }
-function renderCChips(data){
-  const el=$('cChips'); if(!el) return;
-  let a=0,ia=0,q=0,nq=0,known=0;
-  for(let k=0;k<data.length;k++){
-    const i=cInfo(data[k].name); if(!i) continue; known++;
+function searchPass(c){ return !cSearchVal || c.name.toLowerCase().includes(cSearchVal); }
+// ONE filter (status chips + search) drives EVERY counsellor view: podium, grid, badge, incentive leaderboard, director summary
+function counselBase(data){ return cSearchVal ? data.filter(searchPass) : data; }                       // search only → chip counts
+function counselView(data){ const b=counselBase(data); return cStatusFilter==='all' ? b : b.filter(statusPass); }   // search + status
+function statusCounts(list){
+  let a=0,ia=0,q=0,nq=0;
+  for(let k=0;k<list.length;k++){
+    const i=cInfo(list[k].name); if(!i) continue;
     if(i.a===1)a++; else if(i.a===0)ia++;
     if(i.q===1)q++; else if(i.q===0)nq++;
   }
+  return {a:a,ia:ia,q:q,nq:nq};
+}
+function renderCChips(data){
+  const el=$('cChips'); if(!el) return;
+  let known=0;
+  for(let k=0;k<data.length;k++){ if(cInfo(data[k].name)) known++; }
+  const base=counselBase(data), sc=statusCounts(base), a=sc.a, ia=sc.ia, q=sc.q, nq=sc.nq;
   const dg=$('cDiag');
   if(dg){ dg.style.display=(!known && cDiagMsg)?'':'none'; dg.textContent=(!known && cDiagMsg)?cDiagMsg:''; }
   if(!known){ el.style.display='none'; el.innerHTML=''; cStatusFilter='all'; return; }
   el.style.display='';
-  const defs=[['all','All',data.length],['active','Active',a],['inactive','Inactive',ia],['qualify','Qualify',q],['notq','Not qualify',nq]];
+  const defs=[['all','All',base.length],['active','Active',a],['inactive','Inactive',ia],['qualify','Qualify',q],['notq','Not qualify',nq]];
   el.innerHTML=defs.map(d=>`<button type="button" class="cchip${cStatusFilter===d[0]?' on':''}" data-f="${d[0]}">${d[1]}<b>${d[2]}</b></button>`).join('');
 }
 $('cChips').addEventListener('click',e=>{
@@ -2769,7 +2938,7 @@ $('cSearch').addEventListener('input',function(){
   clearTimeout(searchTimer);
   searchTimer=setTimeout(()=>{
     cSearchVal=this.value.toLowerCase().trim();
-    renderCGridData(_cView.data);
+    renderCounselSection(_cView.data,_cView.label);      // podium + grid + chips + leaderboard + summary
   },120);
 },{passive:true});
 
@@ -2804,7 +2973,8 @@ const _pIco=['🥇','🥈','🥉'],_pCls=['p1','p2','p3'],_pLbl=['TOP PERFORMER'
 function renderCounselSection(data,label){
   _cView={data:data,label:label||null};
   renderCChips(data);
-  const view=(cStatusFilter==='all')?data:data.filter(statusPass);
+  refreshTotalIncentives();
+  const view=counselView(data);
   $('cBadge').textContent=(label?label+' · ':'')+view.length+' COUNSELLORS';
   const top=view.filter(c=>c.count>0).slice(0,3),parts=[];
   for(let i=0;i<top.length;i++){
@@ -2828,8 +2998,99 @@ function drawCounsel(rows){
   // Draw TL and Manager incentive leaderboards
   drawTLIncLeaderboard(rows);
   drawMgrIncLeaderboard(rows);
+  refreshTotalIncentives(rows);
   // Re-enforce role visibility after all sections are drawn
   applyRoleVisibility();
+}
+
+// ── Total Incentives Summary (Director only) ──
+// = the incentive of EVERY admission row that passes ALL filters currently applied on the dashboard:
+//   period tab / custom range · manager or TL selected · counsellor status chips · leaderboard filter · counsellor search
+function fmtIN(n){                       // Indian digit grouping: 20,97,700
+  const s=String(Math.round(n)), neg=s[0]==='-', d=neg?s.slice(1):s;
+  const last3=d.slice(-3), rest=d.slice(0,-3);
+  return (neg?'-':'')+(rest?rest.replace(/\B(?=(\d{2})+(?!\d))/g,',')+',':'')+last3;
+}
+const _TOT_IDS=['totCs','totTl','totMgr','totGrand','totCsN','totTlN','totMgrN','totGrandN'];
+const _STATUS_TXT={active:'Active',inactive:'Inactive',qualify:'Qualify',notq:'Not qualify'};
+const _PERIOD_TXT={all:'All time',today:'Today',thisweek:'This week',weekly:'This week',lastweek:'Last week',monthly:'This month',custom:'Custom range'};
+function _fmtDay(iso){ const a=String(iso||'').split('-'); return a.length===3 ? (+a[2])+' '+_MON3[+a[1]-1].replace(/^./,c=>c.toUpperCase()) : ''; }
+
+// The admission rows behind the summary + a human-readable list of the filters applied
+function totalIncRows(baseRows){
+  const c=mem[activeCk];
+  let rows=baseRows || (c && c.data ? (c.data.allTrendRows||c.data.trendRows||[]) : []);
+  const m=(c&&c.data&&c.data.meta)||{};
+  const per=_PERIOD_TXT[activePeriod]||'Selected period';
+  const range=(m.from&&m.to)?(m.from===m.to?_fmtDay(m.from):_fmtDay(m.from)+' – '+_fmtDay(m.to)):'';
+  const chips=[{t:'📅 '+per+(range&&activePeriod!=='all'?' · '+range:''),f:false}];
+  if(activeMgr){
+    const x=MGRS.find(v=>v.k===activeMgr), nm=(x?x.n:'').toLowerCase();
+    rows=rows.filter(r=>(r.mgr||'').trim().toLowerCase()===nm);
+    chips.push({t:'Manager: '+(x?x.n:''),f:true});
+  } else if(activeTL){
+    const x=TLS.find(v=>v.k===activeTL);
+    rows=rows.filter(r=>resolveTL((r.tl||'').trim().toLowerCase())===activeTL);
+    chips.push({t:'Team leader: '+(x?x.n:''),f:true});
+  }
+  if(cStatusFilter!=='all'){
+    rows=rows.filter(r=>statusPass({name:r.counsellor}));
+    chips.push({t:'Counsellors: '+_STATUS_TXT[cStatusFilter],f:true});
+  }
+  if(cSearchVal){
+    rows=rows.filter(r=>(r.counsellor||'').toLowerCase().includes(cSearchVal));
+    chips.push({t:'Search: “'+cSearchVal+'”',f:true});
+  }
+  if(chips.length===1) chips.push({t:'No filters — every admission counted',f:false});
+  return {rows:rows, chips:chips};
+}
+
+// Shrinks each amount until the WHOLE number is visible inside its card (any screen / font)
+function fitTotVals(){
+  document.querySelectorAll('.tot-val').forEach(el=>{
+    el.style.fontSize='';
+    let fs=parseFloat(getComputedStyle(el).fontSize)||24, guard=0;
+    while(el.scrollWidth>el.clientWidth+1 && fs>12 && guard++<40){ fs-=1; el.style.fontSize=fs+'px'; }
+  });
+}
+let _fitT=null;
+window.addEventListener('resize',()=>{ clearTimeout(_fitT); _fitT=setTimeout(fitTotVals,120); },{passive:true});
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>fitTotVals()).catch(()=>{});
+
+function drawTotalIncentives(rows, chips){
+  const sec=$('totIncSection'); if(!sec) return;
+  const role=currentUser?currentUser.role:'public';
+  if(roleRank(role)<3){                                   // nothing is even written for other roles
+    _TOT_IDS.forEach(id=>{ const e=$(id); if(e) e.textContent=''; });
+    const f=$('totFilt'); if(f) f.innerHTML='';
+    return;
+  }
+  let cs=0, tl=0, mg=0;
+  const sc=new Set(), st=new Set(), sm=new Set();
+  for(let i=0;i<rows.length;i++){
+    const r=rows[i];
+    cs+=r.incentive||0; tl+=r.tlIncentive||0; mg+=r.mgrIncentive||0;
+    if(r.counsellor) sc.add(_ckey(r.counsellor));
+    if(r.tl)         st.add(_ckey(r.tl));
+    if(r.mgr)        sm.add(_ckey(r.mgr));
+  }
+  const rc=Math.round(cs), rt=Math.round(tl), rm=Math.round(mg), grand=rc+rt+rm;   // grand = exactly what the three cards add up to
+  const plural=(n,w)=>n+' '+w+(n===1?'':'s');
+  const set=(id,v)=>{ const e=$(id); if(e) e.textContent=v; };
+  set('totCs','₹'+fmtIN(rc));   set('totCsN',plural(sc.size,'counsellor'));
+  set('totTl','₹'+fmtIN(rt));   set('totTlN',plural(st.size,'team leader'));
+  set('totMgr','₹'+fmtIN(rm));  set('totMgrN',plural(sm.size,'manager'));
+  set('totGrand','₹'+fmtIN(grand)); set('totGrandN',plural(rows.length,'admission'));
+  const f=$('totFilt');
+  if(f && chips) f.innerHTML=chips.map(c=>`<span${c.f?' class="f"':''}>${String(c.t).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]))}</span>`).join('');
+  requestAnimationFrame(fitTotVals);
+}
+// Single entry point — call whenever the period or ANY filter changes
+function refreshTotalIncentives(baseRows){
+  const role=currentUser?currentUser.role:'public';
+  if(roleRank(role)<3){ drawTotalIncentives([],[]); return; }
+  const x=totalIncRows(baseRows);
+  drawTotalIncentives(x.rows, x.chips);
 }
 
 // Build TL incentive map from trendRows
@@ -2843,7 +3104,7 @@ function buildTLIncMap(rows){
     map[tl].count++;
     map[tl].incentive += parseFloat(r.tlIncentive)||0;
   }
-  return Object.values(map).filter(x=>x.incentive>0).sort((a,b)=>b.incentive-a.incentive);
+  return Object.values(map).sort((a,b)=>b.incentive-a.incentive||b.count-a.count||a.name.localeCompare(b.name));
 }
 
 // Build Manager incentive map from trendRows
@@ -2857,17 +3118,17 @@ function buildMgrIncMap(rows){
     map[mgr].count++;
     map[mgr].incentive += parseFloat(r.mgrIncentive)||0;
   }
-  return Object.values(map).filter(x=>x.incentive>0).sort((a,b)=>b.incentive-a.incentive);
+  return Object.values(map).sort((a,b)=>b.incentive-a.incentive||b.count-a.count||a.name.localeCompare(b.name));
 }
 
 function drawTLIncLeaderboard(rows){
   const sec=$('tlIncSection'); if(!sec) return;
   // Only show for TL or manager role — never for public
   const role = currentUser ? currentUser.role : 'public';
-  if(roleRank(role) < 1){ sec.style.setProperty('display','none','important'); return; }
+  if(roleRank(role) < 1){ sec.style.setProperty('display','none','important'); clearIncBoard('tlInc'); return; }
   const data=buildTLIncMap(rows);
-  if(!data.length){ sec.style.setProperty('display','none','important'); return; }
   sec.style.setProperty('display','block','important');
+  if(!data.length){ emptyIncBoard('tlInc','Team Leader Incentive'); return; }
   renderIncLeaderboard(data,'tlInc','Team Leader Incentive');
 }
 
@@ -2875,17 +3136,27 @@ function drawMgrIncLeaderboard(rows){
   const sec=$('mgrIncSection'); if(!sec) return;
   // Only show for manager role — never for public or TL
   const role = currentUser ? currentUser.role : 'public';
-  if(roleRank(role) < 2){ sec.style.setProperty('display','none','important'); return; }
+  if(roleRank(role) < 2){ sec.style.setProperty('display','none','important'); clearIncBoard('mgrInc'); return; }
   const data=buildMgrIncMap(rows);
-  if(!data.length){ sec.style.setProperty('display','none','important'); return; }
   sec.style.setProperty('display','block','important');
+  if(!data.length){ emptyIncBoard('mgrInc','Manager Incentive'); return; }
   renderIncLeaderboard(data,'mgrInc','Manager Incentive');
 }
 
+// A hidden board must not keep the previous period's rows in the page
+function clearIncBoard(prefix){
+  const c=$(prefix+'Chart'); if(c) c.innerHTML='';
+  const t=$(prefix+'Total'); if(t) t.textContent='';
+}
+function emptyIncBoard(prefix,title){
+  const tt=$(prefix+'Title'); if(tt) tt.textContent='💰 '+title+' Leaderboard';
+  const tot=$(prefix+'Total'); if(tot) tot.textContent='₹0';
+  const c=$(prefix+'Chart'); if(c) c.innerHTML=nd('No admissions in this period');
+}
 function renderIncLeaderboard(data, prefix, title){
   const section=$(prefix+'Section'); if(!section) return;
   const total=data.reduce((s,x)=>s+x.incentive,0);
-  const maxInc=data[0].incentive;
+  const maxInc=Math.max(1,data[0].incentive);        // ≥1: a period with ₹0 incentive must not divide by zero
   const titleEl=$(prefix+'Title');
   const totalEl=$(prefix+'Total');
   const chartEl=$(prefix+'Chart');
@@ -2916,7 +3187,7 @@ function renderIncLeaderboard(data, prefix, title){
 }
 
 // Counsellor incentive leaderboard: its own sort + status filter (state survives data refreshes)
-let incSort='incDesc', incStatus='all', _incData=[];
+let incSort='incDesc', _incData=[];
 const INC_SORT_TXT={incDesc:'incentive · highest first', incAsc:'incentive · lowest first', admDesc:'admissions · highest first', admAsc:'admissions · lowest first'};
 const INC_CMP={
   incDesc:(a,b)=>b.incentive-a.incentive||b.count-a.count,
@@ -2924,48 +3195,35 @@ const INC_CMP={
   admDesc:(a,b)=>b.count-a.count||b.incentive-a.incentive,
   admAsc: (a,b)=>a.count-b.count||a.incentive-b.incentive
 };
-function incPass(c){
-  const i=cInfo(c.name);
-  switch(incStatus){
-    case 'active':   return !!i && i.a===1;
-    case 'inactive': return !!i && i.a===0;
-    case 'qualify':  return !!i && i.q===1;
-    case 'notq':     return !!i && i.q===0;
-    default:         return true;
-  }
-}
-function renderIncCtl(earners){
+function renderIncCtl(data){
   document.querySelectorAll('#incSortRow button').forEach(b=>b.classList.toggle('on', b.dataset.sort===incSort));
   const row=$('incFilterRow');
-  let a=0,ia=0,q=0,nq=0,known=0;
-  for(let k=0;k<earners.length;k++){
-    const i=cInfo(earners[k].name); if(!i) continue; known++;
-    if(i.a===1)a++; else if(i.a===0)ia++;
-    if(i.q===1)q++; else if(i.q===0)nq++;
-  }
-  if(!known){ row.style.display='none'; row.innerHTML=''; incStatus='all'; return; }
+  let known=0;
+  for(let k=0;k<data.length;k++){ if(cInfo(data[k].name)) known++; }
+  if(!known){ row.style.display='none'; row.innerHTML=''; return; }
+  const base=counselBase(data), sc=statusCounts(base), a=sc.a, ia=sc.ia, q=sc.q, nq=sc.nq;
   row.style.display='';
-  const defs=[['all','All',earners.length],['active','Active',a],['inactive','Inactive',ia],['qualify','Qualify',q],['notq','Not qualify',nq]];
+  const defs=[['all','All',base.length],['active','Active',a],['inactive','Inactive',ia],['qualify','Qualify',q],['notq','Not qualify',nq]];
   row.innerHTML='<span class="inc-ctl-lbl">FILTER</span><span class="inc-ctl-div"></span>'+
-    defs.map(d=>`<button type="button" data-f="${d[0]}"${incStatus===d[0]?' class="on"':''}>${d[1]} <b>${d[2]}</b></button>`).join('');
+    defs.map(d=>`<button type="button" data-f="${d[0]}"${cStatusFilter===d[0]?' class="on"':''}>${d[1]} <b>${d[2]}</b></button>`).join('');
 }
 $('incCtl').addEventListener('click',e=>{
   const b=e.target.closest('button'); if(!b) return;
-  if(b.dataset.sort) incSort=b.dataset.sort;
-  else if(b.dataset.f) incStatus=b.dataset.f;
-  else return;
-  drawIncLeaderboard(_incData);
+  if(b.dataset.sort){ incSort=b.dataset.sort; drawIncLeaderboard(_incData); return; }
+  if(b.dataset.f){                                   // the status filter is SHARED: re-render the whole counsellor area
+    cStatusFilter=b.dataset.f;
+    renderCounselSection(_cView.data,_cView.label);
+  }
 });
 
 function drawIncLeaderboard(data){
   _incData=data;
-  const earners=data;            // everyone in the list — including counsellors with 0 admissions / ₹0
   const sec=$('incSection');
-  if(!earners.length){ sec.style.display='none'; return; }
+  if(!data.length){ sec.style.display='none'; return; }       // `data` = everyone in the list, incl. counsellors with 0 admissions / ₹0
   sec.style.display='block';
-  renderIncCtl(earners);
+  renderIncCtl(data);
 
-  const withInc=(incStatus==='all'?earners.slice():earners.filter(incPass));
+  const withInc=counselView(data).slice();                   // same filter as the grid and podium
   const cmp=INC_CMP[incSort]||INC_CMP.incDesc;
   withInc.sort((a,b)=>cmp(a,b)||a.name.localeCompare(b.name));
 
@@ -3229,13 +3487,13 @@ $('counselFilterX').addEventListener('click',()=>{
 // roles: 'admin' = sees everything | 'counsellor' = sees only own incentive
 const USERS = [
   // Manager — sees ALL incentive data (counsellor + TL + manager)
-  { username:'manager', pin:'Mgr@2026', role:'manager' },
+  { username:'manager', pin:'Mgr#368Go', role:'manager' },
 
   // Team Leader — sees counsellor + TL incentive (no manager incentive)
   { username:'teamleader', pin:'TL@2026', role:'tl' },
 
   // Director — sees EVERYTHING (counsellor + TL + manager) and can export CSV
-  { username:'director', pin:'Dir@2026', role:'director' },
+  { username:'director', pin:'Dir@FullAccess#890', role:'director' },
 ];
 // Access level per role: 0 public · 1 TL · 2 manager · 3 director
 const ROLE_RANK = { public:0, tl:1, manager:2, director:3 };
@@ -3251,6 +3509,7 @@ function authInit(){
   const btnEl  = document.getElementById('loginBtn');
   if(pinEl)  pinEl.addEventListener('keydown',  e=>{ if(e.key==='Enter') doLogin(); });
   if(nameEl) nameEl.addEventListener('keydown', e=>{ if(e.key==='Enter') pinEl && pinEl.focus(); });
+  if(nameEl) nameEl.addEventListener('change',  ()=>{ const er=document.getElementById('loginError'); if(er) er.textContent=''; pinEl && pinEl.focus(); });
   if(btnEl)  btnEl.addEventListener('click', doLogin);
 
   // Check saved session
@@ -3271,13 +3530,16 @@ function doLogin(){
   const pin  = (document.getElementById('loginPin').value||'').trim();
   const errEl = document.getElementById('loginError');
 
-  if(!uRaw || !pin){ if(errEl) errEl.textContent='Enter username and PIN'; return; }
+  if(!uRaw){ if(errEl) errEl.textContent='Select a user'; return; }
+  if(!pin){ if(errEl) errEl.textContent='Enter the PIN'; return; }
 
   const user = USERS.find(u => u.username.toLowerCase()===uRaw && u.pin===pin);
   if(!user){ if(errEl) errEl.textContent='Invalid username or PIN'; return; }
 
   const u = { username:user.username, role:user.role };
   try{ sessionStorage.setItem('hs_user', JSON.stringify(u)); }catch(e){}
+  { const n=document.getElementById('loginName'), p=document.getElementById('loginPin'), er=document.getElementById('loginError');
+    if(n) n.selectedIndex=0; if(p) p.value=''; if(er) er.textContent=''; }     // leave the form clean for the next sign-in
   closeLoginModal();
   applyLogin(u, false);
 }
@@ -3321,6 +3583,7 @@ function applyLogin(u, fromSession){
       const rows = c.data.allTrendRows || c.data.trendRows || [];
       drawTLIncLeaderboard(rows);
       drawMgrIncLeaderboard(rows);
+      refreshTotalIncentives(rows);
       // Re-enforce visibility after draws (draws may have re-hidden on empty data)
       applyRoleVisibility();
     }
