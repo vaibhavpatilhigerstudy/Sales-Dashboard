@@ -938,6 +938,14 @@ body.role-director .tot-inc{display:block !important;}
 /* inline-block: the gradient box is exactly as wide as the number (a wider number used to run past its box and turn invisible);
    the font is then shrunk by fitTotVals() until the whole number fits inside the card */
 .tot-val{display:inline-block;max-width:100%;font-family:var(--font-display);font-size:clamp(20px,2.1vw,28px);font-weight:800;line-height:1.2;margin:3px 0 2px;padding-right:2px;background:var(--tc);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;white-space:nowrap;font-variant-numeric:tabular-nums;}
+.tot-basis{display:flex;align-items:center;gap:3px;flex-wrap:wrap;padding:5px 6px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);margin:-4px 0 16px;width:fit-content;max-width:100%;}
+.tot-basis .inc-ctl-lbl{padding:0 6px 0 8px;}
+.tot-basis button{font-family:inherit;font-size:11px;font-weight:700;color:rgba(255,255,255,.5);background:transparent;border:1px solid transparent;border-radius:9px;padding:6px 12px;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s,border-color .15s;}
+.tot-basis button:hover{color:#fff;background:rgba(255,255,255,.06);}
+.tot-basis button.on{color:#fbbf24;background:rgba(251,191,36,.14);border-color:rgba(251,191,36,.5);}
+.tot-split{font-size:11px;font-weight:700;color:rgba(255,255,255,.45);margin-top:4px;line-height:1.4;}
+.tot-split:empty{display:none;}
+.tot-split .sp-a{color:#34d399;} .tot-split .sp-i{color:#f87171;} .tot-split .sp-u{color:rgba(255,255,255,.4);}
 .tot-filt{display:flex;flex-wrap:wrap;gap:8px;margin:-6px 0 16px;font-size:11.5px;font-weight:700;}
 .tot-filt span{padding:4px 11px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.62);}
 .tot-filt span.f{background:rgba(251,191,36,.13);border-color:rgba(251,191,36,.5);color:#fbbf24;}
@@ -1240,12 +1248,13 @@ body.role-director .exp-btn:hover{background:rgba(251,191,36,.14);border-color:r
         <div class="tot-title">💰 Total Incentives Summary</div>
         <div class="tot-live">All roles combined · Live</div>
       </div>
+      <div class="tot-basis" id="totBasis" style="display:none;"></div>
       <div class="tot-filt" id="totFilt"></div>
       <div class="tot-grid">
-        <div class="tot-card t-cs"><div class="tot-ico">💼</div><div class="tot-body"><div class="tot-lbl">Counsellor</div><div class="tot-val" id="totCs"></div><div class="tot-n" id="totCsN"></div></div></div>
-        <div class="tot-card t-tl"><div class="tot-ico">👥</div><div class="tot-body"><div class="tot-lbl">Team Leader</div><div class="tot-val" id="totTl"></div><div class="tot-n" id="totTlN"></div></div></div>
-        <div class="tot-card t-mgr"><div class="tot-ico">🏆</div><div class="tot-body"><div class="tot-lbl">Manager</div><div class="tot-val" id="totMgr"></div><div class="tot-n" id="totMgrN"></div></div></div>
-        <div class="tot-card t-grand"><div class="tot-ico">💎</div><div class="tot-body"><div class="tot-lbl">Grand Total</div><div class="tot-val" id="totGrand"></div><div class="tot-n" id="totGrandN"></div></div></div>
+        <div class="tot-card t-cs"><div class="tot-ico">💼</div><div class="tot-body"><div class="tot-lbl">Counsellor</div><div class="tot-val" id="totCs"></div><div class="tot-n" id="totCsN"></div><div class="tot-split" id="totCsS"></div></div></div>
+        <div class="tot-card t-tl"><div class="tot-ico">👥</div><div class="tot-body"><div class="tot-lbl">Team Leader</div><div class="tot-val" id="totTl"></div><div class="tot-n" id="totTlN"></div><div class="tot-split" id="totTlS"></div></div></div>
+        <div class="tot-card t-mgr"><div class="tot-ico">🏆</div><div class="tot-body"><div class="tot-lbl">Manager</div><div class="tot-val" id="totMgr"></div><div class="tot-n" id="totMgrN"></div><div class="tot-split" id="totMgrS"></div></div></div>
+        <div class="tot-card t-grand"><div class="tot-ico">💎</div><div class="tot-body"><div class="tot-lbl">Grand Total</div><div class="tot-val" id="totGrand"></div><div class="tot-n" id="totGrandN"></div><div class="tot-split" id="totGrandS"></div></div></div>
       </div>
     </div>
 
@@ -1279,6 +1288,8 @@ body.role-director .exp-btn:hover{background:rgba(251,191,36,.14);border-color:r
         </div>
         <div class="inc-total-pill" id="tlIncTotal"></div>
       </div>
+      <div class="inc-ctl" id="tlIncCtl"><div class="inc-ctl-row" id="tlIncFilterRow" style="display:none;"></div></div>
+      <div class="c-diag" id="tlIncDiag" style="display:none;"></div>
       <div class="inc-chart" id="tlIncChart"></div>
     </div>
 
@@ -1291,6 +1302,8 @@ body.role-director .exp-btn:hover{background:rgba(251,191,36,.14);border-color:r
         </div>
         <div class="inc-total-pill" id="mgrIncTotal"></div>
       </div>
+      <div class="inc-ctl" id="mgrIncCtl"><div class="inc-ctl-row" id="mgrIncFilterRow" style="display:none;"></div></div>
+      <div class="c-diag" id="mgrIncDiag" style="display:none;"></div>
       <div class="inc-chart" id="mgrIncChart"></div>
     </div>
     <div class="ts-row" style="margin-top:12px;"><span class="ts-dot"></span>&nbsp;<span id="t5" style="font-size:10px;font-weight:600;color:rgba(255,255,255,.16)">&#8212;</span></div>
@@ -1304,7 +1317,7 @@ body.role-director .exp-btn:hover{background:rgba(251,191,36,.14);border-color:r
 // ═══════════════════════════════════════════════════════
 // CONSTANTS
 // ═══════════════════════════════════════════════════════
-const API = 'https://script.google.com/macros/s/AKfycbyzKPWHDTjKSnsIbEI-zWXDEd1vMr26UkQomUdP6jMg6S4vQnL6E19NyzpWCQHZXNbR8w/exec';
+const API = 'https://script.google.com/macros/s/AKfycbxosvGSDHu9gB7195Tm4f5vwV2WbkOo0V-Sw8JthcpT93N5_LvGCdMRgoljZxYF7R646Q/exec';
 const CACHE_KEY  = 'hs_v8_';
 const MEM_TTL    = 60 * 1000;       // 1 min — data older than this is re-fetched on use
 const DISK_TTL   = 60 * 60 * 1000;  // 1 hr disk cache — survive long sessions
@@ -1568,7 +1581,7 @@ function _mkSig(raw, p){
   const m=raw.meta||{};
   // server data-version + what this view shows (counts + counsellor status) — a view can never be skipped if any of it differs
   return (raw.ver || ('t'+Date.now()+Math.random()))+'|'+p+'|'+(m.from||'')+'|'+(m.to||'')+'|'+
-    raw.netAdm+'/'+raw.totalAdm+'/'+raw.cancelAdm+'|'+(raw.counsellorInfo?_hash(JSON.stringify(raw.counsellorInfo)):'');
+    raw.netAdm+'/'+raw.totalAdm+'/'+raw.cancelAdm+'|'+(raw.counsellorInfo?_hash(JSON.stringify(raw.counsellorInfo)):'')+'|'+(raw.peopleInfo?_hash(JSON.stringify(raw.peopleInfo)):'');
 }
 
 function norm(raw, p){
@@ -1825,7 +1838,7 @@ function deriveNormed(snap, p, from, to){
     netAdm:rows.length, totalAdm:rows.length+cancel, cancelAdm:cancel, ver:snap.ver,
     trendRows:rows,
     mgrTargets: all[_MON3[+snap.meta.today.slice(5,7)-1]] || {}, mgrTargetsAll: all,
-    counsellorInfo: snap.counsellorInfo,
+    counsellorInfo: snap.counsellorInfo, peopleInfo: snap.peopleInfo,
     meta: Object.assign({}, snap.meta, {period:p, from:R?R.from:null, to:R?R.to:null})
   };
   return norm(raw, p);
@@ -2183,6 +2196,20 @@ function render(d, stale, p){
       m[k]={n:String(v.n||''), a:(v.a===1||v.a===0)?v.a:null, q:(v.q===1||v.q===0)?v.q:null};
     }
     CINFO=m;
+  }
+  { // Team Leader / Manager roster
+    const np={tl:Object.create(null), mgr:Object.create(null)};
+    const pi=d.peopleInfo;
+    if(pi && typeof pi==='object'){
+      ['tl','mgr'].forEach(role=>{ const src=pi[role]||{}; for(const k in src){ const v=src[k]||{}; const nm=String(v.n||''); if(!nm) continue; np[role][pCanon(role,nm)]={n:nm, a:(v.a===1||v.a===0)?v.a:null, q:(v.q===1||v.q===0)?v.q:null}; } });
+    }
+    PINFO=np;
+    const have=Object.keys(np.tl).length+Object.keys(np.mgr).length;
+    _peopleDiag = d.peopleInfo===undefined
+      ? '⚠ Team leader / manager status was not received — the script on Google is an older version. Paste the latest Code.gs and deploy a NEW version.'
+      : (have ? '' : ((d.meta||{}).peopleTab===false
+          ? '⚠ No team leader / manager status list found. Either list them in Sheet2 under the header “TL & Managers | Status | Incentive Status”, or add a tab named “TL & Managers” with the columns Name | Role | Status. Anyone not listed counts as Active.'
+          : '⚠ The “TL & Managers” tab is empty — add the names with their Role and Status.'));
   }
   { // explain — on screen — why Active/Inactive + Qualify tags are missing
     const meta=d.meta||{};
@@ -2870,6 +2897,44 @@ let cStatusFilter = 'all';           // all | active | inactive | qualify | notq
 let cDiagMsg = '';                   // why status tags are missing (shown to the user)
 const _ckey = s => String(s==null?'':s).toLowerCase().replace(/[^a-z0-9]/g,'');
 function cInfo(name){ return CINFO[_ckey(name)] || null; }
+
+// ── Team Leader / Manager Active-Inactive roster ("TL & Managers" tab) ──
+let PINFO = {tl:Object.create(null), mgr:Object.create(null)};
+let tlStatusFilter='all', mgrStatusFilter='all', _peopleRows=[], _peopleDiag='';
+function pCanon(role,name){
+  const s=String(name||'').trim(); if(!s) return '';
+  if(role==='tl'){ const k=resolveTL(s); if(k) return k; }      // same alias rules as the TL bars (Hrithvik → Ruthvik …)
+  return 'x'+_ckey(s);
+}
+function pInfo(role,name){ return PINFO[role][pCanon(role,name)] || null; }
+// A team leader / manager is ACTIVE unless the list says Inactive (so a list that only names the Inactive people works);
+// with no list at all nothing is claimed (null).
+function pListed(){ return Object.keys(PINFO.tl).length+Object.keys(PINFO.mgr).length>0; }
+function pStat(role,name){ const i=pInfo(role,name); if(i && i.a!==null) return i.a; return pListed() ? 1 : null; }
+function pQ(role,name){ const i=pInfo(role,name); return i ? i.q : null; }
+function pOff(role,name){ return pStat(role,name)===0 ? ' c-off' : ''; }
+function pTags(role,name){
+  const a=pStat(role,name), q=pQ(role,name);
+  let h='';
+  if(a===1) h+='<span class="ctag a">Active</span>'; else if(a===0) h+='<span class="ctag i">Inactive</span>';
+  if(q===1) h+='<span class="ctag q">Qualify</span>'; else if(q===0) h+='<span class="ctag n">Not qualify</span>';
+  return h?`<span class="cg-tags">${h}</span>`:'';
+}
+function pFilter(role){ return role==='tl' ? tlStatusFilter : mgrStatusFilter; }
+function pPass(role,name){
+  const f=pFilter(role); if(f==='all') return true;
+  if(f==='qualify') return pQ(role,name)===1;
+  if(f==='notq')    return pQ(role,name)===0;
+  const a=pStat(role,name); return f==='active' ? a===1 : a===0;
+}
+// listed people with no admissions in the period appear with 0 / ₹0
+function padPeople(role,list){
+  const have=new Set(list.map(x=>pCanon(role,x.name)));
+  const zeros=[];
+  for(const k in PINFO[role]){ if(have.has(k)) continue; const nm=(PINFO[role][k].n||'').trim(); if(nm) zeros.push({name:nm,count:0,incentive:0}); }
+  zeros.sort((a,b)=>a.name.localeCompare(b.name));
+  return list.concat(zeros).sort((a,b)=>b.incentive-a.incentive||b.count-a.count||a.name.localeCompare(b.name));
+}
 function offCls(name){ const i=CINFO[_ckey(name)]; return (i && i.a===0) ? ' c-off' : ''; }
 // Counsellors listed in the status tab with NO admissions in the current period are added with count 0.
 function padZeroCounsellors(list){
@@ -3016,8 +3081,12 @@ const _STATUS_TXT={active:'Active',inactive:'Inactive',qualify:'Qualify',notq:'N
 const _PERIOD_TXT={all:'All time',today:'Today',thisweek:'This week',weekly:'This week',lastweek:'Last week',monthly:'This month',custom:'Custom range'};
 function _fmtDay(iso){ const a=String(iso||'').split('-'); return a.length===3 ? (+a[2])+' '+_MON3[+a[1]-1].replace(/^./,c=>c.toUpperCase()) : ''; }
 
-// The admission rows behind the summary + a human-readable list of the filters applied
-function totalIncRows(baseRows){
+// Everything the summary needs, per role:
+//   scope  = the period (+ a manager / TL you clicked)          → which admissions are in play
+//   card   = scope rows whose PERSON of that role passes that role's Active/Inactive filter
+//            (counsellor: the shared chips + search · TL: TL chips · manager: manager chips)
+//   split  = Active / Inactive / Not listed amounts of that role in the scope (ignores that role's own filter)
+function totalIncCalc(baseRows){
   const c=mem[activeCk];
   let rows=baseRows || (c && c.data ? (c.data.allTrendRows||c.data.trendRows||[]) : []);
   const m=(c&&c.data&&c.data.meta)||{};
@@ -3033,16 +3102,28 @@ function totalIncRows(baseRows){
     rows=rows.filter(r=>resolveTL((r.tl||'').trim().toLowerCase())===activeTL);
     chips.push({t:'Team leader: '+(x?x.n:''),f:true});
   }
-  if(cStatusFilter!=='all'){
-    rows=rows.filter(r=>statusPass({name:r.counsellor}));
-    chips.push({t:'Counsellors: '+_STATUS_TXT[cStatusFilter],f:true});
-  }
-  if(cSearchVal){
-    rows=rows.filter(r=>(r.counsellor||'').toLowerCase().includes(cSearchVal));
-    chips.push({t:'Search: “'+cSearchVal+'”',f:true});
-  }
+  const csOK=r=>statusPass({name:r.counsellor}) && (!cSearchVal || (r.counsellor||'').toLowerCase().includes(cSearchVal));
+  const role3=[
+    {k:'cs', pass:csOK,                                   val:r=>r.incentive||0,    who:r=>r.counsellor, st:r=>{const i=cInfo(r.counsellor);return i?i.a:null;}},
+    {k:'tl', pass:r=>pPass('tl',r.tl),                    val:r=>r.tlIncentive||0,  who:r=>r.tl,          st:r=>pStat('tl',r.tl)},
+    {k:'mg', pass:r=>pPass('mgr',r.mgr),                  val:r=>r.mgrIncentive||0, who:r=>r.mgr,         st:r=>pStat('mgr',r.mgr)}
+  ];
+  const out={rows:rows, chips:chips};
+  role3.forEach(R=>{
+    let sum=0, a=0, ia=0, un=0, known=0; const who=new Set();
+    for(let i=0;i<rows.length;i++){
+      const r=rows[i], v=R.val(r), s=R.st(r);
+      if(s===1){a+=v;known++;} else if(s===0){ia+=v;known++;} else un+=v;       // split ignores this role's own filter
+      if(R.pass(r)){ sum+=v; const w=R.who(r); if(w) who.add(_ckey(w)); }
+    }
+    out[R.k]={sum:sum, n:who.size, a:a, i:ia, u:un, known:known>0};
+  });
+  if(cStatusFilter!=='all')    chips.push({t:'Counsellors: '+_STATUS_TXT[cStatusFilter],f:true});
+  if(tlStatusFilter!=='all')   chips.push({t:'Team leaders: '+_STATUS_TXT[tlStatusFilter],f:true});
+  if(mgrStatusFilter!=='all')  chips.push({t:'Managers: '+_STATUS_TXT[mgrStatusFilter],f:true});
+  if(cSearchVal)               chips.push({t:'Search: “'+cSearchVal+'”',f:true});
   if(chips.length===1) chips.push({t:'No filters — every admission counted',f:false});
-  return {rows:rows, chips:chips};
+  return out;
 }
 
 // Shrinks each amount until the WHOLE number is visible inside its card (any screen / font)
@@ -3057,41 +3138,58 @@ let _fitT=null;
 window.addEventListener('resize',()=>{ clearTimeout(_fitT); _fitT=setTimeout(fitTotVals,120); },{passive:true});
 if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>fitTotVals()).catch(()=>{});
 
-function drawTotalIncentives(rows, chips){
+function drawTotalIncentives(x){
   const sec=$('totIncSection'); if(!sec) return;
   const role=currentUser?currentUser.role:'public';
-  if(roleRank(role)<3){                                   // nothing is even written for other roles
-    _TOT_IDS.forEach(id=>{ const e=$(id); if(e) e.textContent=''; });
-    const f=$('totFilt'); if(f) f.innerHTML='';
-    return;
-  }
-  let cs=0, tl=0, mg=0;
-  const sc=new Set(), st=new Set(), sm=new Set();
-  for(let i=0;i<rows.length;i++){
-    const r=rows[i];
-    cs+=r.incentive||0; tl+=r.tlIncentive||0; mg+=r.mgrIncentive||0;
-    if(r.counsellor) sc.add(_ckey(r.counsellor));
-    if(r.tl)         st.add(_ckey(r.tl));
-    if(r.mgr)        sm.add(_ckey(r.mgr));
-  }
-  const rc=Math.round(cs), rt=Math.round(tl), rm=Math.round(mg), grand=rc+rt+rm;   // grand = exactly what the three cards add up to
+  const clear=()=>{ _TOT_IDS.concat(['totCsS','totTlS','totMgrS','totGrandS']).forEach(id=>{ const e=$(id); if(e) e.textContent=''; }); const f=$('totFilt'); if(f) f.innerHTML=''; const b=$('totBasis'); if(b){ b.innerHTML=''; b.style.display='none'; } };
+  if(roleRank(role)<3 || !x){ clear(); return; }                // nothing is even written for other roles
+  const rc=Math.round(x.cs.sum), rt=Math.round(x.tl.sum), rm=Math.round(x.mg.sum), grand=rc+rt+rm;   // grand = exactly what the three cards add up to
   const plural=(n,w)=>n+' '+w+(n===1?'':'s');
   const set=(id,v)=>{ const e=$(id); if(e) e.textContent=v; };
-  set('totCs','₹'+fmtIN(rc));   set('totCsN',plural(sc.size,'counsellor'));
-  set('totTl','₹'+fmtIN(rt));   set('totTlN',plural(st.size,'team leader'));
-  set('totMgr','₹'+fmtIN(rm));  set('totMgrN',plural(sm.size,'manager'));
-  set('totGrand','₹'+fmtIN(grand)); set('totGrandN',plural(rows.length,'admission'));
+  set('totCs','₹'+fmtIN(rc));   set('totCsN',plural(x.cs.n,'counsellor'));
+  set('totTl','₹'+fmtIN(rt));   set('totTlN',plural(x.tl.n,'team leader'));
+  set('totMgr','₹'+fmtIN(rm));  set('totMgrN',plural(x.mg.n,'manager'));
+  set('totGrand','₹'+fmtIN(grand)); set('totGrandN',plural(x.rows.length,'admission'));
+  const splitHTML=(o)=>{
+    if(!o.known) return '';
+    return `<span class="sp-a">Active ₹${fmtIN(o.a)}</span> · <span class="sp-i">Inactive ₹${fmtIN(o.i)}</span>`+(Math.round(o.u)>0?` · <span class="sp-u">Not listed ₹${fmtIN(o.u)}</span>`:'');
+  };
+  const put=(id,html)=>{ const e=$(id); if(e) e.innerHTML=html; };
+  put('totCsS',splitHTML(x.cs)); put('totTlS',splitHTML(x.tl)); put('totMgrS',splitHTML(x.mg));
+  const g={a:x.cs.a+x.tl.a+x.mg.a, i:x.cs.i+x.tl.i+x.mg.i, u:x.cs.u+x.tl.u+x.mg.u, known:x.cs.known&&x.tl.known&&x.mg.known};      // a combined split only when every role has a status list
+  put('totGrandS',splitHTML(g));
+  // "Count incentives for": one click sets the Active / Inactive filter of ALL three roles
+  const b=$('totBasis');
+  if(b){
+    if(!(x.cs.known||x.tl.known||x.mg.known)){ b.innerHTML=''; b.style.display='none'; }
+    else{
+      const cur=(cStatusFilter===tlStatusFilter&&tlStatusFilter===mgrStatusFilter&&['all','active','inactive'].includes(cStatusFilter))?cStatusFilter:'';
+      b.style.display='';
+      b.innerHTML='<span class="inc-ctl-lbl">COUNT INCENTIVES FOR</span><span class="inc-ctl-div"></span>'+
+        [['all','Everyone'],['active','Active only'],['inactive','Inactive only']].map(d=>`<button type="button" data-b="${d[0]}"${cur===d[0]?' class="on"':''}>${d[1]}</button>`).join('');
+    }
+  }
   const f=$('totFilt');
-  if(f && chips) f.innerHTML=chips.map(c=>`<span${c.f?' class="f"':''}>${String(c.t).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]))}</span>`).join('');
+  if(f && x.chips) f.innerHTML=x.chips.map(c=>`<span${c.f?' class="f"':''}>${String(c.t).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]))}</span>`).join('');
   requestAnimationFrame(fitTotVals);
 }
-// Single entry point — call whenever the period or ANY filter changes
+// Single entry point — call whenever the period or ANY filter / roster changes
 function refreshTotalIncentives(baseRows){
   const role=currentUser?currentUser.role:'public';
-  if(roleRank(role)<3){ drawTotalIncentives([],[]); return; }
-  const x=totalIncRows(baseRows);
-  drawTotalIncentives(x.rows, x.chips);
+  if(roleRank(role)<3){ drawTotalIncentives(null); return; }
+  drawTotalIncentives(totalIncCalc(baseRows));
 }
+(function(){
+  const b=$('totBasis'); if(!b) return;
+  b.addEventListener('click',e=>{
+    const x=e.target.closest('button'); if(!x||!x.dataset.b) return;
+    const v=x.dataset.b;
+    cStatusFilter=v; tlStatusFilter=v; mgrStatusFilter=v;
+    renderCounselSection(_cView.data,_cView.label);       // counsellor chips + podium + grid + leaderboard (+ summary)
+    drawPeopleBoard('tl',_peopleRows); drawPeopleBoard('mgr',_peopleRows);
+    refreshTotalIncentives();
+  });
+})();
 
 // Build TL incentive map from trendRows
 function buildTLIncMap(rows){
@@ -3121,27 +3219,65 @@ function buildMgrIncMap(rows){
   return Object.values(map).sort((a,b)=>b.incentive-a.incentive||b.count-a.count||a.name.localeCompare(b.name));
 }
 
-function drawTLIncLeaderboard(rows){
-  const sec=$('tlIncSection'); if(!sec) return;
-  // Only show for TL or manager role — never for public
-  const role = currentUser ? currentUser.role : 'public';
-  if(roleRank(role) < 1){ sec.style.setProperty('display','none','important'); clearIncBoard('tlInc'); return; }
-  const data=buildTLIncMap(rows);
-  sec.style.setProperty('display','block','important');
-  if(!data.length){ emptyIncBoard('tlInc','Team Leader Incentive'); return; }
-  renderIncLeaderboard(data,'tlInc','Team Leader Incentive');
-}
+function drawTLIncLeaderboard(rows){ _peopleRows=rows; drawPeopleBoard('tl',rows); }
+function drawMgrIncLeaderboard(rows){ _peopleRows=rows; drawPeopleBoard('mgr',rows); }
 
-function drawMgrIncLeaderboard(rows){
-  const sec=$('mgrIncSection'); if(!sec) return;
-  // Only show for manager role — never for public or TL
-  const role = currentUser ? currentUser.role : 'public';
-  if(roleRank(role) < 2){ sec.style.setProperty('display','none','important'); clearIncBoard('mgrInc'); return; }
-  const data=buildMgrIncMap(rows);
+function drawPeopleBoard(role, rows){
+  const isTL=role==='tl', prefix=isTL?'tlInc':'mgrInc', title=isTL?'Team Leader Incentive':'Manager Incentive';
+  const sec=$(prefix+'Section'); if(!sec) return;
+  const need=isTL?1:2, me=currentUser?currentUser.role:'public';
+  if(roleRank(me)<need){                       // never visible (and holds nothing) for roles without access
+    sec.style.setProperty('display','none','important'); clearIncBoard(prefix);
+    const r=$(prefix+'FilterRow'); if(r){ r.innerHTML=''; r.style.display='none'; }
+    const dg=$(prefix+'Diag'); if(dg){ dg.textContent=''; dg.style.display='none'; }
+    return;
+  }
+  const data=padPeople(role,(isTL?buildTLIncMap:buildMgrIncMap)(rows));
   sec.style.setProperty('display','block','important');
-  if(!data.length){ emptyIncBoard('mgrInc','Manager Incentive'); return; }
-  renderIncLeaderboard(data,'mgrInc','Manager Incentive');
+
+  // status chips (only when a roster exists for this role)
+  const row=$(prefix+'FilterRow'), dg=$(prefix+'Diag');
+  let known=0,a=0,ia=0,q=0,nq=0;
+  for(const x of data){ const s=pStat(role,x.name); if(s===1){a++;known++;} else if(s===0){ia++;known++;} const qq=pQ(role,x.name); if(qq===1)q++; else if(qq===0)nq++; }
+  const qKnown=(q+nq)>0;
+  if(!qKnown && (pFilter(role)==='qualify'||pFilter(role)==='notq')){ if(isTL) tlStatusFilter='all'; else mgrStatusFilter='all'; }
+  if(row){
+    if(!known){ row.style.display='none'; row.innerHTML=''; if(pFilter(role)!=='all'){ if(isTL) tlStatusFilter='all'; else mgrStatusFilter='all'; } }
+    else{
+      row.style.display='';
+      const f=pFilter(role);
+      row.innerHTML='<span class="inc-ctl-lbl">FILTER</span><span class="inc-ctl-div"></span>'+
+        [['all','All',data.length],['active','Active',a],['inactive','Inactive',ia]].concat(qKnown?[['qualify','Qualify',q],['notq','Not qualify',nq]]:[]).map(d=>`<button type="button" data-f="${d[0]}"${f===d[0]?' class="on"':''}>${d[1]} <b>${d[2]}</b></button>`).join('');
+    }
+  }
+  if(dg){ dg.textContent=(!known&&_peopleDiag)?_peopleDiag:''; dg.style.display=(!known&&_peopleDiag)?'':'none'; }
+
+  const shown=data.filter(x=>pPass(role,x.name));
+  const sub=document.querySelector('#'+prefix+'Section .inc-head-sub');
+  const base=isTL?'Sorted by TL earnings':'Sorted by manager earnings';
+  if(!data.length){ emptyIncBoard(prefix,title); if(sub) sub.textContent=base; return; }
+  if(!shown.length){
+    const tot=$(prefix+'Total'); if(tot) tot.textContent='₹0';
+    const c=$(prefix+'Chart'); if(c) c.innerHTML=nd('No '+(isTL?'team leaders':'managers')+' in this filter');
+    const tt=$(prefix+'Title'); if(tt) tt.textContent='💰 '+title+' Leaderboard';
+    if(sub) sub.textContent=base;
+    return;
+  }
+  renderIncLeaderboard(shown,prefix,title,role);
+  if(sub){
+    let sa=0,si=0; for(const x of data){ const s=pStat(role,x.name); if(s===1) sa+=x.incentive; else if(s===0) si+=x.incentive; }
+    sub.textContent=base+(known?` · Active ₹${fmtInc(sa)} · Inactive ₹${fmtInc(si)}`:'');
+  }
 }
+['tl','mgr'].forEach(role=>{
+  const ctl=$(role+'IncCtl'); if(!ctl) return;
+  ctl.addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b||!b.dataset.f) return;
+    if(role==='tl') tlStatusFilter=b.dataset.f; else mgrStatusFilter=b.dataset.f;
+    drawPeopleBoard(role,_peopleRows);
+    refreshTotalIncentives();
+  });
+});
 
 // A hidden board must not keep the previous period's rows in the page
 function clearIncBoard(prefix){
@@ -3153,7 +3289,7 @@ function emptyIncBoard(prefix,title){
   const tot=$(prefix+'Total'); if(tot) tot.textContent='₹0';
   const c=$(prefix+'Chart'); if(c) c.innerHTML=nd('No admissions in this period');
 }
-function renderIncLeaderboard(data, prefix, title){
+function renderIncLeaderboard(data, prefix, title, role){
   const section=$(prefix+'Section'); if(!section) return;
   const total=data.reduce((s,x)=>s+x.incentive,0);
   const maxInc=Math.max(1,data[0].incentive);        // ≥1: a period with ₹0 incentive must not divide by zero
@@ -3167,11 +3303,11 @@ function renderIncLeaderboard(data, prefix, title){
   let html='';
   for(let i=0;i<data.length;i++){
     const d=data[i];
-    const rc=i<3?rCls[i]:'rn', ri=i<3?rIco[i]:(i+1);
+    const medal=i<3&&d.count>0, rc=medal?rCls[i]:'rn', ri=medal?rIco[i]:(i+1);
     const grad=INC_GRD[i%INC_GRD.length];
     html+=`<div class="inc-row">`;
     html+=`<div class="inc-rank ${rc}">${ri}</div>`;
-    html+=`<div class="inc-name"><span class="inc-name-main" title="${d.name}">${d.name}</span><span class="inc-name-adm">${d.count} admissions</span></div>`;
+    html+=`<div class="inc-name"><span class="inc-name-main${role?pOff(role,d.name):''}" title="${d.name}">${d.name}</span><span class="inc-name-adm">${d.count} admission${d.count===1?'':'s'}</span>${role?pTags(role,d.name):''}</div>`;
     html+=`<div class="inc-track-wrap"><div class="inc-track"><div class="inc-bar" id="${prefix}b${i}" style="background:${grad};"></div></div><div class="inc-overlay"><span class="inc-ol-adm">${d.count} adm</span><span class="inc-ol-amt">₹${fmtInc(d.incentive)}</span></div></div>`;
     html+=`<div class="inc-stats"><span class="inc-stat-amt">₹${fmtInc(d.incentive)}</span><span class="inc-stat-adm">${d.count} adm</span></div>`;
     html+=`</div>`;
@@ -3698,8 +3834,9 @@ function exportSummary(){
 }
 function exportDetails(){
   const x=_exportCtx(); if(!x) return false;
-  const table=[['Date','Manager','TL','University','Counsellor','Counsellor Incentive','TL Incentive','Manager Incentive']];
-  for(const r of x.rows) table.push([r.date,r.mgr,r.tl,r.univ,r.counsellor,r.incentive||0,r.tlIncentive||0,r.mgrIncentive||0]);
+  const st=a=>a===1?'Active':a===0?'Inactive':'';
+  const table=[['Date','Manager','Manager Status','TL','TL Status','University','Counsellor','Counsellor Status','Counsellor Incentive','TL Incentive','Manager Incentive']];
+  for(const r of x.rows){ const ci=cInfo(r.counsellor); table.push([r.date,r.mgr,st(pStat('mgr',r.mgr)),r.tl,st(pStat('tl',r.tl)),r.univ,r.counsellor,st(ci?ci.a:null),r.incentive||0,r.tlIncentive||0,r.mgrIncentive||0]); }
   _downloadCSV(`admissions-details_${x.label}_${x.stamp}.csv`, table);
   return true;
 }
