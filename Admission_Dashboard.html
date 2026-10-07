@@ -36,7 +36,8 @@
   --r:14px;
   --r-sm:8px;
 }
-html{scroll-behavior:smooth;overscroll-behavior:none;}
+html{scroll-behavior:auto;overscroll-behavior:none;overflow-anchor:none;scrollbar-gutter:stable;}
+#scrollPad{height:0;pointer-events:none;}
 body{-webkit-overflow-scrolling:touch;}
 /* Mesh gradient background */
 body::before{
@@ -3785,6 +3786,118 @@ document.addEventListener('click', e=>{
   }
   if(!e.target.closest('#userMenu')) menu && menu.classList.remove('open');
 });
+
+// ═══════════════════════════════════════════════════════
+// STABLE SCROLL — a click (or typing in the search box, or a data refresh) must never move what you are looking at.
+// Re-rendering a section can make the page taller / shorter ABOVE the control you clicked (e.g. the counsellor grid
+// shrinking from 115 cards to 14). Before the change we remember where the control sits on screen; afterwards we scroll
+// by exactly the difference, so the control stays under your cursor. If the page became too short to allow that, a
+// temporary spacer at the bottom keeps the position instead of the browser clamping (= jumping).
+// ═══════════════════════════════════════════════════════
+const _SS_PERSIST = '.topbar,.statusbar,.g2,.full-card,#cPodium,#cGrid,#totIncSection,#incSection,#tlIncSection,#mgrIncSection,#chartWrap';
+const _SS_CLICKABLE = 'button,.tab,.cchip,.cal-btn,.rbtn,.br[data-mgr],.br[data-tl],[data-f],[data-b],[data-sort],[data-tf],[data-p]';
+let _ssActive = null, _ssCancel = false, _ssPad = null, _ssTrim = null;
+function _ssPadEl(){
+  if(!_ssPad){ _ssPad=document.createElement('div'); _ssPad.id='scrollPad'; (document.querySelector('.wrap')||document.body).appendChild(_ssPad); }
+  return _ssPad;
+}
+function _ssScrollTo(y){                                   // instant, whatever the page's CSS says
+  const h=document.documentElement, old=h.style.scrollBehavior;
+  h.style.scrollBehavior='auto';
+  try{ window.scrollTo({top:y,left:window.scrollX||0,behavior:'instant'}); }catch(e){ window.scrollTo(window.scrollX||0,y); }
+  h.style.scrollBehavior=old;
+}
+function _ssRoom(y){                                       // make the page tall enough to hold scroll position y
+  const need=y+window.innerHeight, have=document.documentElement.scrollHeight;
+  if(have<need){ const p=_ssPadEl(); p.style.height=((parseFloat(p.style.height)||0)+(need-have))+'px'; }
+}
+function _ssSelFor(el){
+  if(el.id) return '#'+el.id;
+  let c=el.parentElement; while(c && !c.id) c=c.parentElement;
+  const attrs=['data-f','data-sort','data-b','data-tf','data-p','data-mgr','data-tl'];
+  for(const k of attrs){
+    if(el.hasAttribute(k)){
+      return (c?'#'+c.id+' ':'')+el.tagName.toLowerCase()+'['+k+'="'+String(el.getAttribute(k)).replace(/"/g,'\\"')+'"]';
+    }
+  }
+  return null;
+}
+function _ssSnapshot(target){
+  const probe=Math.min(120,window.innerHeight/3);
+  const snap={sel:null, top:0, cont:null, cTop:0};
+  document.querySelectorAll(_SS_PERSIST).forEach(el=>{       // deepest persistent block covering the top of the screen
+    const r=el.getBoundingClientRect();
+    if(r.height>0 && r.top<=probe && r.bottom>probe){ snap.cont=el; snap.cTop=r.top; }
+  });
+  if(target){
+    const r=target.getBoundingClientRect();
+    if(r.height>0 && r.width>0 && getComputedStyle(target).position!=='fixed'){ snap.sel=_ssSelFor(target); snap.top=r.top; }
+  }
+  return snap;
+}
+function _ssRestore(snap){
+  if(_ssCancel) return;
+  let delta=0, done=false;
+  if(snap.sel){
+    const el=document.querySelector(snap.sel);
+    if(el){ const r=el.getBoundingClientRect(); if(r.height>0 && r.width>0){ delta=r.top-snap.top; done=true; } }
+  }
+  if(!done && snap.cont && document.contains(snap.cont)){
+    const r=snap.cont.getBoundingClientRect(); delta=r.top-snap.cTop;
+  }
+  if(Math.abs(delta)>0.5){
+    const y=Math.max(0,(window.scrollY||window.pageYOffset||0)+delta);
+    _ssRoom(y); _ssScrollTo(y);
+  }
+}
+function _ssRun(snap){
+  _ssActive=snap; _ssCancel=false;
+  requestAnimationFrame(()=>{ _ssRestore(snap); requestAnimationFrame(()=>_ssRestore(snap)); });   // before the first paint
+  [90,260,700].forEach(ms=>setTimeout(()=>{ _ssRestore(snap); if(ms===700 && _ssActive===snap) _ssActive=null; },ms));  // late layout (animations, chunked renders)
+}
+// the user takes over → stop correcting
+window.addEventListener('wheel',()=>{ if(_ssActive) _ssCancel=true; },{passive:true});
+window.addEventListener('touchstart',()=>{ if(_ssActive) _ssCancel=true; },{passive:true});
+window.addEventListener('keydown',e=>{
+  const tg=e.target&&e.target.tagName;
+  if(_ssActive && tg!=='INPUT' && tg!=='TEXTAREA' && tg!=='SELECT' && ['PageUp','PageDown','Home','End','ArrowUp','ArrowDown',' '].includes(e.key)) _ssCancel=true;
+},{passive:true});
+// any button / chip / tab / bar click
+document.addEventListener('click',e=>{
+  const t=e.target.closest ? e.target.closest(_SS_CLICKABLE) : null;
+  if(!t) return;
+  const inModal=!!t.closest('#loginModal,#userMenu');
+  _ssRun(_ssSnapshot(inModal?null:t));
+},true);
+// typing in the counsellor search changes the grid height as you type
+document.addEventListener('input',e=>{ if(e.target && e.target.id==='cSearch') _ssRun(_ssSnapshot(e.target)); },true);
+// give the spacer back once you scroll on your own (only the part that is below the screen)
+window.addEventListener('scroll',()=>{
+  if(_ssActive || !_ssPad) return;
+  clearTimeout(_ssTrim);
+  _ssTrim=setTimeout(()=>{
+    const pad=parseFloat(_ssPad.style.height)||0; if(!pad) return;
+    const slack=document.documentElement.scrollHeight-((window.scrollY||0)+window.innerHeight);
+    if(slack>0) _ssPad.style.height=Math.max(0,pad-slack)+'px';
+  },300);
+},{passive:true});
+// background refreshes and role changes re-render sections too
+(function(){
+  const r0=render;
+  render=function(){
+    const s=(!_ssActive && (window.scrollY||0)>2) ? _ssSnapshot(null) : null;
+    const out=r0.apply(this,arguments);
+    if(s) _ssRun(s);
+    return out;
+  };
+  const a0=applyLogin;
+  applyLogin=function(){
+    const s=(!_ssActive && (window.scrollY||0)>2) ? _ssSnapshot(null) : null;
+    const out=a0.apply(this,arguments);
+    if(s) _ssRun(s);
+    return out;
+  };
+})();
 
 // ── Director export (CSV) ─────────────────────────────
 // Exports exactly what the dashboard is showing: the period / range currently selected.
