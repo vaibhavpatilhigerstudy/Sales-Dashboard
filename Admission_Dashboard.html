@@ -609,7 +609,7 @@ body::before{
 .inc-overlay{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;padding:0 12px;gap:10px;pointer-events:none;z-index:10;}
 .inc-ol-adm{font-size:12px;font-weight:900;color:#fff;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:3px 9px;white-space:nowrap;flex-shrink:0;}
 .inc-ol-amt{font-size:14px;font-weight:900;color:#fff;white-space:nowrap;flex-shrink:0;text-shadow:0 1px 4px rgba(0,0,0,.9);}
-.inc-stats{width:72px;flex-shrink:0;text-align:right;}
+.inc-stats{min-width:96px;flex-shrink:0;text-align:right;white-space:nowrap;}
 .inc-stat-amt{font-size:13px;font-weight:900;color:#10b981;display:block;line-height:1;}
 .inc-stat-adm{font-size:10px;font-weight:700;color:rgba(255,255,255,.38);display:block;margin-top:2px;}
 .inc-row:nth-child(1) .inc-bar{box-shadow:0 0 22px rgba(251,191,36,.28);}
@@ -1378,11 +1378,8 @@ const $q = sel => document.querySelector(sel);
 // ═══════════════════════════════════════════════════════
 // UTILITY
 // ═══════════════════════════════════════════════════════
-function fmtInc(n){
-  if(n>=100000) return (n/100000).toFixed(1)+'L';
-  if(n>=1000)   return (n/1000).toFixed(1)+'K';
-  return Math.round(n).toLocaleString('en-IN');
-}
+// Every incentive amount is shown in FULL with Indian digit grouping: 1,33,500 (never 1.3L / 29.9K)
+function fmtInc(n){ return fmtIN(n); }
 function nd(msg){ return`<div class="nodata"><div class="ico">📭</div><p>${msg}</p></div>`; }
 
 // ── Smart status bar ────────────────────────────────────
