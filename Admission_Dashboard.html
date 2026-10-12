@@ -957,6 +957,64 @@ body.role-director .tot-inc{display:block !important;}
 .tot-card.t-grand{--tc:linear-gradient(90deg,#34d399,#10b981);background:rgba(16,185,129,.08);border-color:rgba(52,211,153,.45);}
 @media (max-width:1000px){ .tot-grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
 @media (max-width:520px){ .tot-grid{grid-template-columns:1fr;} .tot-val{font-size:24px;} }
+/* ── Admission Analysis tab ── */
+.viewnav{display:flex;gap:6px;margin:0 0 18px;padding:5px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);width:fit-content;max-width:100%;flex-wrap:wrap;}
+.viewnav button{font-family:inherit;font-size:13px;font-weight:700;color:rgba(255,255,255,.55);background:transparent;border:1px solid transparent;border-radius:10px;padding:9px 18px;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s,border-color .15s;}
+.viewnav button:hover{color:#fff;background:rgba(255,255,255,.06);}
+.viewnav button.on{color:#fff;background:linear-gradient(135deg,rgba(99,102,241,.35),rgba(34,211,238,.18));border-color:rgba(129,140,248,.55);box-shadow:0 0 18px rgba(99,102,241,.25);}
+#analysisView{display:none;}
+body.view-analysis #analysisView{display:block;}
+body.view-analysis .dash-section{display:none !important;}
+.an-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+.an-title{font-family:var(--font-display);font-size:22px;font-weight:800;color:#fff;letter-spacing:-.01em;}
+.an-sub{font-size:12px;font-weight:600;color:rgba(255,255,255,.42);margin-top:3px;}
+.an-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:18px;}
+.an-kpi{padding:18px 20px;border-radius:18px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.1);position:relative;overflow:hidden;min-width:0;}
+.an-kpi::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--kc,linear-gradient(90deg,#6366f1,#22d3ee));}
+.an-kpi-l{font-size:10px;font-weight:800;letter-spacing:.14em;color:rgba(255,255,255,.45);text-transform:uppercase;}
+.an-kpi-v{font-family:var(--font-display);font-size:28px;font-weight:800;color:#fff;margin:4px 0 2px;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.an-kpi-v.sm{font-size:17px;line-height:1.3;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.an-kpi-n{font-size:12px;font-weight:600;color:rgba(255,255,255,.42);}
+.an-card{padding:22px 24px;border-radius:22px;background:linear-gradient(135deg,rgba(99,102,241,.05),rgba(16,185,129,.03));border:1px solid rgba(255,255,255,.09);margin-bottom:18px;}
+.an-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+.an-card-title{font-family:var(--font-display);font-size:17px;font-weight:800;color:#fff;}
+.an-ctl{display:flex;gap:8px;flex-wrap:wrap;}
+.ca-row{display:grid;grid-template-columns:34px minmax(120px,300px) 1fr 64px;align-items:center;gap:12px;padding:5px 0;}
+.ca-rank{font-size:12px;font-weight:800;color:rgba(255,255,255,.4);text-align:center;}
+.ca-name{font-size:13px;font-weight:700;color:#e5e7eb;line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.ca-name small{display:block;font-size:10px;font-weight:700;color:rgba(255,255,255,.32);}
+.ca-track{position:relative;height:30px;border-radius:9px;background:rgba(255,255,255,.05);overflow:hidden;}
+.ca-bar{position:absolute;left:0;top:0;bottom:0;border-radius:9px;min-width:3px;transition:width .5s cubic-bezier(.16,1,.3,1);}
+.ca-val{position:absolute;left:10px;top:0;bottom:0;display:flex;align-items:center;font-size:13px;font-weight:800;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.6);}
+.ca-pct{font-size:12px;font-weight:700;color:rgba(255,255,255,.55);text-align:right;}
+.ca-row.others .ca-name{color:rgba(255,255,255,.55);font-style:italic;}
+.an-fix{margin-top:14px;border:1px solid rgba(129,140,248,.25);border-radius:14px;background:rgba(129,140,248,.05);padding:0;}
+.an-fix summary{cursor:pointer;list-style:none;padding:12px 16px;font-size:13px;font-weight:800;color:#c7d2fe;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.an-fix summary::-webkit-details-marker{display:none;}
+.an-fix-body{padding:4px 16px 16px;font-size:12.5px;color:rgba(255,255,255,.66);line-height:1.55;}
+.an-fix-body p{margin:6px 0 10px;}
+.an-fixtab{width:100%;border-collapse:collapse;margin:6px 0 10px;font-size:12px;}
+.an-fixtab th{text-align:left;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);padding:6px 8px;}
+.an-fixtab td{padding:6px 8px;border-top:1px solid rgba(255,255,255,.06);color:#e5e7eb;}
+.an-fixtab td.n,.an-fixtab th.n{text-align:right;}
+.an-rules{margin:8px 0 0;padding-left:18px;} .an-rules li{margin:3px 0;}
+.ca-deg{font-size:11px;font-weight:600;color:rgba(255,255,255,.38);margin-top:2px;}
+.an-note{font-size:11px;font-weight:600;color:rgba(255,255,255,.34);margin-top:12px;line-height:1.5;}
+.an-empty{padding:40px 10px;text-align:center;color:rgba(255,255,255,.35);font-size:14px;font-weight:600;}
+.an-search{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#fff;font-family:inherit;font-size:13px;padding:8px 12px;min-width:220px;outline:none;}
+.an-search:focus{border-color:rgba(129,140,248,.6);}
+.an-table-wrap{max-height:520px;overflow:auto;border-radius:12px;border:1px solid rgba(255,255,255,.07);}
+.an-table{width:100%;border-collapse:collapse;font-size:13px;}
+.an-table th{position:sticky;top:0;background:#12142a;color:rgba(255,255,255,.5);font-size:10px;letter-spacing:.12em;text-transform:uppercase;text-align:left;padding:10px 12px;z-index:1;}
+.an-table td{padding:9px 12px;border-top:1px solid rgba(255,255,255,.05);color:#e5e7eb;vertical-align:top;}
+.an-table td.n,.an-table th.n{text-align:right;font-variant-numeric:tabular-nums;}
+.an-table tr.ca-main{cursor:pointer;}
+.an-table tr.ca-main:hover td{background:rgba(255,255,255,.035);}
+.an-table .ca-var{display:inline-block;margin-left:8px;font-size:10px;font-weight:800;color:#a5b4fc;background:rgba(129,140,248,.14);border:1px solid rgba(129,140,248,.3);border-radius:999px;padding:1px 8px;}
+.an-table tr.ca-det td{background:rgba(255,255,255,.025);font-size:12px;color:rgba(255,255,255,.6);}
+.an-table tr.ca-det ul{margin:0;padding-left:18px;columns:2;column-gap:28px;}
+@media (max-width:900px){ .an-kpis{grid-template-columns:repeat(2,minmax(0,1fr));} .ca-row{grid-template-columns:26px minmax(90px,170px) 1fr 52px;} }
+@media (max-width:520px){ .an-kpis{grid-template-columns:1fr;} .an-card{padding:16px;} .an-table tr.ca-det ul{columns:1;} }
 /* Director-only export buttons */
 .exp-btn{display:none !important;}
 body.role-director .exp-btn{display:inline-flex !important;align-items:center;gap:4px;border-color:rgba(251,191,36,.45);color:#fbbf24;}
@@ -1318,8 +1376,8 @@ body.role-director .exp-btn:hover{background:rgba(251,191,36,.14);border-color:r
 // ═══════════════════════════════════════════════════════
 // CONSTANTS
 // ═══════════════════════════════════════════════════════
-const API = 'https://script.google.com/macros/s/AKfycbw78b-sWisN462T0qwkme3HrnVBe_Ijyb90UahskpaQxnVKAP-XpyaJAg2xLN8zOYFAWg/exec';
-const CACHE_KEY  = 'hs_v8_';
+const API = 'https://script.google.com/macros/s/AKfycbx4C3c_1IQtnLycNNhiNIgzjAvDAwbK64LKLEhuhRBMEq5346dl363249QpIRdLhbnw9A/exec';
+const CACHE_KEY  = 'hs_v9_';
 const MEM_TTL    = 60 * 1000;       // 1 min — data older than this is re-fetched on use
 const DISK_TTL   = 60 * 60 * 1000;  // 1 hr disk cache — survive long sessions
 const BG_REFRESH = 60 * 1000;       // background auto-refresh every minute while the tab is open
@@ -1716,7 +1774,7 @@ function expandRows(raw){
   const D=raw.dict, R=raw.rowsC, out=new Array(R.length);
   for(let i=0;i<R.length;i++){
     const a=R[i];
-    out[i]={date:a[0],mgr:D.m[a[1]],tl:D.t[a[2]],univ:D.u[a[3]],counsellor:D.c[a[4]],incentive:a[5],tlIncentive:a[6],mgrIncentive:a[7]};
+    out[i]={date:a[0],mgr:D.m[a[1]],tl:D.t[a[2]],univ:D.u[a[3]],counsellor:D.c[a[4]],incentive:a[5],tlIncentive:a[6],mgrIncentive:a[7],course:D.s?D.s[a[8]]:''};
   }
   raw.trendRows=out; delete raw.rowsC; delete raw.dict;
   return raw;
@@ -1836,7 +1894,7 @@ function deriveNormed(snap, p, from, to){
     netAdm:rows.length, totalAdm:rows.length+cancel, cancelAdm:cancel, ver:snap.ver,
     trendRows:rows,
     mgrTargets: all[_MON3[+snap.meta.today.slice(5,7)-1]] || {}, mgrTargetsAll: all,
-    counsellorInfo: snap.counsellorInfo, peopleInfo: snap.peopleInfo,
+    counsellorInfo: snap.counsellorInfo, peopleInfo: snap.peopleInfo, courseMap: snap.courseMap,
     meta: Object.assign({}, snap.meta, {period:p, from:R?R.from:null, to:R?R.to:null})
   };
   return norm(raw, p);
@@ -3791,8 +3849,8 @@ document.addEventListener('click', e=>{
 // by exactly the difference, so the control stays under your cursor. If the page became too short to allow that, a
 // temporary spacer at the bottom keeps the position instead of the browser clamping (= jumping).
 // ═══════════════════════════════════════════════════════
-const _SS_PERSIST = '.topbar,.statusbar,.g2,.full-card,#cPodium,#cGrid,#totIncSection,#incSection,#tlIncSection,#mgrIncSection,#chartWrap';
-const _SS_CLICKABLE = 'button,.tab,.cchip,.cal-btn,.rbtn,.br[data-mgr],.br[data-tl],[data-f],[data-b],[data-sort],[data-tf],[data-p]';
+const _SS_PERSIST = '.topbar,.statusbar,.viewnav,.an-kpis,.an-card,.g2,.full-card,#cPodium,#cGrid,#totIncSection,#incSection,#tlIncSection,#mgrIncSection,#chartWrap';
+const _SS_CLICKABLE = 'button,.tab,.cchip,.cal-btn,.rbtn,.br[data-mgr],.br[data-tl],[data-f],[data-b],[data-sort],[data-tf],[data-p],[data-view],[data-top],[data-grp],tr.ca-main';
 let _ssActive = null, _ssCancel = false, _ssPad = null, _ssTrim = null;
 function _ssPadEl(){
   if(!_ssPad){ _ssPad=document.createElement('div'); _ssPad.id='scrollPad'; (document.querySelector('.wrap')||document.body).appendChild(_ssPad); }
@@ -3811,7 +3869,7 @@ function _ssRoom(y){                                       // make the page tall
 function _ssSelFor(el){
   if(el.id) return '#'+el.id;
   let c=el.parentElement; while(c && !c.id) c=c.parentElement;
-  const attrs=['data-f','data-sort','data-b','data-tf','data-p','data-mgr','data-tl'];
+  const attrs=['data-f','data-sort','data-b','data-tf','data-p','data-mgr','data-tl','data-view','data-top','data-grp','data-k'];
   for(const k of attrs){
     if(el.hasAttribute(k)){
       return (c?'#'+c.id+' ':'')+el.tagName.toLowerCase()+'['+k+'="'+String(el.getAttribute(k)).replace(/"/g,'\\"')+'"]';
@@ -3867,7 +3925,7 @@ document.addEventListener('click',e=>{
   _ssRun(_ssSnapshot(inModal?null:t));
 },true);
 // typing in the counsellor search changes the grid height as you type
-document.addEventListener('input',e=>{ if(e.target && e.target.id==='cSearch') _ssRun(_ssSnapshot(e.target)); },true);
+document.addEventListener('input',e=>{ if(e.target && (e.target.id==='cSearch'||e.target.id==='caSearch')) _ssRun(_ssSnapshot(e.target)); },true);
 // give the spacer back once you scroll on your own (only the part that is below the screen)
 window.addEventListener('scroll',()=>{
   if(_ssActive || !_ssPad) return;
@@ -3895,6 +3953,380 @@ window.addEventListener('scroll',()=>{
     return out;
   };
 })();
+
+// ═══════════════════════════════════════════════════════
+// ADMISSION ANALYSIS tab — course-wise admissions
+// ═══════════════════════════════════════════════════════
+// The "Course Selected" column is typed by hand (hundreds of spellings of the same course). Every entry is read as
+// degree + specialisation + qualifiers, spelling mistakes are corrected, and the course gets ONE official name:
+//     "<Degree> – <Specialisation>"   e.g.  B.Tech – Computer Science & Engineering   ·   MBA – Master of Business Administration
+// Different programmes are never merged (B.Tech CSE ≠ B.Tech CSE (AI & ML) ≠ M.Tech CSE; BBA ≠ BBA LL.B; with-IBM / Hons. /
+// Lateral Entry stay separate). "As typed" shows every spelling separately; an optional "Course Mapping" tab in the sheet
+// (Course Selected | Standard Course) overrides the official name of any entry.
+const parseCourse=(function(){
+// Course parser v2: raw "Course Selected" text → ONE official name.  official = "<ABBR> – <Specialization or full degree name>[ (Hons.)]"
+const DEGREES=[ // [regex on the normalised text, abbr, full name]   (combined degrees first)
+ [/^(?:b ?com|bachelors? of commerce)\s*(?:\+|and)?\s*(?:ll ?b|bachelors? of laws?)\b/,'B.Com LL.B','Bachelor of Commerce + Bachelor of Laws'],
+ [/^(?:bba|bachelors? of business administration)\s*(?:\+|and)?\s*(?:ll ?b|bachelors? of laws?)\b/,'BBA LL.B','Bachelor of Business Administration + Bachelor of Laws'],
+ [/^bballb\b/,'BBA LL.B','Bachelor of Business Administration + Bachelor of Laws'],
+ [/^(?:ba|bachelors? of arts)\s*(?:\+|and)?\s*(?:ll ?b|bachelors? of laws?)\b/,'BA LL.B','Bachelor of Arts + Bachelor of Laws'],
+ [/^ballb\b/,'BA LL.B','Bachelor of Arts + Bachelor of Laws'],
+ [/^(?:bachelors? of technology|b ?tech)\b/,'B.Tech','Bachelor of Technology'],
+ [/^(?:masters? of technology|m ?tech)\b/,'M.Tech','Master of Technology'],
+ [/^(?:bachelors? of engineering|b ?e)\b/,'B.E.','Bachelor of Engineering'],
+ [/^(?:masters? of engineering|m ?e)\b/,'M.E.','Master of Engineering'],
+ [/^(?:bachelors? of science|b ?sc)\b/,'B.Sc','Bachelor of Science'],
+ [/^(?:masters? of science|m ?sc)\b/,'M.Sc','Master of Science'],
+ [/^(?:b ?sc\s*(?:\+|and)\s*m ?sc|bachelors? and masters? of science)\b/,'B.Sc + M.Sc','Integrated Bachelor and Master of Science'],
+ [/^(?:bachelors? of business administration|bba)\b/,'BBA','Bachelor of Business Administration'],
+ [/^(?:masters? of business administration|mba)\b/,'MBA','Master of Business Administration'],
+ [/^(?:bachelors? of computer applications?|bca)\b/,'BCA','Bachelor of Computer Applications'],
+ [/^(?:masters? of computer applications?|mca)\b/,'MCA','Master of Computer Applications'],
+ [/^(?:bachelors? of commerce|b ?com)\b/,'B.Com','Bachelor of Commerce'],
+ [/^(?:masters? of commerce|m ?com)\b/,'M.Com','Master of Commerce'],
+ [/^(?:bachelors? of arts|ba)\b/,'BA','Bachelor of Arts'],
+ [/^(?:masters? of arts|ma)\b/,'MA','Master of Arts'],
+ [/^(?:bachelors? of laws?|ll ?b)\b/,'LL.B','Bachelor of Laws'],
+ [/^(?:masters? of laws?|ll ?m)\b/,'LL.M','Master of Laws'],
+ [/^(?:bachelors? of pharmacy|b ?pharma?m?(?:acy)?)\b/,'B.Pharm','Bachelor of Pharmacy'],
+ [/^(?:masters? of pharmacy|m ?pharma?m?(?:acy)?)\b/,'M.Pharm','Master of Pharmacy'],
+ [/^(?:bachelors? of physiotherapy|bpt)\b/,'BPT','Bachelor of Physiotherapy'],
+ [/^(?:masters? of physiotherapy|mpt)\b/,'MPT','Master of Physiotherapy'],
+ [/^(?:bachelors? of architecture|b ?arch)\b/,'B.Arch','Bachelor of Architecture'],
+ [/^(?:bachelors? of design|b ?des(?:ign)?)\b/,'B.Des','Bachelor of Design'],
+ [/^(?:masters? of design|m ?des(?:ign)?)\b/,'M.Des','Master of Design'],
+ [/^(?:bachelors? of fine arts|bfa)\b/,'BFA','Bachelor of Fine Arts'],
+ [/^(?:bachelors? of education|b ?ed)\b/,'B.Ed','Bachelor of Education'],
+ [/^(?:masters? of education|m ?ed)\b/,'M.Ed','Master of Education'],
+ [/^(?:doctor of philosophy|ph ?d)\b/,'Ph.D','Doctor of Philosophy'],
+ [/^(?:post graduate diploma in management|pgdm)\b/,'PGDM','Post Graduate Diploma in Management'],
+ [/^(?:bachelors? of vocation|b ?voc)\b/,'B.Voc','Bachelor of Vocation'],
+ [/^(?:bachelors? of medical laboratory technology|bmlt)\b/,'BMLT','Bachelor of Medical Laboratory Technology'],
+ [/^(?:diploma in medical laboratory technology|dmlt)\b/,'DMLT','Diploma in Medical Laboratory Technology'],
+ [/^bmrt\b/,'BMRT','Bachelor of Medical Radiology Technology'],
+ [/^dmrt\b/,'DMRT','Diploma in Medical Radiology Technology'],
+ [/^(?:bachelors? of social work|bsw)\b/,'BSW','Bachelor of Social Work'],
+ [/^(?:masters? of social work|msw)\b/,'MSW','Master of Social Work'],
+ [/^(?:general nursing and midwifery|gnm)\b/,'GNM','General Nursing and Midwifery'],
+ [/^(?:bachelors? of optometry|b ?optom)\b/,'B.Optom','Bachelor of Optometry'],
+ [/^(?:bachelors? of veterinary science|bvsc)\b/,'B.V.Sc','Bachelor of Veterinary Science'],
+ [/^professional diploma\b/,'Professional Diploma','Professional Diploma'],
+ [/^diploma\b/,'Diploma','Diploma']
+];
+// words that are spelled wrong in the sheet → correct spelling (explicit list + fuzzy match against the vocabulary below)
+const TYPO={bachlore:'bachelor',bachlor:'bachelor',bacholor:'bachelor',honse:'hons',hon:'hons',pyschology:'psychology',phsychology:'psychology',psycology:'psychology',mater:'master',mehanical:'mechanical',mechnical:'mechanical',machanical:'mechanical',enginering:'engineering',engineeing:'engineering',engeneering:'engineering',enginnering:'engineering',biotechnolgy:'biotechnology',biotecnology:'biotechnology',securtiy:'security',securty:'security',artifical:'artificial',artficial:'artificial',inteligence:'intelligence',intellegence:'intelligence',aplications:'applications',applcations:'applications',administraion:'administration',adminstration:'administration',comerce:'commerce',comeerce:'commerce',scince:'science',sceince:'science',phisiotherapy:'physiotherapy',physiotheraphy:'physiotherapy',pharmcy:'pharmacy',pharmacey:'pharmacy',agricultue:'agriculture',agriculure:'agriculture',marketting:'marketing',analytic:'analytics',electornics:'electronics',electonics:'electronics',comunication:'communication',communcation:'communication',architechture:'architecture',fasion:'fashion',desgin:'design',nusring:'nursing',tecnology:'technology',technolgy:'technology',tehnology:'technology',computar:'computer',compter:'computer',learing:'learning',lerning:'learning'};
+const VOCAB='bachelor master doctor philosophy diploma technology engineering science sciences computer applications business administration commerce arts laws law pharmacy physiotherapy architecture design education fine management artificial intelligence machine learning data analytics cyber security information biotechnology bioinformatics agriculture nursing psychology clinical applied forensic mechanical civil electrical electronics communication aeronautical aerospace chemical biomedical environmental economics english history political journalism animation fashion interior hospitality tourism marketing finance logistics robotics microbiology chemistry physics mathematics zoology botany optometry dietetics nutrition medical laboratory radiology honours research specialization entry lateral digital transformation visual communication mass media film retail international relations criminal'.split(' ');
+function lev(a,b){const m=a.length,n=b.length;const d=Array.from({length:m+1},(_,i)=>[i]);for(let j=1;j<=n;j++)d[0][j]=j;for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[m][n]}
+const VSET=new Set(VOCAB);
+function fixWord(w,fixes){
+  if(TYPO[w]){fixes.push([w,TYPO[w]]);return TYPO[w]}
+  if(w.length<8||VSET.has(w)) return w;                       // short words / codes are never "corrected"
+  let best=null;
+  for(const v of VOCAB){
+    if(Math.abs(v.length-w.length)>1||v.length<7) continue;
+    if(w.endsWith(v)||w.startsWith(v)) continue;               // "bpharmacy", "techcomputer": glued text, not a typo
+    if(lev(w,v)===1&&(!best)) best=v;                          // exactly ONE letter wrong / missing / extra
+  }
+  if(best){fixes.push([w,best]);return best}
+  return w;
+}
+const SPEC=[ // phrase → official specialization (applied to the lower-case, punctuation-free text, longest first)
+ [/\bcomputer science (?:and )?engineering\b|\bcomputer science engg\b|\bcse\b/,'Computer Science & Engineering','cse'],
+ [/\be and tc\b|\bentc\b|\belectronics (?:and )?telecommunication(?: engineering)?\b/,'Electronics & Telecommunication Engineering','entc'],
+ [/\baerospace engineering\b/,'Aerospace Engineering','aeros'],
+ [/\bcomputer science and business systems\b|\bcsbs\b/,'Computer Science & Business Systems','csbs'],
+ [/\brobotics (?:and )?(?:ai|artificial intelligence)\b|\b(?:ai|artificial intelligence) (?:and )?robotics\b/,'Robotics & Artificial Intelligence','robai'],
+ [/\binternet of things\b|\biot\b/,'Internet of Things','iot'],
+ [/\bcs (?:and )?it\b/,'Computer Science & Information Technology','csit'],
+ [/\bartificial intelligence (?:and )?machine learning\b|\bai ?(?:and )?ml\b|\baiml\b/,'Artificial Intelligence & Machine Learning','aiml'],
+ [/\bartificial intelligence (?:and )?data science\b|\bai (?:and )?ds\b|\baids\b|\bdsai\b/,'Artificial Intelligence & Data Science','aids'],
+ [/\bartificial intelligence\b|\bai\b/,'Artificial Intelligence','ai'],
+ [/\bdata science\b|\bds\b/,'Data Science','ds'],
+ [/\bcomputer science\b|\bcs\b/,'Computer Science','cs'],
+ [/\bcyber ?security\b/,'Cyber Security','cyber'],
+ [/\binformation technology\b|\bit\b/,'Information Technology','it'],
+ [/\belectronics (?:and )?communication engineering\b|\bece\b/,'Electronics & Communication Engineering','ece'],
+ [/\belectrical (?:and )?electronics engineering\b|\beee\b/,'Electrical & Electronics Engineering','eee'],
+ [/\belectrical engineering\b|\bee\b/,'Electrical Engineering','ee'],
+ [/\bmechanical engineering\b|\bmechanical\b|\bmech\b/,'Mechanical Engineering','mech'],
+ [/\bcivil engineering\b|\bcivil\b/,'Civil Engineering','civil'],
+ [/\baeronautical engineering\b/,'Aeronautical Engineering','aero'],
+ [/\bbio ?technology\b|\bbiotech\b/,'Biotechnology','biotech'],
+ [/\bbioinformatics\b/,'Bioinformatics','bioinf'],
+ [/\bagriculture\b|\bagri\b/,'Agriculture','agri'],
+ [/\bclinical psychology\b|\bcp\b/,'Clinical Psychology','clinpsy'],
+ [/\bapplied psychology\b/,'Applied Psychology','apppsy'],
+ [/\bdigital marketing\b/,'Digital Marketing','digmkt'],
+ [/\bbusiness analytics\b/,'Business Analytics','banalytics'],
+ [/\bphysical sciences\b/,'Physical Sciences','physsci']
+];
+function normText(s){
+  s=String(s||'').replace(/[\u200b\u00a0]/g,' ').toLowerCase();
+  s=s.replace(/&/g,' and ').replace(/[–—]/g,' – ').replace(/_/g,' ').replace(/[\/\\,:;|]/g,' ').replace(/[()\[\]{}]/g,' ( ').replace(/\./g,'');
+  s=s.replace(/\s-\s/g,' – ').replace(/-/g,' ');
+  return s.replace(/\s+/g,' ').trim();
+}
+function titleCase(s){return s.replace(/\b([a-z])([a-z]*)/g,(m,a,b)=>/^(and|of|in|with|for)$/.test(m)?m:a.toUpperCase()+b)}
+function parseCourse(raw){
+  const fixes=[];
+  let s0=String(raw||'').trim();
+  if(!s0) return {official:'Not specified',key:'not specified',fixes:fixes};
+  let s=normText(s0);
+  // glued "techcyber" / "techcomputer"
+  s=s.replace(/\b(btech|mtech|bsc|msc|bca|mca|bba|mba)(cse|ece|eee|aiml|aids|ds|it|cs)\b/,'$1 $2').replace(/\b(btech|mtech|bsc|msc|bcom|mcom|bca|mca|bba|mba)(?=[a-z]{4,})/,'$1 ').replace(/\b(b ?tech)(?=(cyber|computer|bio|mech|civil|elec)[a-z]*)/,'$1 ');
+  // 1) the official expansion after a dash ("X – Bachelor of … in …") is the most reliable description
+  let left=s, right='';
+  const dm=s.match(/^(.*?)\s–\s((?:bachelors?|masters?|doctor|diploma|post graduate|integrated|undergraduate)\b.*)$/);
+  if(dm){ left=dm[1]; right=dm[2]; }
+  else { const d2=s.match(/^(.*?)\s–\s(.+)$/); if(d2){ left=d2[1]; right=d2[2]; } }
+  left=left.replace(/ – /g,' '); right=right.replace(/ – /g,' ');
+  s=s.replace(/\b(engg|eng)\b/g,'engineering').replace(/\b(bachelors?|masters?|doctor)\s+(?!of\b|and\b)/g,'$1 of ');
+  left=left.replace(/\b(engg|eng)\b/g,'engineering'); right=right.replace(/\b(engg|eng)\b/g,'engineering');
+  const fixText=t=>t.split(' ').map(w=>/^[a-z]+$/.test(w)?fixWord(w,fixes):w).join(' ');
+  left=fixText(left); right=fixText(right);
+  const rightIsDegree=/^(?:bachelors?|masters?|doctor|diploma|post graduate|integrated|undergraduate)\b/.test(right);
+  let text= rightIsDegree ? right : (right? left+' '+right : left);
+  text=text.replace(/\b(bachelors?|masters?|doctor)\s+(?!of\b|and\b)/g,'$1 of ');   // "Bachelor Clinical Psychology" → "Bachelor of …" (after typos are fixed)
+  const leftTail = rightIsDegree ? left : '';                       // qualifiers/codes that only appear on the left ("BBA (Hons.)", "BTECH CSE-AIML")
+  // 2) qualifiers
+  let hons=false, lateral=false, partner='', tags=[];
+  const strip=(re,fn)=>{ text=text.replace(re,(...a)=>{ fn&&fn(a); return ' '; }); };
+  strip(/\bhons\b|\bhonours\b|\bhonors\b|\bh\b(?= ?\)?$)/g,()=>{hons=true});
+  strip(/\bwith research\b/g,()=>{hons=true});
+  strip(/\blateral entry\b|\ble\b|\blateral\b/g,()=>{lateral=true});
+  let part=false; strip(/\bpart time\b/g,()=>{part=true});
+  let dist=false; strip(/\bdistance\b/g,()=>{dist=true});
+  let wp=false; strip(/\bworking professionals?\b/g,()=>{wp=true});
+  strip(/\bfull time\b/g,()=>{});
+  let dual=false; strip(/\bdual degree\b/g,()=>{dual=true});
+  strip(/\bcity campus\b|\bcity\b/g,()=>{tags.push('City Campus')});
+  strip(/\bacca\b/g,()=>{partner=partner||'ACCA'});
+  strip(/\bwith (ibm|microsoft|tcs|sas|acca)\b/g,a=>{partner=({ibm:'IBM',microsoft:'Microsoft',tcs:'TCS',sas:'SAS',acca:'ACCA'})[a[1]]});
+  if(/\b(hons|honours|honors)\b/.test(leftTail)||/\(h\)|-h\b/.test(s0.toLowerCase())) hons=true;
+  if(/\bdual degree\b/.test(s0.toLowerCase())) dual=true;
+  if(/\blateral entry\b|\blateral\b/.test(leftTail)) lateral=true;
+  strip(/\b(asob|aac|central)\b/g,a=>{tags.push(a[1]==='central'?'Central':a[1].toUpperCase())});
+  strip(/\b(jul|july)\b/g,()=>{});                                                   // intake month is not part of the course
+  text=text.replace(/\b(specialization|specialisation|specializing|program|programme|course|collaboration|integrated)\b/g,' ').replace(/\s+/g,' ').trim();
+  // 3) degree
+  let abbr=null,full=null,rest=text;
+  for(const [re,ab,fl] of DEGREES){ const m=text.match(re); if(m){ abbr=ab; full=fl; rest=text.slice(m[0].length).trim(); break; } }
+  if(!abbr){ // a degree we do not know: keep the (spell-corrected) text, tidy case
+    const g=text.match(/^(bachelors?|masters?|doctor) of (.+)$/);
+    const clean=text.replace(/[()]/g,' ').replace(/\s+/g,' ').trim();
+    const ACR0=new Set(['cse','ece','eee','le','acca','itm','iot','cs','ce','ae','it','ai','ml','ds','bot']);
+    const t=g ? titleCase(clean)+(hons?' (Hons.)':'') : (clean.length<=4&&!clean.includes(' ')) ? clean.toUpperCase() : clean.split(' ').map(w=>ACR0.has(w)?w.toUpperCase():titleCase(w)).join(' ');
+    const orig=s0.replace(/\s+/g,' ').trim();
+    const tidy=(/\./.test(orig)&&!g)?orig.replace(/\s*[–—]\s*/g,' – '):t;     // abbreviations written with dots ("B.I.D", "M.Planning") stay as typed
+    return {official:tidy||'Not specified',key:'u:'+tidy.toLowerCase(),fixes:fixes,abbr:'',unknown:true};
+  }
+  // 4) specialization
+  rest=rest.replace(/[()]/g,' ').replace(/\s+/g,' ').trim().replace(/^(?:in|of)\s+/,'');
+  // code-only leftovers on the left side when the right side carried the description (e.g. BTECH CSE-AIML – …) are dropped
+  const specs=[];let r2=' '+rest+' ';
+  const hit=[];
+  for(const [re,label,code] of SPEC){ const m=new RegExp(re.source).exec(r2); if(m){ hit.push({label,code,pos:m.index}); r2=r2.replace(new RegExp(re.source,'g'),' '+'\u0001'.repeat(0)+' '); } }
+  hit.sort((a,b)=>a.pos-b.pos); hit.forEach(h=>specs.push(h));
+  r2=r2.replace(/\b(and|with|the|in|of)\b/g,' ').replace(/\b\w\b/g,' ').replace(/\b(\w+)( \1\b)+/g,'$1').replace(/\s+/g,' ').trim();
+  { const fl=full.toLowerCase().replace(/\b(and|with|the|in|of)\b/g,' ').replace(/\s+/g,' ').trim(); if(r2===fl) r2=''; }   // the degree's own full name is not a specialisation
+  const ENG=['B.Tech','B.E.','M.Tech','M.E.','Diploma'].includes(abbr);
+  if(ENG) specs.forEach(x=>{ if(x.code==='cs'){ x.label='Computer Science & Engineering'; x.code='cse'; } });     // "B.Tech Computer Science" IS the CSE programme
+  const dedup=[];specs.forEach(x=>{ if(!dedup.some(y=>y.code===x.code)) dedup.push(x); });
+  const codes=dedup.map(x=>x.code);
+  let spec='';
+  const main=codes.includes('cse')?dedup.find(x=>x.code==='cse'):dedup[0];
+  if(main){ const sub=dedup.filter(x=>x!==main); spec=main.label+(sub.length?' ('+sub.map(x=>x.label).join(' & ')+')':''); }
+  const ACR=new Set(['acca','itm','iot','vfx','vlsi','cma','gnm','fsid','dsai','hr','ibm','tcs','sas','cs','ce','ae','ee','ml','ai','ds','it','le','la','pa']);
+  const extra=r2?r2.split(' ').map(w=>ACR.has(w)||w.length<=2?w.toUpperCase():titleCase(w)).join(' '):'';
+  if(extra) spec = spec ? spec+' '+extra : extra;
+  const tail=[]; tags.forEach(t=>tail.push(t)); if(hons) tail.push('Hons.'); if(dual) tail.push('Dual Degree'); if(lateral) tail.push('Lateral Entry'); if(wp) tail.push('Working Professional'); if(part) tail.push('Part Time'); if(dist) tail.push('Distance'); if(partner) tail.push('with '+partner);
+  let official=abbr+' – '+(spec||full)+(tail.length?' ('+tail.join(', ')+')':'');
+  return {official:official,key:official.toLowerCase(),fixes:fixes,abbr:abbr,degree:full,spec:spec};
+}
+
+return parseCourse;
+})();
+
+const _pcCache=new Map();
+function courseInfo(raw){ let p=_pcCache.get(raw); if(!p){ p=parseCourse(raw); _pcCache.set(raw,p); } return p; }
+// every row → ONE official name; spelling mistakes are corrected on the way and reported
+function buildCourseStats(rows, grouped, cmap){
+  const G=new Map(), FX=new Map();
+  for(let i=0;i<rows.length;i++){
+    const raw=String(rows[i].course||'').replace(/\s+/g,' ').trim() || 'Not specified';
+    let key,label,degree='';
+    if(grouped){
+      const std=(cmap && cmap[_ckey(raw)]) || null;                     // "Course Mapping" tab wins, verbatim
+      if(std){ key=std.toLowerCase(); label=std; }
+      else{
+        const p=courseInfo(raw); key=p.key; label=p.official; degree=p.degree||'';
+        p.fixes.forEach(f=>{ const k=f[0]+' → '+f[1]; let e=FX.get(k); if(!e){ e={from:f[0],to:f[1],rows:0,ex:raw}; FX.set(k,e); } e.rows++; });
+      }
+    } else { key=raw; label=raw; }
+    let g=G.get(key); if(!g){ g={label:label,degree:degree,count:0,vars:new Map()}; G.set(key,g); }
+    g.count++; g.vars.set(raw,(g.vars.get(raw)||0)+1);
+  }
+  const list=[];
+  G.forEach((g,key)=>{
+    const vars=[...g.vars.entries()].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])).map(e=>({raw:e[0],n:e[1]}));
+    list.push({key:key,label:g.label,degree:g.degree,count:g.count,vars:vars});
+  });
+  list.sort((a,b)=>b.count-a.count||a.label.localeCompare(b.label));
+  const total=rows.length;
+  list.forEach((c,i)=>{ c.rank=i+1; c.share=total?c.count/total*100:0; });
+  const spellings=new Set(rows.map(r=>String(r.course||'').replace(/\s+/g,' ').trim()||'Not specified')).size;
+  return {list:list,total:total,spellings:spellings,fixes:[...FX.values()].sort((a,b)=>b.rows-a.rows||a.from.localeCompare(b.from))};
+}
+
+let viewMode='dash', courseGrouped=true, courseTop=15, courseQuery='', _caOpen=new Set(), _anLast=null;
+const _CA_GRD=['linear-gradient(90deg,#6366f1,#818cf8)','linear-gradient(90deg,#06b6d4,#22d3ee)','linear-gradient(90deg,#8b5cf6,#c084fc)','linear-gradient(90deg,#10b981,#34d399)','linear-gradient(90deg,#f59e0b,#fbbf24)','linear-gradient(90deg,#ec4899,#f472b6)','linear-gradient(90deg,#3b82f6,#60a5fa)','linear-gradient(90deg,#ef4444,#f87171)'];
+const _escH=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function fmtPct(x){ return (x>=10?x.toFixed(0):x.toFixed(1))+'%'; }
+
+function analysisData(){
+  const c=mem[activeCk]; if(!c||!c.data) return null;
+  return c.data;
+}
+function drawAnalysis(d){
+  const root=$('analysisView'); if(!root) return;
+  d=d||analysisData(); if(!d) return;
+  _anLast=d;
+  const rows=d.allTrendRows||d.trendRows||[];
+  const S=buildCourseStats(rows,courseGrouped,d.courseMap||{});
+  const m=d.meta||{}, per=_PERIOD_TXT[activePeriod]||'Selected period';
+  const rng=(m.from&&m.to)?(m.from===m.to?_fmtDay(m.from):_fmtDay(m.from)+' – '+_fmtDay(m.to)):'';
+  $('anSub').textContent='Course-wise admissions · '+per+((rng&&activePeriod!=='all')?' · '+rng:'')+' · net admissions (cancelled excluded)';
+
+  // KPIs
+  const top=S.list[0], top5=S.list.slice(0,5).reduce((a,c)=>a+c.count,0);
+  const kp=(l,v,n,col,sm)=>`<div class="an-kpi" style="--kc:${col}"><div class="an-kpi-l">${l}</div><div class="an-kpi-v${sm?' sm':''}" title="${_escH(String(v).replace(/<[^>]+>/g,''))}">${v}</div><div class="an-kpi-n">${n}</div></div>`;
+  $('anKpis').innerHTML = S.total ? [
+    kp('Total admissions',S.total,'in the selected period','linear-gradient(90deg,#6366f1,#22d3ee)'),
+    kp(courseGrouped?'Official courses':'Courses',S.list.length,courseGrouped?`standardised from ${S.spellings} spellings`:'as typed in the sheet','linear-gradient(90deg,#8b5cf6,#ec4899)'),
+    kp('Top course',_escH(top.label),`${top.count} admissions · ${fmtPct(top.share)}`,'linear-gradient(90deg,#f59e0b,#fbbf24)',true),
+    kp('Top 5 courses',fmtPct(top5/S.total*100),`${top5} of ${S.total} admissions`,'linear-gradient(90deg,#10b981,#34d399)')
+  ].join('') : '';
+
+  // chart controls
+  const topRow=$('anTopRow'), grpRow=$('anGroupRow');
+  if(topRow) topRow.innerHTML='<span class="inc-ctl-lbl">SHOW</span><span class="inc-ctl-div"></span>'+
+    [[10,'Top 10'],[15,'Top 15'],[25,'Top 25'],[0,'All']].map(x=>`<button type="button" data-top="${x[0]}"${courseTop===x[0]?' class="on"':''}>${x[1]}</button>`).join('');
+  if(grpRow) grpRow.innerHTML='<span class="inc-ctl-lbl">COURSE NAMES</span><span class="inc-ctl-div"></span>'+
+    [[1,'Official names'],[0,'As typed']].map(x=>`<button type="button" data-grp="${x[0]}"${(courseGrouped?1:0)===x[0]?' class="on"':''}>${x[1]}</button>`).join('');
+
+  // comparison chart (horizontal bars, longest bar = busiest course)
+  const chart=$('anChart'), note=$('anNote');
+  if(!S.total){
+    chart.innerHTML='<div class="an-empty">No admissions in this period</div>'; note.textContent='';
+    $('anTable').querySelector('tbody').innerHTML='<tr><td colspan="4" class="an-empty">No admissions in this period</td></tr>';
+    return;
+  }
+  fixPanel(S);
+  const N=courseTop||S.list.length, shown=S.list.slice(0,N), rest=S.list.slice(N);
+  const max=Math.max(1,shown[0].count);
+  let h='';
+  shown.forEach((c,i)=>{
+    h+=`<div class="ca-row"><div class="ca-rank">${c.rank}</div><div class="ca-name" title="${_escH(c.label)}">${_escH(c.label)}${courseGrouped&&c.vars.length>1?`<small>${c.vars.length} spellings → 1 official name</small>`:''}</div>`+
+       `<div class="ca-track"><div class="ca-bar" style="width:${(c.count/max*100).toFixed(2)}%;background:${_CA_GRD[i%_CA_GRD.length]}"></div><span class="ca-val">${c.count}</span></div><div class="ca-pct">${fmtPct(c.share)}</div></div>`;
+  });
+  if(rest.length){
+    const rs=rest.reduce((a,c)=>a+c.count,0);
+    h+=`<div class="ca-row others"><div class="ca-rank">…</div><div class="ca-name">Others (${rest.length} courses)</div>`+
+       `<div class="ca-track"><div class="ca-bar" style="width:${(rs/max*100).toFixed(2)}%;max-width:100%;background:linear-gradient(90deg,#475569,#64748b)"></div><span class="ca-val">${rs}</span></div><div class="ca-pct">${fmtPct(rs/S.total*100)}</div></div>`;
+  }
+  chart.innerHTML=h;
+  note.textContent = courseGrouped
+    ? 'Every entry is counted under its OFFICIAL course name: spelling mistakes are corrected and different ways of writing the same programme are merged (e.g. “B.Tech CSE”, “Btech cse”, “B.Tech – Computer Science & Engineering (CSE)” → B.Tech – Computer Science & Engineering). Click a course in the table to see the spellings merged. To set a name yourself, add a “Course Mapping” tab (Course Selected | Standard Course).'
+    : 'Every spelling in the sheet is counted separately, exactly as typed.';
+
+  // table with search + spelling details
+  const q=courseQuery;
+  const L=q?S.list.filter(c=>c.label.toLowerCase().includes(q)||c.vars.some(v=>v.raw.toLowerCase().includes(q))):S.list;
+  let tb='';
+  L.forEach(c=>{
+    const open=_caOpen.has(c.key);
+    tb+=`<tr class="ca-main" data-k="${_escH(c.key)}"><td>${c.rank}</td><td>${_escH(c.label)}${courseGrouped&&c.vars.length>1?`<span class="ca-var">${c.vars.length} spellings ${open?'▲':'▼'}</span>`:''}${c.degree?`<div class="ca-deg">${_escH(c.degree)}</div>`:''}</td><td class="n">${c.count}</td><td class="n">${fmtPct(c.share)}</td></tr>`;
+    if(open&&courseGrouped&&c.vars.length>1) tb+=`<tr class="ca-det"><td></td><td colspan="3"><ul>${c.vars.map(v=>`<li>${_escH(v.raw)} <b>×${v.n}</b></li>`).join('')}</ul></td></tr>`;
+  });
+  tb+=`<tr><td></td><td><b>Total</b>${q?` <span style="opacity:.5">(${L.length} of ${S.list.length} courses shown)</span>`:''}</td><td class="n"><b>${q?L.reduce((a,c)=>a+c.count,0):S.total}</b></td><td class="n"><b>${q?fmtPct(L.reduce((a,c)=>a+c.count,0)/S.total*100):'100%'}</b></td></tr>`;
+  if(!L.length) tb=`<tr><td colspan="4" class="an-empty">No course matches “${_escH(q)}”</td></tr>`;
+  $('anTable').querySelector('tbody').innerHTML=tb;
+}
+
+// "Spelling corrections & standardisation" — what was changed, so nothing is hidden
+function fixPanel(S){
+  const el=$('anFix'); if(!el) return;
+  if(!courseGrouped){ el.style.display='none'; return; }
+  el.style.display='';
+  const merged=S.spellings-S.list.length;
+  let h=`<summary>✔ Spelling corrections &amp; standardisation <span class="ca-var">${S.fixes.length} spelling fix${S.fixes.length===1?'':'es'} · ${merged} spellings merged</span></summary><div class="an-fix-body">`;
+  h+=`<p><b>${S.spellings}</b> different spellings were typed in the sheet for these admissions. They are now counted under <b>${S.list.length}</b> official course names. All counts and totals on this page use the official names.</p>`;
+  if(S.fixes.length){
+    h+=`<table class="an-fixtab"><thead><tr><th>Mistyped word</th><th>Corrected to</th><th class="n">Entries</th><th>Example as typed</th></tr></thead><tbody>`+
+       S.fixes.map(f=>`<tr><td>${_escH(f.from)}</td><td><b>${_escH(f.to)}</b></td><td class="n">${f.rows}</td><td>${_escH(f.ex)}</td></tr>`).join('')+`</tbody></table>`;
+  } else h+='<p>No spelling mistakes were found in this period.</p>';
+  h+=`<ul class="an-rules"><li>Degrees are written one way: <i>BTech / B.Tech / Bachelor of Technology → B.Tech</i>, <i>BALLB / BA LLB → BA LL.B</i>.</li>
+      <li>Specialisations are written one way: <i>CSE / Computer Science &amp; Engineering → Computer Science &amp; Engineering</i>, <i>AI/ML / AIML → Artificial Intelligence &amp; Machine Learning</i>.</li>
+      <li>Format: <b>Degree – Specialisation</b> (a plain degree shows its full name, e.g. <i>MBA – Master of Business Administration</i>).</li>
+      <li>Kept as separate courses: different degrees (B.Tech ≠ B.E. ≠ M.Tech), Hons., Lateral Entry, industry-partner (with IBM / TCS …) and campus (Central / City) versions.</li></ul></div>`;
+  el.innerHTML=h;
+}
+
+function setView(v){
+  viewMode=(v==='analysis')?'analysis':'dash';
+  document.body.classList.toggle('view-analysis',viewMode==='analysis');
+  document.querySelectorAll('#viewNav button').forEach(b=>b.classList.toggle('on',b.dataset.view===viewMode));
+  try{ sessionStorage.setItem('hs_view',viewMode); }catch(e){}
+  if(viewMode==='analysis') drawAnalysis();
+}
+(function initAnalysis(){
+  const dash=$('dash'); if(!dash) return;
+  const sb=dash.querySelector('.statusbar'); if(!sb) return;
+  // everything below the status bar belongs to the Dashboard view
+  [...dash.children].forEach(el=>{ if(!el.matches('.topbar,.statusbar,#scrollPad,#analysisView,#viewNav,script,style')) el.classList.add('dash-section'); });
+  sb.insertAdjacentHTML('afterend',`
+  <div class="viewnav f1" id="viewNav"><button type="button" data-view="dash" class="on">📊 Dashboard</button><button type="button" data-view="analysis">🎓 Admission Analysis</button></div>
+  <section class="an f1" id="analysisView" aria-label="Admission Analysis">
+    <div class="an-head"><div><div class="an-title">🎓 Admission Analysis</div><div class="an-sub" id="anSub"></div></div>
+      <div class="an-ctl"><button type="button" class="rbtn exp-btn" id="expCourse" title="Download the course-wise totals (CSV) for the period shown">⬇ Course CSV</button></div></div>
+    <div class="an-kpis" id="anKpis"></div>
+    <div class="an-card">
+      <div class="an-card-head"><div class="an-card-title">📊 Course-Wise Admissions</div>
+        <div class="an-ctl"><div class="inc-ctl-row" id="anTopRow"></div><div class="inc-ctl-row" id="anGroupRow"></div></div></div>
+      <div id="anChart"></div><div class="an-note" id="anNote"></div>
+      <details class="an-fix" id="anFix"></details>
+    </div>
+    <div class="an-card">
+      <div class="an-card-head"><div class="an-card-title">🗂 All Courses</div><input class="an-search" id="caSearch" type="search" placeholder="Search a course…" autocomplete="off"></div>
+      <div class="an-table-wrap"><table class="an-table" id="anTable"><thead><tr><th style="width:48px">#</th><th>Course</th><th class="n" style="width:110px">Admissions</th><th class="n" style="width:90px">Share</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </section>`);
+  $('viewNav').addEventListener('click',e=>{ const b=e.target.closest('button[data-view]'); if(b) setView(b.dataset.view); });
+  $('anTopRow').addEventListener('click',e=>{ const b=e.target.closest('button[data-top]'); if(!b) return; courseTop=+b.dataset.top; drawAnalysis(); });
+  $('anGroupRow').addEventListener('click',e=>{ const b=e.target.closest('button[data-grp]'); if(!b) return; courseGrouped=b.dataset.grp==='1'; _caOpen.clear(); drawAnalysis(); });
+  $('caSearch').addEventListener('input',function(){ courseQuery=this.value.toLowerCase().trim(); drawAnalysis(); });
+  $('anTable').addEventListener('click',e=>{ const tr=e.target.closest('tr.ca-main'); if(!tr) return; const k=tr.dataset.k; if(_caOpen.has(k)) _caOpen.delete(k); else _caOpen.add(k); drawAnalysis(); });
+  $('expCourse').addEventListener('click',()=>{ _expClick($('expCourse'),exportCourses); });
+  let v='dash'; try{ v=sessionStorage.getItem('hs_view')||'dash'; }catch(e){}
+  if(v==='analysis') setView('analysis');
+})();
+// the analysis follows every data refresh / period change
+(function(){
+  const r1=render;
+  render=function(d){ const out=r1.apply(this,arguments); if(viewMode==='analysis' && d) drawAnalysis(d); return out; };
+})();
+
+// ── Director: course-wise CSV ──
+function exportCourses(){
+  const x=_exportCtx(); if(!x) return false;
+  const d=analysisData(); const S=buildCourseStats(x.rows,courseGrouped,(d&&d.courseMap)||{});
+  const table=[[courseGrouped?'Rank':'Rank',courseGrouped?'Official Course Name':'Course (as typed)','Degree','Admissions','Share %','Spellings merged']];
+  S.list.forEach(c=>table.push([c.rank,c.label,c.degree||'',c.count,Math.round(c.share*100)/100,c.vars.length]));
+  table.push(['','TOTAL','',S.total,100,S.spellings]);
+  if(courseGrouped&&S.fixes.length){ table.push([],['Spelling corrections applied'],['Mistyped word','Corrected to','Entries','Example as typed']); S.fixes.forEach(f=>table.push([f.from,f.to,f.rows,f.ex])); }
+  _downloadCSV(`course-wise-admissions_${x.label}_${x.stamp}.csv`, table);
+  return true;
+}
 
 // ── Director export (CSV) ─────────────────────────────
 // Exports exactly what the dashboard is showing: the period / range currently selected.
@@ -3945,8 +4377,8 @@ function exportSummary(){
 function exportDetails(){
   const x=_exportCtx(); if(!x) return false;
   const st=a=>a===1?'Active':a===0?'Inactive':'';
-  const table=[['Date','Manager','Manager Status','TL','TL Status','University','Counsellor','Counsellor Status','Counsellor Incentive','TL Incentive','Manager Incentive']];
-  for(const r of x.rows){ const ci=cInfo(r.counsellor); table.push([r.date,r.mgr,st(pStat('mgr',r.mgr)),r.tl,st(pStat('tl',r.tl)),r.univ,r.counsellor,st(ci?ci.a:null),r.incentive||0,r.tlIncentive||0,r.mgrIncentive||0]); }
+  const table=[['Date','Manager','Manager Status','TL','TL Status','University','Counsellor','Counsellor Status','Counsellor Incentive','TL Incentive','Manager Incentive','Course']];
+  for(const r of x.rows){ const ci=cInfo(r.counsellor); table.push([r.date,r.mgr,st(pStat('mgr',r.mgr)),r.tl,st(pStat('tl',r.tl)),r.univ,r.counsellor,st(ci?ci.a:null),r.incentive||0,r.tlIncentive||0,r.mgrIncentive||0,r.course||'']); }
   _downloadCSV(`admissions-details_${x.label}_${x.stamp}.csv`, table);
   return true;
 }
