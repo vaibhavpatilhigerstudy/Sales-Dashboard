@@ -4150,6 +4150,13 @@ function parseCourse(raw){
 return parseCourse;
 })();
 
+// Courses merged on purpose (your instruction): these official names are counted as ONE course.
+const COURSE_MERGE=(function(){
+  const NAME='B.Tech / B.E. – Computer Science & Engineering', DEG='Bachelor of Technology / Bachelor of Engineering', m={};
+  ['B.E. – Computer Science & Engineering','B.Tech – Computer Science & Engineering','B.Tech – Computer Science & Engineering (Artificial Intelligence & Machine Learning)']
+    .forEach(k=>{ m[k.toLowerCase()]={name:NAME,degree:DEG}; });
+  return m;
+})();
 const _pcCache=new Map();
 function courseInfo(raw){ let p=_pcCache.get(raw); if(!p){ p=parseCourse(raw); _pcCache.set(raw,p); } return p; }
 // every row → ONE official name; spelling mistakes are corrected on the way and reported
@@ -4157,22 +4164,24 @@ function buildCourseStats(rows, grouped, cmap){
   const G=new Map(), FX=new Map();
   for(let i=0;i<rows.length;i++){
     const raw=String(rows[i].course||'').replace(/\s+/g,' ').trim() || 'Not specified';
-    let key,label,degree='';
+    let key,label,degree='',partOf=null;
     if(grouped){
       const std=(cmap && cmap[_ckey(raw)]) || null;                     // "Course Mapping" tab wins, verbatim
       if(std){ key=std.toLowerCase(); label=std; }
       else{
         const p=courseInfo(raw); key=p.key; label=p.official; degree=p.degree||'';
+        const mg=COURSE_MERGE[p.key]; if(mg){ key=mg.name.toLowerCase(); label=mg.name; degree=mg.degree; partOf=p.official; }
         p.fixes.forEach(f=>{ const k=f[0]+' → '+f[1]; let e=FX.get(k); if(!e){ e={from:f[0],to:f[1],rows:0,ex:raw}; FX.set(k,e); } e.rows++; });
       }
     } else { key=raw; label=raw; }
-    let g=G.get(key); if(!g){ g={label:label,degree:degree,count:0,vars:new Map()}; G.set(key,g); }
+    let g=G.get(key); if(!g){ g={label:label,degree:degree,count:0,vars:new Map(),parts:null}; G.set(key,g); }
     g.count++; g.vars.set(raw,(g.vars.get(raw)||0)+1);
+    if(partOf){ g.parts=g.parts||new Map(); g.parts.set(partOf,(g.parts.get(partOf)||0)+1); }
   }
   const list=[];
   G.forEach((g,key)=>{
     const vars=[...g.vars.entries()].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])).map(e=>({raw:e[0],n:e[1]}));
-    list.push({key:key,label:g.label,degree:g.degree,count:g.count,vars:vars});
+    list.push({key:key,label:g.label,degree:g.degree,count:g.count,vars:vars,parts:g.parts?[...g.parts.entries()].sort((a,b)=>b[1]-a[1]).map(e=>({name:e[0],n:e[1]})):null});
   });
   list.sort((a,b)=>b.count-a.count||a.label.localeCompare(b.label));
   const total=rows.length;
@@ -4268,6 +4277,10 @@ function fixPanel(S){
     h+=`<table class="an-fixtab"><thead><tr><th>Mistyped word</th><th>Corrected to</th><th class="n">Entries</th><th>Example as typed</th></tr></thead><tbody>`+
        S.fixes.map(f=>`<tr><td>${_escH(f.from)}</td><td><b>${_escH(f.to)}</b></td><td class="n">${f.rows}</td><td>${_escH(f.ex)}</td></tr>`).join('')+`</tbody></table>`;
   } else h+='<p>No spelling mistakes were found in this period.</p>';
+  const mergedGroups=S.list.filter(c=>c.parts);
+  if(mergedGroups.length){
+    h+=`<p><b>Merged as instructed:</b></p><ul class="an-rules">`+mergedGroups.map(c=>`<li><b>${_escH(c.label)}</b> = ${c.parts.map(x=>`${_escH(x.name)} <b>(${x.n})</b>`).join(' + ')} → <b>${c.count}</b> admissions</li>`).join('')+`</ul>`;
+  }
   h+=`<ul class="an-rules"><li>Degrees are written one way: <i>BTech / B.Tech / Bachelor of Technology → B.Tech</i>, <i>BALLB / BA LLB → BA LL.B</i>.</li>
       <li>Specialisations are written one way: <i>CSE / Computer Science &amp; Engineering → Computer Science &amp; Engineering</i>, <i>AI/ML / AIML → Artificial Intelligence &amp; Machine Learning</i>.</li>
       <li>Format: <b>Degree – Specialisation</b> (a plain degree shows its full name, e.g. <i>MBA – Master of Business Administration</i>).</li>
@@ -4326,6 +4339,7 @@ function exportCourses(){
   const table=[[courseGrouped?'Rank':'Rank',courseGrouped?'Official Course Name':'Course (as typed)','Degree','Admissions','Share %','Spellings merged']];
   S.list.forEach(c=>table.push([c.rank,c.label,c.degree||'',c.count,Math.round(c.share*100)/100,c.vars.length]));
   table.push(['','TOTAL','',S.total,100,S.spellings]);
+  { const mg=S.list.filter(c=>c.parts); if(courseGrouped&&mg.length){ table.push([],['Merged as instructed']); mg.forEach(c=>table.push([c.label,c.parts.map(x=>x.name+' ('+x.n+')').join(' + '),c.count])); } }
   if(courseGrouped&&S.fixes.length){ table.push([],['Spelling corrections applied'],['Mistyped word','Corrected to','Entries','Example as typed']); S.fixes.forEach(f=>table.push([f.from,f.to,f.rows,f.ex])); }
   _downloadCSV(`course-wise-admissions_${x.label}_${x.stamp}.csv`, table);
   return true;
